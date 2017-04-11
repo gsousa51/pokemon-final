@@ -40,6 +40,19 @@ public abstract class Map
     {
         mapGrid[remove.y][remove.x].removeItem();
     }
+    
+    /**
+     * When a pokemon runs away, this will put it at
+     * a new grass location and removes it from the
+     * previous location
+     * @param loc - location of the pokemon previously
+     */
+    public void movePokemon(Point loc)
+    {
+        Pokemon remmovePok = mapGrid[loc.y][loc.x].getPokemon();
+        
+        //TODO
+    }
 
     /**
      * Hard code map 1 into mapGrid

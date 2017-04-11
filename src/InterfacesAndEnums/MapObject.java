@@ -35,4 +35,14 @@ public abstract class MapObject {
 	public void removeItem()
 	{
 	}
+
+	/**
+	 * Override in grass to move get the pokemon
+	 * 
+	 * @author Morgan Henry
+	 */
+	public Pokemon getPokemon()
+	{
+	    return null;
+	}
 }
