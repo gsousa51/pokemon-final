@@ -26,4 +26,13 @@ public abstract class MapObject {
 	}
 	
 	
+	/**
+	 * Override in ground to remove the item
+	 * when it's found
+	 * 
+	 * @author Morgan Henry
+	 */
+	public void removeItem()
+	{
+	}
 }

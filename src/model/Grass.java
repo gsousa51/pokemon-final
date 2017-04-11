@@ -22,5 +22,10 @@ public class Grass extends MapObject
     {
         pokemon = null;
     }
+    
+    public Pokemon getPokemon()
+    {
+        return pokemon;
+    }
 
 }

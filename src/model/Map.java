@@ -35,6 +35,11 @@ public abstract class Map
     {
         mapGrid[remove.y][remove.x].removePokemon();
     }
+    
+    public void removeItem(Point remove)
+    {
+        mapGrid[remove.y][remove.x].removeItem();
+    }
 
     /**
      * Hard code map 1 into mapGrid
