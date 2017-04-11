@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Point;
 
+import InterfacesAndEnums.MapObject;
+
 public abstract class Map
 {
     private static final int MAP_WIDTH = 30;
@@ -31,8 +33,7 @@ public abstract class Map
     
     public void removePokemon(Point remove)
     {
-        //TODO: SET TO EMPTY
-        mapGrid[remove.y][remove.x] = new MapObject();
+        mapGrid[remove.y][remove.x].removePokemon();
     }
 
     /**
