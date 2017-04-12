@@ -43,8 +43,8 @@ public class AnimationPanel extends JPanel {
 	final static int width = 500;
 	final static int playerX = 250;
 	final static int playerY = 250;
-	final static int playerW = 40;
-	final static int playerL = 40;
+	final static int playerW = 50;
+	final static int playerL = 50;
 	ActionListener taskPerformer;
 	ActionListener timerStopper;
 	javax.swing.Timer walkTimer;
@@ -66,7 +66,8 @@ public class AnimationPanel extends JPanel {
 					System.out.println("Steps: " + steps + " X : " + currX + " Y : " + currY);
 					System.out.println("-------------------------");
 					steps++;
-				} else if (steps == 5) {
+					//Time to stop his walking
+				} else if (steps == 6) {
 					walkTimer.stop();
 					System.out.println("Steps: " + steps + " X : " + currX + " Y : " + currY);
 					steps = 0;
@@ -99,7 +100,7 @@ public class AnimationPanel extends JPanel {
 
 	public void setImages() {
 		try {
-			map = ImageIO.read(new File("src/animationSandBox/Map3.jpg"));
+			map = ImageIO.read(new File("src/animationSandBox/SHITMAP.PNG"));
 			left1 = ImageIO.read(new File("src/animationSandBox/Left1.PNG"));
 			left2 = ImageIO.read(new File("src/animationSandBox/Left2.PNG"));
 			left3 = ImageIO.read(new File("src/animationSandBox/Left3Stand.PNG"));
@@ -144,13 +145,13 @@ public class AnimationPanel extends JPanel {
 	public boolean canMove() {
 		// If they're going up, we need to be at a value greater than 40.
 		if (direction.equals(direction.UP)) {
-			return (currY >= 40);
+			return (currY >= 50);
 		}
 		if (direction.equals(direction.DOWN)) {
 			return (currY <= map.getHeight() - height - 40);
 		}
 		if (direction.equals(direction.LEFT)) {
-			return (currX >= 40);
+			return (currX >= 50);
 		} else
 			return (currX <= map.getWidth() - width - 40);
 	}// end canMove
