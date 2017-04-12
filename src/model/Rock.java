@@ -10,4 +10,10 @@ public class Rock extends MapObject
         super(false);
     }
 
+    @Override
+    public String toString()
+    {
+        return "R";
+    }
+
 }

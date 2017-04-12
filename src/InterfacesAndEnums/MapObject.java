@@ -11,6 +11,9 @@ public abstract class MapObject {
 		this.isWalkable = isWalkable;
 	}
 	
+	public abstract String toString();
+	
+	
 	public boolean isWalkable() {
 		return isWalkable;
 	}

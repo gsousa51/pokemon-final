@@ -28,4 +28,10 @@ public class Grass extends MapObject
         return pokemon;
     }
 
+    @Override
+    public String toString()
+    {
+        return "G";
+    }
+
 }

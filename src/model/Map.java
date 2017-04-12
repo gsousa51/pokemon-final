@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import InterfacesAndEnums.MapObject;
 
-public abstract class Map
+public class Map
 {
     private static final int MAP_WIDTH = 30;
     private static final int MAP_HEIGHT = 30;
@@ -100,7 +100,7 @@ public abstract class Map
         {
             for (int c = 0; c < MAP_WIDTH; c++)
             {
-                System.out.println(mapGrid[r][c]);
+                System.out.print("[" + mapGrid[r][c] + "]" );
             }
             System.out.println();
         }

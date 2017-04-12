@@ -8,8 +8,15 @@ import InterfacesAndEnums.MapObject;
 
 public class Game implements GameInterface
 {
-    private Map gameMap;
-    private Trainer trainer;
+    private static Map gameMap;
+    private static Trainer trainer;
+    
+    public static void main(String[] args)
+    {
+        gameMap = new Map(1);
+        trainer = new Trainer();
+        gameMap.printMap();
+    }
 
     @Override
     public MapObject[][] getMap()
