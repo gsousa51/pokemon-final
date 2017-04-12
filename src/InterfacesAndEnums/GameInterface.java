@@ -5,6 +5,6 @@ public interface GameInterface {
 
 	public MapObject[][] getMap();
 	public Point getTrainerPosition();
-	public int getRemaingSteps();
+	public int getRemainingSteps();
 	public void moveTrainer(Direction dir);
 }
