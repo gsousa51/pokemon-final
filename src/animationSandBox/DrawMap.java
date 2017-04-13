@@ -12,9 +12,15 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/*
+ * This class is used to draw a visual representation of the mapgrid used in the model
+ * It draws it on, takes a snapshot of it and saves the snapshot.
+ * We then use the snapshot in the animation model
+ * This JPanel draws a border of 250 pixels around the map.
+ */
 public class DrawMap extends JPanel {
-	BufferedImage grass1;
-	BufferedImage grass2; 
+	BufferedImage grass;
+	BufferedImage ground; 
 	BufferedImage rock;
 	char[][] map;
 	
@@ -24,15 +30,13 @@ public class DrawMap extends JPanel {
 		createFakeMap map = new createFakeMap();
 		frame.add(new DrawMap(map));
 		frame.setVisible(true);
-
-		
-		
+	
 	}
 	public DrawMap(createFakeMap mapObj){
 		try{
-			grass1 = ImageIO.read(new File("src/animationSandBox/grass1.PNG"));
-			grass2 = ImageIO.read(new File("src/animationSandBox/grass2.PNG"));
-			rock = ImageIO.read(new File("src/animationSandBox/rock.PNG"));
+			grass = ImageIO.read(new File("src/animationSandBox/GRASSBUSH.PNG"));
+			ground = ImageIO.read(new File("src/animationSandBox/GROUND.PNG"));
+			rock = ImageIO.read(new File("src/animationSandBox/newRock.PNG"));
 		}
 		catch(IOException e){
 			System.out.println(e.getStackTrace());
@@ -43,7 +47,7 @@ public class DrawMap extends JPanel {
 		   BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
 		    this.paint(img.getGraphics());
 		    try {
-		        ImageIO.write(img, "png", new File("THISWORKED.png"));
+		        ImageIO.write(img, "png", new File("updatedMap.png"));
 		        
 		        System.out.println("panel saved as image");
 
@@ -70,14 +74,15 @@ public class DrawMap extends JPanel {
 		for(int r =0; r<30; r++){
 			for(int c = 0; c<30; c++){
 				if(map[r][c]=='r'){
+					g.drawImage(ground, c*50+250, r*50+250, 50, 50, null);
 					g.drawImage(rock, c*50+250, r*50+250, 50,50,null);
 				}
 				else if(map[r][c]=='g'){
-					g.drawImage(grass1, c*50+250, r*50+250, 50, 50, null);
+					g.drawImage(grass, c*50+250, r*50+250, 50, 50, null);
 					
 				}
 				else{
-					g.drawImage(grass2, c*50+250, r*50+250, 50, 50, null);
+					g.drawImage(ground, c*50+250, r*50+250, 50, 50, null);
 				}
 			}
 		}

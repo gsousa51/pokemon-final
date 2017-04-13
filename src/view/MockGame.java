@@ -25,7 +25,7 @@ public class MockGame implements GameInterface {
 	public MockGame(){
 		trainerPosition = new Point(14,15);
 		map  = new replaceWithMapObject[30][30];
-		initializeMap();
+		makeMapOne();
 	}
 
 	private void initializeMap(){
@@ -65,6 +65,42 @@ public class MockGame implements GameInterface {
 			col ++;
 		}
 	}
+	
+	/*
+	 * The exact map that Morgan used in model.
+	 */
+	 private void makeMapOne()
+	    {
+	        for (int r = 0; r < 30; r++)
+	        {
+	            for (int c = 0; c < 30; c++)
+	            {
+	            	//ground
+	                map[r][c] = new replaceWithMapObject(true);
+	            }
+	        }
+	        
+	        for(int r = 0; r < 15; r++)
+	        {
+	        	//rocks
+	            map[r][10] = new replaceWithMapObject(false);
+	        }
+	        
+	        for(int r = 15; r < 30; r++)
+	        {
+	        	//rocks
+	            map[r][25] = new replaceWithMapObject(false);
+	        }
+	        
+	        for(int r = 0; r < 7; r++)
+	        {
+	            for(int c = 0; c < 7; c++)
+	            {
+	            	//grass
+	                map[r][c] = new replaceWithMapObject(true);
+	            }
+	        }
+	    }
 	@Override
 	public MapObject[][] getMap() {
 		return new MapObject[2][2];

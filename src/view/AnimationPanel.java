@@ -160,7 +160,7 @@ public class AnimationPanel extends JPanel {
 	// Method assigns the correct filePath to our BufferedImages
 	public void setImages() {
 		try {
-			map = ImageIO.read(new File("src/view/THISWORKED.png"));
+			map = ImageIO.read(new File("src/view/updatedMap.png"));
 			left1 = ImageIO.read(new File("src/animationSandBox/Left1.PNG"));
 			left2 = ImageIO.read(new File("src/animationSandBox/Left2.PNG"));
 			left3 = ImageIO.read(new File("src/animationSandBox/Left3Stand.PNG"));

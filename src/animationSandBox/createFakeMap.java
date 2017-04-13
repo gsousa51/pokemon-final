@@ -9,7 +9,7 @@ public class createFakeMap {
 	char[][] map = new char[100][100];
 	
 	public createFakeMap(){
-		initializeMap();
+		makeMapOne();
 	}
 	
 	public char[][] getMap(){
@@ -53,6 +53,41 @@ public class createFakeMap {
 			col ++;
 		}
 	}
+	
+	
+	//create a layout that's the exact layout morgan made in model
+	// h==ground
+	// g==grass
+	// r==rock
+	 private void makeMapOne()
+	    {
+	        for (int r = 0; r < 30; r++)
+	        {
+	            for (int c = 0; c < 30; c++)
+	            {
+	                map[r][c] = 'h';
+	            }
+	        }
+	        
+	        for(int r = 0; r < 30/2; r++)
+	        {
+	            map[r][10] = 'r';
+	        }
+	        
+	        for(int r = 15; r < 30; r++)
+	        {
+	            map[r][25] = 'r';
+	        }
+	        
+	        for(int r = 0; r < 7; r++)
+	        {
+	            for(int c = 0; c < 7; c++)
+	            {
+	                map[r][c] = 'g';
+	            }
+	        }
+	    }
+	    
 //	private void intializeMap(){
 //
 //		for(int r=0 ; r<100; r++){
