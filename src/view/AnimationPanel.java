@@ -1,6 +1,8 @@
 package view;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,8 +17,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import InterfacesAndEnums.Direction;
-
-
+import InterfacesAndEnums.GameInterface;
+import InterfacesAndEnums.MapObject;
 
 public class AnimationPanel extends JPanel {
 
@@ -40,40 +42,43 @@ public class AnimationPanel extends JPanel {
 	BufferedImage right1;
 	BufferedImage right2;
 	BufferedImage right3;
-	int currX = 150;
-	int currY = 150;
+	int currX ;
+	int currY ;
 	final static int height = 500;
 	final static int width = 500;
 	final static int playerX = 250;
 	final static int playerY = 250;
 	final static int playerW = 50;
 	final static int playerL = 50;
+	final static int mapWidth = 30;
+	final static int mapHeight = 30;
+	final static int pixelSize = 50;
 	ActionListener taskPerformer;
 	ActionListener timerStopper;
 	javax.swing.Timer walkTimer;
 	private Direction direction = Direction.SOUTH;
 	int index = 0;
 	int steps = 0;
-
+	Point trainerPosition;
+	GameInterface game;
+	MapObject[][] mapGrid;
 	boolean walking = false;
 
-	public AnimationPanel() {
+	public AnimationPanel(GameInterface game) {
 		setImages();
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
-
+		this.game = game;
+		trainerPosition = game.getTrainerPosition();
+		mapGrid = game.getMap();
+		currX = trainerPosition.x*pixelSize;
+		currY = trainerPosition.y*pixelSize;
 		taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if (steps == 0) {
-					System.out.println("-----STARTING REPS-------");
-					System.out.println("Steps: " + steps + " X : " + currX + " Y : " + currY);
-					System.out.println("-------------------------");
-					steps++;
-					//Time to stop his walking
-				} else if (steps == 6) {
+				if (currX == trainerPosition.x * pixelSize && 
+					currY == trainerPosition.y * pixelSize) {
 					walkTimer.stop();
 					System.out.println("Steps: " + steps + " X : " + currX + " Y : " + currY);
-					steps = 0;
 					index = 0;
 					walking = false;
 					repaint();
@@ -87,9 +92,6 @@ public class AnimationPanel extends JPanel {
 					} else {
 						currY += 10;
 					}
-
-					System.out.println("Steps: " + steps + " X : " + currX + " Y : " + currY);
-					steps += 1;
 					index++;
 					repaint();
 				}
@@ -103,7 +105,7 @@ public class AnimationPanel extends JPanel {
 
 	public void setImages() {
 		try {
-			map = ImageIO.read(new File("src/animationSandBox/SHITMAP.PNG"));
+			map = ImageIO.read(new File("src/view/new map.PNG"));
 			left1 = ImageIO.read(new File("src/animationSandBox/Left1.PNG"));
 			left2 = ImageIO.read(new File("src/animationSandBox/Left2.PNG"));
 			left3 = ImageIO.read(new File("src/animationSandBox/Left3Stand.PNG"));
@@ -147,35 +149,50 @@ public class AnimationPanel extends JPanel {
 	// "DIRECTION"
 	public boolean canMove() {
 		// If they're going up, we need to be at a value greater than 40.
-		if (direction.equals(direction.UP)) {
-			return (currY >= 50);
+		if (direction.equals(direction.NORTH)) {
+			if(trainerPosition.y > 0){
+				return mapGrid[trainerPosition.y-1][trainerPosition.x].isWalkable();
+			}
+			else return false;
 		}
-		if (direction.equals(direction.DOWN)) {
-			return (currY <= map.getHeight() - height - 40);
+		if (direction.equals(direction.SOUTH)) {
+			if(trainerPosition.y < mapHeight - 1){
+				return mapGrid[trainerPosition.y+1][trainerPosition.x].isWalkable();
+			}
+			else return false;
 		}
-		if (direction.equals(direction.LEFT)) {
-			return (currX >= 50);
-		} else
-			return (currX <= map.getWidth() - width - 40);
+		if (direction.equals(direction.WEST)) {
+			if (trainerPosition.x > 0){
+				return mapGrid[trainerPosition.y][trainerPosition.x-1].isWalkable();
+			}
+			else return false;
+		} else{
+			if (trainerPosition.x < mapWidth - 1){
+				return mapGrid[trainerPosition.y][trainerPosition.x+1].isWalkable();
+			}
+			else return false;
+		}
 	}// end canMove
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+		//Draw the subimage of the correct size as our background
 		g2.drawImage(map.getSubimage(currX, currY, width, height), 0, 0, width, height, null);
-		if (direction == Direction.UP) {
+		//draw the person in the correct placement.
+		if (direction == Direction.NORTH) {
 			g2.drawImage(up.get(index % 3), playerX, playerY, playerW, playerL, null);
-		} else if (direction == Direction.LEFT) {
+		} else if (direction == Direction.WEST) {
 			g2.drawImage(left.get(index % 3), playerX, playerY, playerW, playerL, null);
-		} else if (direction == Direction.RIGHT) {
+		} else if (direction == Direction.EAST) {
 			g2.drawImage(right.get(index % 3), playerX, playerY, playerW, playerL, null);
 		} else {
 			g2.drawImage(down.get(index % 3), playerX, playerY, playerW, playerL, null);
 		}
 	}
 
-	public void moveUp() {
-		direction = Direction.UP;
+	public void moveNorth() {
+		direction = Direction.NORTH;
 		if (!canMove()) {
 			walking = false;
 			System.out.println("Can't move");
@@ -186,62 +203,68 @@ public class AnimationPanel extends JPanel {
 		super.repaint();
 	}
 
-	public void moveLeft() {
-		direction = Direction.LEFT;
+	public void moveWest() {
+		direction = Direction.WEST;
 		if (!canMove()) {
 			walking = false;
 			return;
+		} else {
+			game.moveTrainer(direction);
+			trainerPosition = game.getTrainerPosition();
+			walkTimer.start();
+			super.repaint();
 		}
-		walkTimer.start();
-		super.repaint();
 	}
 
-	public void moveDown() {
-		//Set the direction we're walking to "down"
-		direction = Direction.DOWN;
-		//If we can't move, set walking to false and return.
+	public void moveSouth() {
+		// Set the direction we're walking to "south"
+		direction = Direction.SOUTH;
+		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
 			return;
+		} else {
+			game.moveTrainer(direction);
+			trainerPosition = game.getTrainerPosition();
+			walkTimer.start();
+			super.repaint();
 		}
-		//Otherwise, starting the "walk timer"
-		//Esse
-		walkTimer.start();
-		super.repaint();
 	}
 
-	public void moveRight() {
-		//Set the direction to be "right"
-		direction = Direction.RIGHT;
-		//If we can't move, set walking to false and return.
+	public void moveEast() {
+		// Set the direction to be "EAST"
+		direction = Direction.EAST;
+		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
 			return;
+		} else {
+			game.moveTrainer(direction);
+			trainerPosition = game.getTrainerPosition();
+			walkTimer.start();
+			super.repaint();
 		}
-		//Else starting the walking timer.
-		walkTimer.start();
-		super.repaint();
 	}
 
-	//The keyboard listener we use to get moves from user.
+	// The keyboard listener we use to get moves from user.
 	public class Keyboard implements KeyListener {
 		@Override
 		public void keyPressed(KeyEvent key) {
-			//If user isn't already in the middle of a move, read the key typed.
+			// If user isn't already in the middle of a move, read the key
+			// typed.
 			if (!walking) {
 				walking = true;
 				if (key.getKeyCode() == KeyEvent.VK_W) {
-					moveUp();
+					moveNorth();
 					System.out.println("PUSHED W");
 				} else if (key.getKeyCode() == KeyEvent.VK_A) {
-					moveLeft();
+					moveWest();
 				} else if (key.getKeyCode() == KeyEvent.VK_S) {
-					moveDown();
+					moveSouth();
 				} else if (key.getKeyCode() == KeyEvent.VK_D) {
-					moveRight();
+					moveEast();
 				}
-			}
-			else{
+			} else {
 				System.out.println("Skipped key press");
 			}
 		}

@@ -37,10 +37,10 @@ public class AnimationPanel extends JPanel {
 	BufferedImage right1;
 	BufferedImage right2;
 	BufferedImage right3;
-	int currX = 150;
-	int currY = 150;
+	int currX = 200;
+	int currY = 200;
 	final static int height = 500;
-	final static int width = 500;
+	final static int width = 525;
 	final static int playerX = 250;
 	final static int playerY = 250;
 	final static int playerW = 50;
@@ -148,12 +148,12 @@ public class AnimationPanel extends JPanel {
 			return (currY >= 50);
 		}
 		if (direction.equals(direction.DOWN)) {
-			return (currY <= map.getHeight() - height - 40);
+			return (currY <= map.getHeight() - height - 50);
 		}
 		if (direction.equals(direction.LEFT)) {
 			return (currX >= 50);
 		} else
-			return (currX <= map.getWidth() - width - 40);
+			return (currX <= map.getWidth() - width - 50);
 	}// end canMove
 
 	@Override
