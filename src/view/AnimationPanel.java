@@ -162,7 +162,7 @@ public class AnimationPanel extends JPanel {
 	public void setImages() {
 		try {
 			spriteSheet = ImageIO.read(new File("src/animationSandBox/pokemonSprite.png"));
-			map = ImageIO.read(new File("src/view/updatedMap.png"));
+			map = ImageIO.read(new File("src/view/boulderBorder.png"));
 			left1 =  spriteSheet.getSubimage(30, 0, 15, 20);
 			left2 =  spriteSheet.getSubimage(30, 30, 15, 20);
 			left3 =  spriteSheet.getSubimage(30, 150, 15, 20);
