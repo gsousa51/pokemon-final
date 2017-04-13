@@ -8,32 +8,43 @@ import InterfacesAndEnums.MapObject;
 
 public class MockGame implements GameInterface {
 
+	public class replaceWithMapObject{
+		boolean canWalk;
+		
+		public replaceWithMapObject(Boolean canWalk){
+			this.canWalk = canWalk;
+		}
+		public boolean isWalkable(){
+			return canWalk;
+		}
+		
+	}
 	Point trainerPosition;
 	//MapObject[][] map ;
-	char[][] map;
+	replaceWithMapObject[][] map;
 	public MockGame(){
-		trainerPosition = new Point(15,15);
-		map  = new char[30][30];
+		trainerPosition = new Point(14,15);
+		map  = new replaceWithMapObject[30][30];
 		initializeMap();
 	}
-	
+
 	private void initializeMap(){
-		for(int r=0 ; r<19; r++){
-			for(int c =0; c < 19; c++){
+		for(int r=0 ; r<30; r++){
+			for(int c =0; c < 30; c++){
 				if(c%2==0){
 					if(r%2==0){
-						map[r][c] = 'g';
+						map[r][c] = new replaceWithMapObject(true);
 					}
 					else{
-						map[r][c]= 'h';
+						map[r][c] = new replaceWithMapObject(true);
 					}
 				}
 				else{
 					if(r%2==0){
-						map[r][c] = 'h';
+						map[r][c] = new replaceWithMapObject(true);
 					}
 					else{
-						map[r][c] = 'g';
+						map[r][c] = new replaceWithMapObject(true);
 					}
 				}
 			}
@@ -42,38 +53,36 @@ public class MockGame implements GameInterface {
 		int row, col;
 		row = col = 10;
 		while(row<20){
-			map[row][col] = 'r';
+			map[row][col] = new replaceWithMapObject(false);
 			row++;
 			col++;
 		}
 		row = 20;
 		col = 10;
 		while(row>10){
-			map[row][col] = 'r';
+			map[row][col] = new replaceWithMapObject(false);
 			row --;
 			col ++;
 		}
 	}
 	@Override
 	public MapObject[][] getMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MapObject[2][2];
 	}
-	public char[][] getMapC(){
+
+	public replaceWithMapObject[][] getMap2(){
 		return map;
 	}
 	
 
 	@Override
 	public Point getPlayerPosition() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Point getTrainerPosition() {
-		// TODO Auto-generated method stub
-		return null;
+		return trainerPosition;
 	}
 
 	@Override
@@ -84,8 +93,17 @@ public class MockGame implements GameInterface {
 
 	@Override
 	public void moveTrainer(Direction dir) {
-		// TODO Auto-generated method stub
-		
+		if(dir.equals(Direction.NORTH)){
+			trainerPosition.y-=1;
+		}
+		else if(dir.equals(Direction.SOUTH)){
+			trainerPosition.y+=1;
+		}
+		else if(dir.equals(Direction.EAST)){
+			trainerPosition.x+=1;
+		}
+		else{
+			trainerPosition.x-=1;
+		}
 	}
-
 }

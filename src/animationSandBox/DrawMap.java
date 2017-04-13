@@ -1,5 +1,6 @@
 package animationSandBox;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,6 +24,7 @@ public class DrawMap extends JPanel {
 		createFakeMap map = new createFakeMap();
 		frame.add(new DrawMap(map));
 		frame.setVisible(true);
+
 		
 		
 	}
@@ -36,33 +38,46 @@ public class DrawMap extends JPanel {
 			System.out.println(e.getStackTrace());
 		}
 		map = mapObj.getMap();
-		this.setSize(5000, 5000);
+		this.setSize(2000, 2000);
 		
-		BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
-		this.paint(g);
-		 try {
-		        ImageIO.write(image, "PNG", new File("Map4"));
-		    } catch (IOException ex) {
-		        //Logger.getLogger(CustomApp.class.getName()).log(Level.SEVERE, null, ex);
-		    	System.out.println("Nope.");
-		   }
+		   BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+		    this.paint(img.getGraphics());
+		    try {
+		        ImageIO.write(img, "png", new File("THISWORKED.png"));
+		        
+		        System.out.println("panel saved as image");
+
+		    } catch (Exception e) {
+		        System.out.println("panel not saved" + e.getMessage());
+		    }
+
 		
 	}
 	@Override
 	public void paint(Graphics g){
 //		g.setColor(Color.BLACK);
 //		g.drawRect(0, 0, 600, 600);
+		g.setColor(Color.black);
+		for(int i = 0; i<35; i++){
+			g.fillRect(0, i*50, 250, 50);
+			g.fillRect(1750, i*50, 250, 50);
+		}
+		for(int i = 0; i<35; i++){
+			g.fillRect(i*50, 0, 50, 250);
+			g.fillRect(i*50, 1750, 50, 250);
+		}
+		
 		for(int r =0; r<30; r++){
 			for(int c = 0; c<30; c++){
 				if(map[r][c]=='r'){
-					g.drawImage(rock, r*50, c*50, 50,50,null);
+					g.drawImage(rock, c*50+250, r*50+250, 50,50,null);
 				}
 				else if(map[r][c]=='g'){
-					g.drawImage(grass1, r*50, c*50, 50, 50, null);
+					g.drawImage(grass1, c*50+250, r*50+250, 50, 50, null);
+					
 				}
 				else{
-					g.drawImage(grass2, r*50, c*50, 50, 50, null);
+					g.drawImage(grass2, c*50+250, r*50+250, 50, 50, null);
 				}
 			}
 		}
