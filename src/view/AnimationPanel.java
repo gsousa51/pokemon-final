@@ -40,7 +40,7 @@ public class AnimationPanel extends JPanel {
 	// All the buffered images we need for drawing
 	// the background and trainer
 	BufferedImage map;
-
+	BufferedImage spriteSheet;
 	BufferedImage left1;
 	BufferedImage left2;
 	BufferedImage left3;
@@ -95,6 +95,7 @@ public class AnimationPanel extends JPanel {
 
 	public static void main(String[] args){
 		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(520,500);
 		MockGame game = new MockGame();
 		frame.add(new AnimationPanel(game));
@@ -160,22 +161,23 @@ public class AnimationPanel extends JPanel {
 	// Method assigns the correct filePath to our BufferedImages
 	public void setImages() {
 		try {
+			spriteSheet = ImageIO.read(new File("src/animationSandBox/pokemonSprite.png"));
 			map = ImageIO.read(new File("src/view/updatedMap.png"));
-			left1 = ImageIO.read(new File("src/animationSandBox/Left1.PNG"));
-			left2 = ImageIO.read(new File("src/animationSandBox/Left2.PNG"));
-			left3 = ImageIO.read(new File("src/animationSandBox/Left3Stand.PNG"));
+			left1 =  spriteSheet.getSubimage(30, 0, 15, 20);
+			left2 =  spriteSheet.getSubimage(30, 30, 15, 20);
+			left3 =  spriteSheet.getSubimage(30, 150, 15, 20);
 
-			up1 = ImageIO.read(new File("src/animationSandBox/Up1.PNG"));
-			up2 = ImageIO.read(new File("src/animationSandBox/Up2.PNG"));
-			up3 = ImageIO.read(new File("src/animationSandBox/Up3.PNG"));
+			up1 = spriteSheet.getSubimage(60, 0, 15, 20);
+			up2 =  spriteSheet.getSubimage(60, 30, 15, 20);
+			up3 =  spriteSheet.getSubimage(60, 150, 15, 20);
 
-			right1 = ImageIO.read(new File("src/animationSandBox/Right1.PNG"));
-			right2 = ImageIO.read(new File("src/animationSandBox/Right2.PNG"));
-			right3 = ImageIO.read(new File("src/animationSandBox/Right3.PNG"));
+			right1 =  spriteSheet.getSubimage(90, 0, 15, 20);
+			right2 =  spriteSheet.getSubimage(90, 30, 15, 20);
+			right3 =  spriteSheet.getSubimage(90, 150, 15, 20);
 
-			down1 = ImageIO.read(new File("src/animationSandBox/Down1.PNG"));
-			down2 = ImageIO.read(new File("src/animationSandBox/Down2.PNG"));
-			down3 = ImageIO.read(new File("src/animationSandBox/Down3.PNG"));
+			down1 = spriteSheet.getSubimage(0, 0, 15, 20);
+			down2 = spriteSheet.getSubimage(0, 30, 15, 20);
+			down3 = spriteSheet.getSubimage(0, 150, 15, 20);
 
 			north = new ArrayList<>();
 			north.add(up1);
