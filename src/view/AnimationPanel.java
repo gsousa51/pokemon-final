@@ -188,14 +188,14 @@ public class AnimationPanel extends JPanel {
 			west.add(left1);
 
 			south = new ArrayList<>();
-			south.add(down3);
-			south.add(down2);
 			south.add(down1);
+			south.add(down2);
+			south.add(down3);
 
 			east = new ArrayList<>();
-			east.add(right3);
-			east.add(right2);
 			east.add(right1);
+			east.add(right2);
+			east.add(right3);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

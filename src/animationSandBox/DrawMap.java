@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 public class DrawMap extends JPanel {
 	BufferedImage grass;
 	BufferedImage ground; 
+	BufferedImage rock1;
 	BufferedImage rock;
 	char[][] map;
 	
@@ -36,7 +37,8 @@ public class DrawMap extends JPanel {
 		try{
 			grass = ImageIO.read(new File("src/animationSandBox/GRASSBUSH.PNG"));
 			ground = ImageIO.read(new File("src/animationSandBox/GROUND.PNG"));
-			rock = ImageIO.read(new File("src/animationSandBox/newRock.PNG"));
+			rock1 = ImageIO.read(new File("src/animationSandBox/Boulder.png"));
+			rock = rock1.getSubimage(0, 0, 125, 125);
 		}
 		catch(IOException e){
 			System.out.println(e.getStackTrace());
