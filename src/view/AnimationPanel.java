@@ -19,10 +19,15 @@ import javax.swing.JPanel;
 
 import InterfacesAndEnums.Direction;
 import InterfacesAndEnums.GameInterface;
-import animationSandBox.DrawMap;
-import animationSandBox.createFakeMap;
 import view.MockGame.replaceWithMapObject;
 
+/*
+ * NOTE: THIS PANEL IS USING A CLASS CALLED "replaceWithMapObject"
+ * 		  as well as "MockGame" for testing purposes.
+ * 		  Once we merge our work it will seamlessly work once we change them to MapObject and
+ * 		  a regular game object.
+ * 	    
+ */
 public class AnimationPanel extends JPanel {
 
 	// Each of these holds the various BufferedImages for trainer based on
