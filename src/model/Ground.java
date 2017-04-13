@@ -36,7 +36,7 @@ public class Ground extends MapObject
     @Override
     public String toString()
     {
-        return "P";
+        return " ";
     }
     
 }

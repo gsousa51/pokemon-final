@@ -13,7 +13,7 @@ public class Rock extends MapObject
     @Override
     public String toString()
     {
-        return "R";
+        return "#";
     }
 
 }

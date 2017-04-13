@@ -20,8 +20,8 @@ public class Trainer
     {
         stepsRemaining = 500;
         //TODO: set to correct location or add parameters!!!
-        currentRow = 50;
-        currentCol = 50;
+        currentRow = 15;
+        currentCol = 20;
     }
 
     /**
