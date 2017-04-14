@@ -191,9 +191,9 @@ public class MapPanel extends JPanel {
 			north.add(up3);
 
 			west = new ArrayList<>();
-			west.add(left3);
-			west.add(left2);
 			west.add(left1);
+			west.add(left2);
+			west.add(left3);
 
 			south = new ArrayList<>();
 			south.add(down1);
