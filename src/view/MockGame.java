@@ -2,6 +2,10 @@ package view;
 
 import java.awt.Point;
 
+import interfaceEnumMocks.Direction;
+import interfaceEnumMocks.GameInterface;
+import interfaceEnumMocks.MapObject;
+
 //import InterfacesAndEnums.Direction;
 //import InterfacesAndEnums.GameInterface;
 //import InterfacesAndEnums.MapObject;
@@ -291,7 +295,6 @@ public class MockGame implements GameInterface {
 	}
 	
 
-	@Override
 	public Point getPlayerPosition() {
 		return null;
 	}
@@ -301,7 +304,6 @@ public class MockGame implements GameInterface {
 		return trainerPosition;
 	}
 
-	@Override
 	public int getRemaingSteps() {
 		return stepsRemaining;
 	}
@@ -321,5 +323,11 @@ public class MockGame implements GameInterface {
 			trainerPosition.x-=1;
 		}
 		stepsRemaining--;
+	}
+
+	@Override
+	public int getRemainingSteps() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

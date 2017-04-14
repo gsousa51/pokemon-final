@@ -2,7 +2,8 @@ package view;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+
+import interfaceEnumMocks.GameInterface;
 
 //import InterfacesAndEnums.GameInterface;
 
@@ -14,7 +15,7 @@ public class StepCountPanel extends JPanel {
 	
 	public StepCountPanel(GameInterface game){
 		this.setSize(150,500);
-		stepLabel = new JLabel("Steps Left : "+ game.getRemaingSteps());
+		stepLabel = new JLabel("Steps Left : "+ game.getRemainingSteps());
 	//	stepField = new JTextField(game.getRemaingSteps());
 		this.add(stepLabel);
 		
@@ -24,6 +25,6 @@ public class StepCountPanel extends JPanel {
 	}
 	
 	public void reset(){
-		stepLabel.setText("Steps Left : " + String.valueOf(game.getRemaingSteps()));
+		stepLabel.setText("Steps Left : " + String.valueOf(game.getRemainingSteps()));
 	}
 }

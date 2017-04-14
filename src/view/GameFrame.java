@@ -4,6 +4,8 @@ package view;
 
 import javax.swing.JFrame;
 
+import interfaceEnumMocks.GameInterface;
+
 //import InterfacesAndEnums.GameInterface;
 
 /*
