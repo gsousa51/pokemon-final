@@ -16,7 +16,6 @@ public class StepCountPanel extends JPanel {
 	public StepCountPanel(GameInterface game){
 		this.setSize(150,500);
 		stepLabel = new JLabel("Steps Left : "+ game.getRemainingSteps());
-	//	stepField = new JTextField(game.getRemaingSteps());
 		this.add(stepLabel);
 		
 
