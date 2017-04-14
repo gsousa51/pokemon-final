@@ -273,11 +273,15 @@ public class MapPanel extends JPanel {
 		direction = Direction.NORTH;
 		if (!canMove()) {
 			walking = false;
+			//This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
+			//Else we can mvoe, notify game trainer is moving.
 			game.moveTrainer(direction);
+			//Reset position variable.
 			trainerPosition = game.getTrainerPosition();
+			//Start timer for animation.
 			walkTimer.start();
 			super.repaint();
 		}
@@ -287,11 +291,15 @@ public class MapPanel extends JPanel {
 		direction = Direction.WEST;
 		if (!canMove()) {
 			walking = false;
+			//This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
+			//Else we can move, notify game we're moving.
 			game.moveTrainer(direction);
+			//Reset position variable.
 			trainerPosition = game.getTrainerPosition();
+			//Start time for animation
 			walkTimer.start();
 			super.repaint();
 		}
@@ -303,11 +311,15 @@ public class MapPanel extends JPanel {
 		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
+			//This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
+			//Else we can move. Notify game we're moving.
 			game.moveTrainer(direction);
+			//Update the position variable
 			trainerPosition = game.getTrainerPosition();
+			//Begin the timer for animation.
 			walkTimer.start();
 			super.repaint();
 		}
@@ -319,11 +331,16 @@ public class MapPanel extends JPanel {
 		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
+			//This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
+			//else we can move.
+			//Tell the game the trainer is moving to the east.
 			game.moveTrainer(direction);
+			//Reset our position variable
 			trainerPosition = game.getTrainerPosition();
+			//Start the timer to begin animation of trainer.
 			walkTimer.start();
 			super.repaint();
 		}
