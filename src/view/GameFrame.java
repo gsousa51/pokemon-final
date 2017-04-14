@@ -33,6 +33,12 @@ public class GameFrame extends JFrame{
 	public void walkEnded(){
 		step.reset();
 		repaint();
+		//game.checkIfGameOver()
+		/*
+		 * Should have a check here to see if the user is out of steps.
+		 * Granted, this matter if the end of game condition isn't based on steps.
+		 * But for Iteration 1, should have check here.
+		 */
 	}
 
 

@@ -1,3 +1,10 @@
+/*
+ * Author: Gary Sousa
+ * Class: MapPanel.java
+ * Purpose: This Panel displays the limited view of the map with the trainer
+ * 			as the center of focus at all times.
+ * 			Panel utilizes a timer to animate the trainer as it walks around board.
+ */
 package view;
 
 import java.awt.Graphics;
@@ -12,11 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import InterfacesAndEnums.Direction;
@@ -30,7 +34,7 @@ import view.MockGame.replaceWithMapObject;
  * 		  a regular game object.
  * 	    
  */
-public class MapPanel extends JPanel  {
+public class MapPanel extends JPanel {
 
 	// Each of these holds the various BufferedImages for trainer based on
 	// which direction he is travelling.
@@ -95,14 +99,6 @@ public class MapPanel extends JPanel  {
 	// of moving. (Prevents user from button smashing and ruining everything.)
 	private boolean walking = false;
 	GameFrame container;
-//	public static void main(String[] args) {
-//		JFrame frame = new JFrame();
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setSize(520, 500);
-//		MockGame game = new MockGame();
-//		frame.add(new MapPanel(game,frame));
-//		frame.setVisible(true);
-//	}
 
 	public MapPanel(GameInterface game, GameFrame container) {
 		this.container = container;
@@ -133,7 +129,7 @@ public class MapPanel extends JPanel  {
 					index = 0;
 					// Turn off the flag variable
 					walking = false;
-					//Tell JFrame our walk ended
+					// Tell JFrame our walk ended
 					container.walkEnded();
 					// repaint once more.
 					repaint();
