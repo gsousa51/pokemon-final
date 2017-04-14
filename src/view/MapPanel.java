@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -28,7 +30,7 @@ import view.MockGame.replaceWithMapObject;
  * 		  a regular game object.
  * 	    
  */
-public class MapPanel extends JPanel {
+public class MapPanel extends JPanel  {
 
 	// Each of these holds the various BufferedImages for trainer based on
 	// which direction he is travelling.
@@ -72,7 +74,7 @@ public class MapPanel extends JPanel {
 	final static int playerW = 50;
 	final static int playerL = 50;
 	// Constants to keep track of the length/width of our MapObjects array.
-	final static int mapWidth = 30;
+	final static int mapWidth = 40;
 	final static int mapHeight = 30;
 	// Constant for pixel size of each square of mapgrid.
 	// (Might be unnecessary but if we change the size later it'll be handy)
@@ -92,18 +94,18 @@ public class MapPanel extends JPanel {
 	// Flag var used to keep track of if trainer is in process
 	// of moving. (Prevents user from button smashing and ruining everything.)
 	private boolean walking = false;
+	GameFrame container;
+//	public static void main(String[] args) {
+//		JFrame frame = new JFrame();
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setSize(520, 500);
+//		MockGame game = new MockGame();
+//		frame.add(new MapPanel(game,frame));
+//		frame.setVisible(true);
+//	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(520, 500);
-		MockGame game = new MockGame();
-		frame.add(new MapPanel(game));
-		frame.setVisible(true);
-
-	}
-
-	public MapPanel(GameInterface game) {
+	public MapPanel(GameInterface game, GameFrame container) {
+		this.container = container;
 		// Read in all the necessary images.
 		setImages();
 		this.setSize(width, height);
@@ -131,6 +133,8 @@ public class MapPanel extends JPanel {
 					index = 0;
 					// Turn off the flag variable
 					walking = false;
+					//Tell JFrame our walk ended
+					container.walkEnded();
 					// repaint once more.
 					repaint();
 				} else {
@@ -164,7 +168,7 @@ public class MapPanel extends JPanel {
 		try {
 			// Sprite sheet containing the images of the trainer
 			spriteSheet = ImageIO.read(new File("src/animationSandBox/pokemonSprite.png"));
-			map = ImageIO.read(new File("src/view/boulderBorder.png"));
+			map = ImageIO.read(new File("src/view/finalMap1.png"));
 			// We get the subimages from the sprite sheet that we need for our
 			// trainer.
 			left1 = spriteSheet.getSubimage(30, 0, 15, 20);

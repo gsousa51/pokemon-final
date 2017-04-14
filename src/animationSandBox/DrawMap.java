@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -18,13 +18,15 @@ import javax.swing.JPanel;
  * We then use the snapshot in the animation model
  * This JPanel draws a border of 250 pixels around the map.
  */
-public class DrawMap extends JPanel {
+public class DrawMap extends JPanel  {
 	BufferedImage grass;
 	BufferedImage ground;
 	BufferedImage rock1;
 	BufferedImage rock;
 	char[][] map;
-
+	
+	final static int width = 40;
+	final static int height = 30;
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setSize(5000, 5000);
@@ -44,12 +46,12 @@ public class DrawMap extends JPanel {
 			System.out.println(e.getStackTrace());
 		}
 		map = mapObj.getMap();
-		this.setSize(2000, 2000);
+		this.setSize(2500, 2500);
 
 		BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
 		this.paint(img.getGraphics());
 		try {
-			ImageIO.write(img, "png", new File("updatedMap.png"));
+			ImageIO.write(img, "png", new File("finalMap1.png"));
 
 			System.out.println("panel saved as image");
 
@@ -64,38 +66,31 @@ public class DrawMap extends JPanel {
 		// g.setColor(Color.BLACK);
 		// g.drawRect(0, 0, 600, 600);
 		g.setColor(Color.black);
-		for (int i = 0; i < 35; i++) {
+		for (int i = 0; i < 40; i++) {
 
-			// g.fillRect(0, i*50, 250, 50);
+
 			for (int j = 0; j < 5; j++) {
 
 				g.drawImage(ground, j*50, i * 50, 50, 50, null);
-				g.drawImage(ground, 1750 + j * 50, i * 50, 50, 50, null);
-				if (j == 4&& i>4) {
-					g.drawImage(rock, j * 50, i * 50, 50, 50, null);
-					g.drawImage(rock, 1750, i * 50, 50, 50, null);
-				}
+				g.drawImage(ground, 2150 + j * 50, i * 50, 50, 50, null);
+
 
 			}
-			// g.fillRect(1750, i*50, 250, 50);
+
 
 		}
-		for (int i = 0; i < 35; i++) {
+		for (int i = 0; i < 45; i++) {
 			for(int j=0; j<5; j++){
 			g.drawImage(ground, i*50, j * 50, 50, 50, null);
 			g.drawImage(ground, i * 50, 1750+ j * 50, 50, 50, null);
-			if (j == 4&&i>4) {
-				g.drawImage(rock, i * 50, j * 50, 50, 50, null);
-				g.drawImage(rock, i * 50, 1750, 50, 50, null);
-			}
+
 			}
 
 		}
-//			g.fillRect(i * 50, 0, 50, 250);
-//			g.fillRect(i * 50, 1750, 50, 250);
 
-		for (int r = 0; r < 30; r++) {
-			for (int c = 0; c < 30; c++) {
+
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
 				if (map[r][c] == 'r') {
 					g.drawImage(ground, c * 50 + 250, r * 50 + 250, 50, 50, null);
 					g.drawImage(rock, c * 50 + 250, r * 50 + 250, 50, 50, null);
@@ -108,5 +103,7 @@ public class DrawMap extends JPanel {
 			}
 		}
 	}
+
+
 
 }

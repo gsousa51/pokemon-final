@@ -1,3 +1,5 @@
+package InterfacesAndEnums;
+
 import java.awt.Point;
 
 public interface GameInterface {
