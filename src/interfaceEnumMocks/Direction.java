@@ -1,4 +1,5 @@
-package InterfacesAndEnums;
+package interfaceEnumMocks;
+//package InterfacesAndEnums;
 
 /**
  * An enum used to represent one of four directions in which the player 

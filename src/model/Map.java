@@ -2,7 +2,9 @@ package model;
 
 import java.awt.Point;
 
-import InterfacesAndEnums.MapObject;
+import interfaceEnumMocks.MapObject;
+
+// import InterfacesAndEnums.MapObject;
 
 public class Map
 {

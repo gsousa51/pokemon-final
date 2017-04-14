@@ -1,3 +1,4 @@
+package interfaceEnumMocks;
 import java.awt.Point;
 
 public interface GameInterface {

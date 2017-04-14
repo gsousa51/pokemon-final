@@ -1,4 +1,5 @@
-package InterfacesAndEnums;
+package interfaceEnumMocks;
+// package InterfacesAndEnums;
 
 import model.Item;
 import model.Pokemon;

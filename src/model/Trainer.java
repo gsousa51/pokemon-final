@@ -2,7 +2,9 @@ package model;
 
 import java.awt.Point;
 
-import InterfacesAndEnums.Direction;
+import interfaceEnumMocks.Direction;
+
+// import InterfacesAndEnums.Direction;
 
 public class Trainer
 {

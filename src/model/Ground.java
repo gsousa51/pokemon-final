@@ -1,6 +1,8 @@
 package model;
 
-import InterfacesAndEnums.MapObject;
+import interfaceEnumMocks.MapObject;
+
+// import InterfacesAndEnums.MapObject;
 
 public class Ground extends MapObject
 {

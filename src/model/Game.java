@@ -2,9 +2,13 @@ package model;
 
 import java.awt.Point;
 
-import InterfacesAndEnums.Direction;
-import InterfacesAndEnums.GameInterface;
-import InterfacesAndEnums.MapObject;
+import interfaceEnumMocks.Direction;
+import interfaceEnumMocks.GameInterface;
+import interfaceEnumMocks.MapObject;
+
+// import InterfacesAndEnums.Direction;
+// import InterfacesAndEnums.GameInterface;
+// import InterfacesAndEnums.MapObject;
 
 public class Game implements GameInterface
 {
