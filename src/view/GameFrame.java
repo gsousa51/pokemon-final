@@ -5,6 +5,7 @@ package view;
 import javax.swing.JFrame;
 
 import interfaceEnumMocks.GameInterface;
+import model.Game;
 
 //import InterfacesAndEnums.GameInterface;
 
@@ -23,7 +24,7 @@ public class GameFrame extends JFrame{
 	public GameFrame(){
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setSize(650, 500);
-			GameInterface game = new MockGame();
+			GameInterface game = new Game();
 			MapPanel mapPanel = new MapPanel(game,this);
 			step = new StepCountPanel(game);
 			this.add(step);

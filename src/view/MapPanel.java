@@ -25,9 +25,7 @@ import javax.swing.JPanel;
 
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
-//import InterfacesAndEnums.Direction;
-//import InterfacesAndEnums.GameInterface;
-import view.MockGame.replaceWithMapObject;
+import interfaceEnumMocks.MapObject;
 
 /*
  * NOTE: THIS PANEL IS USING A CLASS CALLED "replaceWithMapObject"
@@ -96,7 +94,7 @@ public class MapPanel extends JPanel {
 	private int index = 0;
 	private Point trainerPosition;
 	private GameInterface game;
-	private replaceWithMapObject[][] mapGrid;
+	private MapObject[][] mapGrid;
 	// Flag var used to keep track of if trainer is in process
 	// of moving. (Prevents user from button smashing and ruining everything.)
 	private boolean walking = false;
@@ -112,7 +110,7 @@ public class MapPanel extends JPanel {
 		this.setFocusable(true);
 		this.game = game;
 		trainerPosition = game.getTrainerPosition();
-		mapGrid = ((MockGame) game).getMap2();
+		mapGrid = game.getMap();
 		// Set the top left corner of subimage for background
 		// to be 50 times the position variables.
 		// (Makes for ease in drawing)
@@ -355,15 +353,18 @@ public class MapPanel extends JPanel {
 			// If user isn't already in the middle of a move, read the key
 			// typed.
 			if (!walking) {
-				walking = true;
 				if (key.getKeyCode() == KeyEvent.VK_W) {
 					moveNorth();
+					walking = true;
 				} else if (key.getKeyCode() == KeyEvent.VK_A) {
 					moveWest();
+					walking = true;
 				} else if (key.getKeyCode() == KeyEvent.VK_S) {
 					moveSouth();
+					walking = true;
 				} else if (key.getKeyCode() == KeyEvent.VK_D) {
 					moveEast();
+					walking = true;
 				}
 			} else {
 				// If we get here, user is already walking
