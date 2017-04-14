@@ -22,6 +22,10 @@ public class Game implements GameInterface
         gameMap.printMap();
     }
 
+    public Game(){
+    	gameMap = new Map(1);
+    	trainer = new Trainer();
+    }
     @Override
     public MapObject[][] getMap()
     {

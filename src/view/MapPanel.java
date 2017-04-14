@@ -354,17 +354,21 @@ public class MapPanel extends JPanel {
 			// typed.
 			if (!walking) {
 				if (key.getKeyCode() == KeyEvent.VK_W) {
+					walking = true;
 					moveNorth();
-					walking = true;
+					
 				} else if (key.getKeyCode() == KeyEvent.VK_A) {
+					walking = true;
 					moveWest();
-					walking = true;
 				} else if (key.getKeyCode() == KeyEvent.VK_S) {
+					walking = true;
 					moveSouth();
-					walking = true;
 				} else if (key.getKeyCode() == KeyEvent.VK_D) {
-					moveEast();
 					walking = true;
+					moveEast();
+				}
+				else{
+					return;
 				}
 			} else {
 				// If we get here, user is already walking

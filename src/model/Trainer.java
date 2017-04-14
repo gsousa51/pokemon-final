@@ -63,9 +63,9 @@ public class Trainer
     public void move(Direction dir)
     {
         if(dir == Direction.NORTH)
-            currentRow++;
-        else if(dir == Direction.SOUTH)
             currentRow--;
+        else if(dir == Direction.SOUTH)
+            currentRow++;
         else if(dir == Direction.EAST)
             currentCol++;
         else if(dir == Direction.WEST)
