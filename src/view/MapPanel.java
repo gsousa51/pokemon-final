@@ -23,8 +23,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import InterfacesAndEnums.Direction;
-import InterfacesAndEnums.GameInterface;
+//import InterfacesAndEnums.Direction;
+//import InterfacesAndEnums.GameInterface;
 import view.MockGame.replaceWithMapObject;
 
 /*

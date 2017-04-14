@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import InterfacesAndEnums.GameInterface;
+//import InterfacesAndEnums.GameInterface;
 
 public class StepCountPanel extends JPanel {
 

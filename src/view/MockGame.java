@@ -2,9 +2,9 @@ package view;
 
 import java.awt.Point;
 
-import InterfacesAndEnums.Direction;
-import InterfacesAndEnums.GameInterface;
-import InterfacesAndEnums.MapObject;
+//import InterfacesAndEnums.Direction;
+//import InterfacesAndEnums.GameInterface;
+//import InterfacesAndEnums.MapObject;
 
 public class MockGame implements GameInterface {
 

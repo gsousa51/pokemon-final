@@ -4,7 +4,7 @@ package view;
 
 import javax.swing.JFrame;
 
-import InterfacesAndEnums.GameInterface;
+//import InterfacesAndEnums.GameInterface;
 
 /*
  * frame will be used as the main JFrame to coordinate everything for the game.
