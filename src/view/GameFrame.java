@@ -20,11 +20,11 @@ public class GameFrame extends JFrame{
 	}
 
 	private StepCountPanel step;
-	
+	private Game game;
 	public GameFrame(){
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setSize(650, 500);
-			GameInterface game = new Game();
+			game = new Game();
 			MapPanel mapPanel = new MapPanel(game,this);
 			step = new StepCountPanel(game);
 			this.add(step);
@@ -36,12 +36,12 @@ public class GameFrame extends JFrame{
 	public void walkEnded(){
 		step.reset();
 		repaint();
-		//game.checkIfGameOver()
-		/*
-		 * Should have a check here to see if the user is out of steps.
-		 * Granted, this matter if the end of game condition isn't based on steps.
-		 * But for Iteration 1, should have check here.
-		 */
+		if(game.gameOver()){
+			/*
+			 * Insert asking if they want to save game logic here.
+			 * End the game.
+			 */
+		}
 	}
 
 
