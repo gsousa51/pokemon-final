@@ -26,6 +26,7 @@ public class Game implements GameInterface
     	gameMap = new Map(1);
     	trainer = new Trainer();
     }
+
     @Override
     public MapObject[][] getMap()
     {
@@ -49,5 +50,20 @@ public class Game implements GameInterface
     {
         trainer.move(dir);
     }
-
+    
+    /**
+     * This method will return true if the trainer
+     * has used all steps.
+     * @return
+     * 
+     * @author Morgan Henry
+     */
+    public boolean gameOver()
+    {
+        if(getRemainingSteps() <= 0)
+            return true;
+        else
+            return false;
+        
+    }
 }

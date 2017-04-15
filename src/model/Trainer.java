@@ -22,7 +22,7 @@ public class Trainer
     {
         stepsRemaining = 500;
         //TODO: set to correct location or add parameters!!!
-        currentRow = 15;
+        currentRow = 14;
         currentCol = 20;
     }
 
