@@ -5,12 +5,15 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import interfaceEnumMocks.MapObject;
+import model.Game;
+import model.Grass;
+import model.Rock;
 
 /*
  * This class is used to draw a visual representation of the mapgrid used in the model
@@ -23,20 +26,20 @@ public class DrawMap extends JPanel  {
 	BufferedImage ground;
 	BufferedImage rock1;
 	BufferedImage rock;
-	char[][] map;
+	MapObject[][] map;
 	
 	final static int width = 40;
 	final static int height = 30;
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setSize(5000, 5000);
-		createFakeMap map = new createFakeMap();
-		frame.add(new DrawMap(map));
+		Game game = new Game();
+		frame.add(new DrawMap(game.getMap()));
 		frame.setVisible(true);
 
 	}
 
-	public DrawMap(createFakeMap mapObj) {
+	public DrawMap(MapObject[][] mapObj) {
 		try {
 			grass = ImageIO.read(new File("src/animationSandBox/GRASSBUSH.PNG"));
 			ground = ImageIO.read(new File("src/animationSandBox/GROUND.PNG"));
@@ -45,7 +48,7 @@ public class DrawMap extends JPanel  {
 		} catch (IOException e) {
 			System.out.println(e.getStackTrace());
 		}
-		map = mapObj.getMap();
+		map = mapObj;
 		this.setSize(2500, 2500);
 
 		BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -91,10 +94,10 @@ public class DrawMap extends JPanel  {
 
 		for (int r = 0; r < height; r++) {
 			for (int c = 0; c < width; c++) {
-				if (map[r][c] == 'r') {
+				if (map[r][c] instanceof Rock) {
 					g.drawImage(ground, c * 50 + 250, r * 50 + 250, 50, 50, null);
 					g.drawImage(rock, c * 50 + 250, r * 50 + 250, 50, 50, null);
-				} else if (map[r][c] == 'g') {
+				} else if (map[r][c] instanceof Grass) {
 					g.drawImage(grass, c * 50 + 250, r * 50 + 250, 50, 50, null);
 
 				} else {

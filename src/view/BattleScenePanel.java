@@ -47,11 +47,11 @@ public class BattleScenePanel extends JPanel {
 	private BufferedImage pokemon;
 	private BufferedImage pokeball;
 	private int index = 0;
+	private boolean throwing = false;
 	
-	public static void main(String[] args){
-		
+	public static void main(String[] args){		
 		JFrame frame  = new JFrame();
-		frame.setSize(525, 600);
+		frame.setSize(525, 500);
 		frame.add(new BattleScenePanel());
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,8 +85,10 @@ public class BattleScenePanel extends JPanel {
 		g.drawImage(backGround, 0, 0, 500, 300, null);
 		g.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		g.drawImage(pokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
-		g.drawImage(pokeball, pokeballX, pokeBallY, pokeballWidth, pokeballLength, null);
 		g.fillRect(topLeftX, topLeftY, healthBarLength, height);
+		if(throwing){
+			g.drawImage(pokeball, pokeballX, pokeBallY, pokeballWidth, pokeballLength, null);
+		}
 	}
 	public class mouse implements MouseListener {
 
@@ -120,6 +122,7 @@ public class BattleScenePanel extends JPanel {
 			System.out.println("X: " + m.getX());
 			}
 		else{
+			throwing=true;
 			pokeballTimer.start();
 		}
 		}
