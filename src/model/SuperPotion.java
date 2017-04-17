@@ -14,6 +14,11 @@ public class SuperPotion extends Item{
 		return "Restores the HP of a Pokémon by 50 points.";
 	}
 	
+	/**
+	 * Returns the amount this item heals
+	 * 
+	 * @return heal amount
+	 */
 	public int getHealAmount() {
 		return healAmount;
 	}

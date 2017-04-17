@@ -8,9 +8,19 @@ public abstract class Item {
 		this.name = name;
 	}
 	
+	/**
+	 * Returns the item's name.
+	 * 
+	 * @return item name
+	 */
 	public String toString() {
 		return name;
 	}
 	
+	/**
+	 * Returns the message given when examining the item
+	 * 
+	 * @return examine message
+	 */
 	abstract String examineMessage();
 }
