@@ -1,23 +1,19 @@
 package model;
 
-public enum Pokemon {
-	NIDORAN("Nidoran", 41, 235, 55), PARAS("Paras", 25, 190, 35), DODUO("Doduo", 75, 190, 35), VANONAT("Venonat", 45,
-			190, 60), CUBONE("Cubone", 35, 190, 50), NIDORINA("Nidorina", 56, 120, 70), RYHORN("Ryhorn", 25, 120,
-					80), EXEGGCUTE("Exeggcute", 40, 90,
-							60), PARASECT("Parasext", 30, 75, 60), CHANSEY("Chansey", 50, 30, 250);
+public class Pokemon {
 
 	private int runRate, currentCatchRate, initialCatchRate;
 	private int angryCount, eatingCount;
 	private String name;
 	private int maxHP, currentHP;
 
-	Pokemon(String name, int runRate, int catchRate, int maxHitPoints) {
+	public Pokemon(String name, int runRate, int catchRate, int maxHitPoints) {
 		this.runRate = runRate;
 		currentCatchRate = initialCatchRate = catchRate;
 		angryCount = eatingCount = 0;
 		this.name = name;
 		maxHP = maxHitPoints;
-		currentHP = (int) (Math.random() * maxHitPoints + 1);
+		currentHP = (int) (0.75 * maxHitPoints);
 	}
 
 	/**
@@ -26,7 +22,16 @@ public enum Pokemon {
 	 * @return true if caught, false if not
 	 */
 	public boolean isCaught() {
-		return Math.random() < Math.min(currentCatchRate + 1, 151) / 449.5;
+		return isCaught(true);
+	}
+
+	/**
+	 * Method used for testing because isCaught() uses random numbers
+	 */
+	public boolean isCaught(boolean random) {
+		if (random)
+			return Math.random() < Math.min(currentCatchRate + 1, 151) / 449.5;
+		return 0.2 < Math.min(currentCatchRate + 1, 151) / 449.5;
 	}
 
 	/**
@@ -51,7 +56,17 @@ public enum Pokemon {
 	 * Controls pokemon's behavior when hit with a rock.
 	 */
 	public void hitWithRock() {
-		angryCount += (int) (Math.random() * 5 + 1);
+		hitWithRock(true);
+	}
+
+	/**
+	 * Method used for testing because hitWithRock() uses random numbers
+	 */
+	public void hitWithRock(boolean random) {
+		if (random)
+			angryCount += (int) (Math.random() * 5 + 1);
+		else
+			angryCount += 2;
 		eatingCount = 0;
 		currentCatchRate = Math.min(255, currentCatchRate * 2);
 	}
@@ -60,7 +75,17 @@ public enum Pokemon {
 	 * Controls pokemon's behavior when given bait.
 	 */
 	public void hitWithBait() {
-		eatingCount += (int) (Math.random() * 5 + 1);
+		hitWithBait(true);
+	}
+
+	/**
+	 * Method used for testing because hitWithBait() uses random numbers
+	 */
+	public void hitWithBait(boolean random) {
+		if (random)
+			eatingCount += (int) (Math.random() * 5 + 1);
+		else
+			eatingCount += 2;
 		angryCount = 0;
 		currentCatchRate /= 2;
 	}
@@ -72,19 +97,30 @@ public enum Pokemon {
 	 * @return boolean battleContinues
 	 */
 	public boolean doTurn() {
+		return doTurn(true);
+	}
+
+	/**
+	 * Method used for testing because doTurn() uses random numbers
+	 */
+	public boolean doTurn(boolean random) {
 		int runRate = this.runRate;
 		if (isAngry()) {
 			if (angryCount == 1)
 				currentCatchRate = initialCatchRate;
+			if (angryCount > 1)
+				runRate = Math.min(255, runRate * 2);
 			angryCount--;
 			System.out.println("Wild " + name + " is angry!");
-			runRate = Math.min(255, runRate * 2);
 		} else if (isEating()) {
 			System.out.println("Wild " + name + " is eating!");
+			if (eatingCount > 1)
+				runRate = runRate / 4;
 			eatingCount--;
-			runRate = runRate / 4;
 		}
-		return !((int) (Math.random() * 256) < runRate);
+		if (random)
+			return !((int) (Math.random() * 256) < runRate);
+		return !(45 < runRate);
 	}
 
 	/**

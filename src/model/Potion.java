@@ -1,12 +1,12 @@
 package model;
 
-public class SuperPotion extends Item{
+public class Potion extends Item{
 	
 	private int healAmount;
 
-	public SuperPotion() {
-		super("Super Potion");
-		healAmount = 50;
+	public Potion() {
+		super("Potion");
+		healAmount = 20;
 	}
 
 	@Override
