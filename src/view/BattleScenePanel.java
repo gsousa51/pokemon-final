@@ -19,52 +19,92 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import model.Pokemon;
+
 public class BattleScenePanel extends JPanel {
 
-	final static int topLeftX = 97;
-	final static int topLeftY = 65;
-	final static int height = 4;
+	//Constants we use for drawing the healthbar
+	final static int healthBarTopLeftX = 97;
+	final static int healthBarTopLeftY = 65;
+	final static int healthBarHeight = 4;
+	//variable for drawing health bar
+	//slides.
+	
+	private int healthBarLength= 95;
+	//Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
 	final static int pokemonWidth = 125;
 	final static int pokemonY = 20;
+	//Variable used for pokemon's top left x coord.
+	//(Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = 500;
-	// g.drawImage(trainerBackStanding, 45, 85, 115, 140, null);
+	
+	//Constants for drawing the trainer
 	final static int trainerY = 85;
 	final static int trainerHeight = 140;
 	final static int trainerWidth = 115;
+	//variable for drawing trainer.
+	//Not a constant since we slide trainer onto screen.
+	private int trainerX = -110;
+	
+	//Variables/constants to draw projectile 
+	//(Bait, ball, rock)
 	private int projectileLength = 30;
 	private int projectileWidth = 30;
 	final static int projectileStartingSpotX = 100;
 	final static int projectileStartingSpotY = 180;
 	private int projectileX = projectileStartingSpotX;
 	private int projectileY = projectileStartingSpotY;
-	private int trainerX = -110;
+
+	//Temporary variable used for testing
+	// TODO: delete this variable.
 	private int clicks = 0;
-	private int healthBarLength;
+	
+	//Timers used for different animations.
 	private javax.swing.Timer healthBarTimer;
 	private javax.swing.Timer startingTimer;
 	private javax.swing.Timer projectileTimer;
+	
+	//Images used for drawing our panel
 	private BufferedImage backGround;
 	private BufferedImage trainerBackStanding;
 	private BufferedImage spriteSheet;
 	private BufferedImage pokemonSpriteSheet;
-	private BufferedImage pokemon;
 	private BufferedImage pokeball;
 	private BufferedImage selectionBack;
 	private BufferedImage rock;
+	private BufferedImage bait;
+	
+	private BufferedImage currentPokemon;
+	private BufferedImage nidoran;
+	private BufferedImage paras;
+	private BufferedImage doduo;
+	private BufferedImage venonat;
+	private BufferedImage cubone;
+	private BufferedImage nidorina;
+	private BufferedImage ryhorn;
+	private BufferedImage exeggcute;
+	private BufferedImage parasect;
+	private BufferedImage chansey;
+	
+	//buttons used to trigger animations/actions in game.
 	private JButton throwBall;
 	private JButton throwRock;
 	private JButton throwBait;
 	private JButton runAway;
 	private JPanel buttonPanel;
+	
+	//variable used to size down projectiles as they move farther.
 	private int index = 0;
 	private boolean throwing = false;
 	private projectileType projType = null;
 
+	//enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
 	}
 
+	//main method for testing
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setSize(520, 550);
@@ -81,31 +121,43 @@ public class BattleScenePanel extends JPanel {
 
 		this.setSize(500, 500);
 		this.setLayout(null);
-		buttonPanel = new JPanel();
 		Font font = new Font("Dialog.bold", Font.PLAIN, 14);
-
+		
+		//Button panel will hold the buttons.
+		//(Believe it or not)
+		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.white);
 		buttonPanel.setSize(500, 200);
 		buttonPanel.setLayout(new GridLayout(2, 2, 20, 20));
 
-		healthBarLength = 95;
+		//Read in all the images we need.
 		try {
 			backGround = ImageIO.read(new File("src/view/BattleSceneBackground.png"));
 			spriteSheet = ImageIO.read(new File("src/view/pokemonSprite.png"));
 			pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
 			selectionBack = ImageIO.read(new File("src/view/SelectionBackground.PNG"));
 			rock = ImageIO.read(new File("src/view/rock.png"));
+			BufferedImage baitSprite = ImageIO.read(new File("src/view/berry.png"));
+			bait = baitSprite.getSubimage(280, 8, 73, 40);
 			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
-			pokemon = pokemonSpriteSheet.getSubimage(735, 400, 65, 75);
+			paras = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
+			doduo = pokemonSpriteSheet.getSubimage(2168, 180, 70 , 45);
+			venonat = pokemonSpriteSheet.getSubimage(1531, 84, 52, 65);
+			cubone = pokemonSpriteSheet.getSubimage(1539, 260, 35, 42);
+			nidorina = pokemonSpriteSheet.getSubimage(100, 105, 50, 40);
+			ryhorn = pokemonSpriteSheet.getSubimage(2094, 240, 60, 65);
+			exeggcute = pokemonSpriteSheet.getSubimage(1370 , 244, 65, 53);
+			parasect = pokemonSpriteSheet.getSubimage(1441, 79, 93, 65);
+			chansey = pokemonSpriteSheet.getSubimage(5, 336, 58, 46);
+			
+			currentPokemon = chansey;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		healthBarTimer = new javax.swing.Timer(30, new drawHealthBarListener());
-		startingTimer = new javax.swing.Timer(5, new beginningListener());
-		projectileTimer = new javax.swing.Timer(15, new throwBallListener());
 
+		//Create and initialize throw ball button
 		JButton throwBall = new JButton("Throw Ball");
 		throwBall.setContentAreaFilled(false);
 		throwBall.setEnabled(true);
@@ -183,33 +235,60 @@ public class BattleScenePanel extends JPanel {
 		// throwBall.setBounds(250, 00, 250, 100);
 		this.add(buttonPanel);
 		buttonPanel.setLocation(0, 300);
+		//Temp mouse listener for testing
+		// TODO: delete mouse listener.
 		this.addMouseListener(new mouse());
+		healthBarTimer = new javax.swing.Timer(30, new drawHealthBarListener());
+		startingTimer = new javax.swing.Timer(5, new beginningListener());
+		projectileTimer = new javax.swing.Timer(15, new throwProjectileListener());
+
 		repaint();
 	}
 
+	public void setCurrentPokemon(Pokemon poke){
+		
+	}
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 500, 300);
-		g.setColor(Color.GREEN);
-		g.drawImage(backGround, 0, 0, 500, 300, null);
-		g.drawImage(selectionBack, -1, 298, 500, 200, null);
-		g.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
-		g.drawImage(pokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
-		g.fillRect(topLeftX, topLeftY, healthBarLength, height);
+		g2.setColor(Color.white);
+		//First draw a white rectangle the size of the screen.
+		//This is necessary since to "refresh" the screen.
+		g2.fillRect(0, 0, 500, 300);
+		//Draw the background
+		g2.drawImage(backGround, 0, 0, 500, 300, null);
+		//Draw the health bar.
+		g2.setColor(Color.GREEN);
+		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
+		//Draw a replica image of our button panel, otherwise it flickers...
+		g2.drawImage(selectionBack, -1, 298, 500, 200, null);
+		//Draw the trainer
+		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
+		//Draw the pokemon we're facing.
+		g2.drawImage(currentPokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
+
+		//If we're throwing something, draw it.
 		if (throwing) {
 			if (projType == projectileType.BALL) {
-				g.drawImage(pokeball, projectileX, projectileY, projectileWidth, projectileLength, null);
+				g2.drawImage(pokeball, projectileX, projectileY, projectileWidth, projectileLength, null);
 			}
 			else if(projType == projectileType.ROCK){
-				g.drawImage(rock, projectileX, projectileY, projectileWidth, projectileLength, null);
+				g2.drawImage(rock, projectileX, projectileY, projectileWidth, projectileLength, null);
+			}
+			else{
+				g2.drawImage(bait, projectileX, projectileY, projectileWidth, projectileLength, null);						
 			}
 		}
-		buttonPanel.repaint();
+		else{
+			//else repain the buttonPanel
+			//Cuts down on flickering.
+			buttonPanel.repaint();
+		}
 
 	}
 
+	//Temp mouselistener for testing
+	//TODO : delete mouse listener...
 	public class mouse implements MouseListener {
 
 		@Override
@@ -295,7 +374,7 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
-	public class throwBallListener implements ActionListener {
+	public class throwProjectileListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
