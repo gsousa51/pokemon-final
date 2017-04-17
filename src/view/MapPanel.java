@@ -358,13 +358,13 @@ public class MapPanel extends JPanel {
 					walking = true;
 					moveNorth();
 					
-				} else if (key.getKeyCode() == KeyEvent.VK_A) {
+				} else if (key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT) {
 					walking = true;
 					moveWest();
-				} else if (key.getKeyCode() == KeyEvent.VK_S) {
+				} else if (key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN) {
 					walking = true;
 					moveSouth();
-				} else if (key.getKeyCode() == KeyEvent.VK_D) {
+				} else if (key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT) {
 					walking = true;
 					moveEast();
 				}
