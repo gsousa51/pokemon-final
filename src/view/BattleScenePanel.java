@@ -32,18 +32,18 @@ public class BattleScenePanel extends JPanel {
 	final static int trainerY = 85;
 	final static int trainerHeight = 140;
 	final static int trainerWidth = 115;
-	private int pokeballLength = 30;
-	private int pokeballWidth = 30;
+	private int projectileLength = 30;
+	private int projectileWidth = 30;
 	final static int projectileStartingSpotX = 100;
 	final static int projectileStartingSpotY = 180;
-	private int pokeballX = projectileStartingSpotX;
-	private int pokeBallY = projectileStartingSpotY;
+	private int projectileX = projectileStartingSpotX;
+	private int projectileY = projectileStartingSpotY;
 	private int trainerX = -110;
 	private int clicks = 0;
 	private int healthBarLength;
 	private javax.swing.Timer healthBarTimer;
 	private javax.swing.Timer startingTimer;
-	private javax.swing.Timer pokeballTimer;
+	private javax.swing.Timer projectileTimer;
 	private BufferedImage backGround;
 	private BufferedImage trainerBackStanding;
 	private BufferedImage spriteSheet;
@@ -51,6 +51,7 @@ public class BattleScenePanel extends JPanel {
 	private BufferedImage pokemon;
 	private BufferedImage pokeball;
 	private BufferedImage selectionBack;
+	private BufferedImage rock;
 	private JButton throwBall;
 	private JButton throwRock;
 	private JButton throwBait;
@@ -58,6 +59,11 @@ public class BattleScenePanel extends JPanel {
 	private JPanel buttonPanel;
 	private int index = 0;
 	private boolean throwing = false;
+	private projectileType projType = null;
+
+	private enum projectileType {
+		ROCK, BALL, BAIT;
+	}
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
@@ -88,6 +94,7 @@ public class BattleScenePanel extends JPanel {
 			spriteSheet = ImageIO.read(new File("src/view/pokemonSprite.png"));
 			pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
 			selectionBack = ImageIO.read(new File("src/view/SelectionBackground.PNG"));
+			rock = ImageIO.read(new File("src/view/rock.png"));
 			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
 			pokemon = pokemonSpriteSheet.getSubimage(735, 400, 65, 75);
@@ -97,7 +104,7 @@ public class BattleScenePanel extends JPanel {
 		}
 		healthBarTimer = new javax.swing.Timer(30, new drawHealthBarListener());
 		startingTimer = new javax.swing.Timer(5, new beginningListener());
-		pokeballTimer = new javax.swing.Timer(15, new throwBallListener());
+		projectileTimer = new javax.swing.Timer(15, new throwBallListener());
 
 		JButton throwBall = new JButton("Throw Ball");
 		throwBall.setContentAreaFilled(false);
@@ -108,7 +115,8 @@ public class BattleScenePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (!throwing) {
 					throwing = true;
-					pokeballTimer.start();
+					projType = projectileType.BALL;
+					projectileTimer.start();
 				}
 			}
 
@@ -117,11 +125,15 @@ public class BattleScenePanel extends JPanel {
 		throwBall.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBall.setFont(font);
 		JButton throwRock = new JButton("Throw Rock");
-		throwBall.addActionListener(new ActionListener() {
+		throwRock.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// Start throw rock timer
+			public void actionPerformed(ActionEvent e) {
+				if (!throwing) {
+					throwing = true;
+					projType = projectileType.ROCK;
+					projectileTimer.start();
+				}
 			}
 
 		});
@@ -132,10 +144,33 @@ public class BattleScenePanel extends JPanel {
 		throwBait.setContentAreaFilled(false);
 		throwBait.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBait.setFont(font);
+		throwBait.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!throwing) {
+					throwing = true;
+					projType = projectileType.BAIT;
+					projectileTimer.start();
+				}
+			}
+
+		});
+		
 		JButton runAway = new JButton("Run Away");
 		runAway.setContentAreaFilled(false);
 		runAway.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		runAway.setFont(font);
+		runAway.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				/*
+				 * Add run away functionality here.
+				 */
+			}
+
+		});
 
 		buttonPanel.add(throwBait);
 		buttonPanel.add(throwRock);
@@ -164,7 +199,12 @@ public class BattleScenePanel extends JPanel {
 		g.drawImage(pokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 		g.fillRect(topLeftX, topLeftY, healthBarLength, height);
 		if (throwing) {
-			g.drawImage(pokeball, pokeballX, pokeBallY, pokeballWidth, pokeballLength, null);
+			if (projType == projectileType.BALL) {
+				g.drawImage(pokeball, projectileX, projectileY, projectileWidth, projectileLength, null);
+			}
+			else if(projType == projectileType.ROCK){
+				g.drawImage(rock, projectileX, projectileY, projectileWidth, projectileLength, null);
+			}
 		}
 		buttonPanel.repaint();
 
@@ -264,20 +304,20 @@ public class BattleScenePanel extends JPanel {
 			// PROBABLY set it to newHealth/fullHealth (Which would be
 			// percentage of the full
 			// Health that the pokemon is now at.
-			if (pokeballX == 370) {
-				pokeballTimer.stop();
-				pokeballX = projectileStartingSpotX;
-				pokeBallY = projectileStartingSpotY;
-				pokeballWidth = 30;
-				pokeballLength = 30;
+			if (projectileX == 370) {
+				projectileTimer.stop();
+				projectileX = projectileStartingSpotX;
+				projectileY = projectileStartingSpotY;
+				projectileWidth = 30;
+				projectileLength = 30;
 				throwing = false;
 			} else {
 				index++;
-				pokeballX += 2;
-				pokeBallY--;
+				projectileX += 2;
+				projectileY--;
 				if (index % 10 == 0) {
-					pokeballWidth--;
-					pokeballLength--;
+					projectileWidth--;
+					projectileLength--;
 				}
 				repaint();
 			}
