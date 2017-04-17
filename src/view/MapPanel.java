@@ -353,7 +353,8 @@ public class MapPanel extends JPanel {
 			// If user isn't already in the middle of a move, read the key
 			// typed.
 			if (!walking) {
-				if (key.getKeyCode() == KeyEvent.VK_W) {
+
+				if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_UP) {
 					walking = true;
 					moveNorth();
 					
