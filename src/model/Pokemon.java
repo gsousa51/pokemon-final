@@ -11,8 +11,6 @@ public enum Pokemon {
 	EXEGGCUTE("Exeggcute", 40, 90, 60),
 	PARASECT("Parasext", 30, 75, 60),
 	CHANSEY("Chansey", 50, 30, 250);
-	
-	
 
 	private int runRate, currentCatchRate, initialCatchRate;
 	private int angryCount, eatingCount;
