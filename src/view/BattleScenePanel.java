@@ -30,10 +30,11 @@ public class BattleScenePanel extends JPanel {
 	final static int healthBarTopLeftX = 97;
 	final static int healthBarTopLeftY = 65;
 	final static int healthBarHeight = 4;
+	final static int startingHealthBarLength = 95;
 	// variable for drawing health bar
 	// slides.
 
-	private int healthBarLength = 95;
+	private int healthBarLength = startingHealthBarLength;
 	// Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
 	final static int pokemonWidth = 125;
@@ -44,14 +45,14 @@ public class BattleScenePanel extends JPanel {
 	private int pokemonX = pokemonStartingSpotX;
 
 	// Constants for drawing the trainer
-	final static int trainerXStartingSpot = -110;
+	final static int trainerStartingSpotX = -110;
 	final static int trainerXEndingSpot = 45;
 	final static int trainerY = 85;
 	final static int trainerHeight = 140;
 	final static int trainerWidth = 115;
 	// variable for drawing trainer.
 	// Not a constant since we slide trainer onto screen.
-	private int trainerX = trainerXStartingSpot;
+	private int trainerX = trainerStartingSpotX;
 
 	// Variables/constants to draw projectile
 	// (Bait, ball, rock)
@@ -250,9 +251,10 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*
-				 * Add run away functionality here.
-				 */
+				healthBarLength = startingHealthBarLength;
+				trainerX = trainerStartingSpotX;
+				pokemonX = pokemonStartingSpotX;
+				repaint();
 			}
 		});
 
@@ -297,7 +299,7 @@ public class BattleScenePanel extends JPanel {
 		g2.drawImage(currentPokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 
 		// If we're throwing something, draw it.
-		if (animating) {
+		if (projectileTimer.isRunning()) {
 			if (projType == projectileType.BALL) {
 				g2.drawImage(pokeball, projectileX, projectileY, projectileWidth, projectileLength, null);
 			} else if (projType == projectileType.ROCK) {
