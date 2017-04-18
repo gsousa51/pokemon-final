@@ -7,7 +7,7 @@ public class HelixFossil extends Item {
 	}
 
 	@Override
-	String examineMessage() {
+	public String examineMessage() {
 		return "A piece of ancient marine Pokémon's seashell.";
 	}
 }

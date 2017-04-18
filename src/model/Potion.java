@@ -10,7 +10,7 @@ public class Potion extends Item{
 	}
 
 	@Override
-	String examineMessage() {
+	public String examineMessage() {
 		return "Restores the HP of a Pokémon by 50 points.";
 	}
 	

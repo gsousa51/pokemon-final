@@ -3,12 +3,12 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PokemonList {
+public class AvailablePokemonList {
 
 	private ArrayList<Pokemon> list;
-	private static PokemonList self;
+	private static AvailablePokemonList self;
 
-	private PokemonList() {
+	private AvailablePokemonList() {
 		list = new ArrayList<Pokemon>();
 
 		// add common pokemon
@@ -32,9 +32,9 @@ public class PokemonList {
 		list.add(new Pokemon("Chansey", 50, 30, 250));
 	}
 	
-	public static synchronized PokemonList getInstance() {
+	public static synchronized AvailablePokemonList getInstance() {
 		if (self == null)
-			self = new PokemonList();
+			self = new AvailablePokemonList();
 		return self;
 	}
 

@@ -7,7 +7,7 @@ public class SafariBall extends Item {
 	}
 
 	@Override
-	String examineMessage() {
+	public String examineMessage() {
 		return "A special ball that is used only in the Safari Zone.";
 	}
 }

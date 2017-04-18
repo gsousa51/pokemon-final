@@ -22,5 +22,5 @@ public abstract class Item {
 	 * 
 	 * @return examine message
 	 */
-	abstract String examineMessage();
+	abstract public String examineMessage();
 }
