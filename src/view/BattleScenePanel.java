@@ -43,6 +43,7 @@ public class BattleScenePanel extends JPanel {
 	// variable for drawing health bar
 	// slides.
 
+	private int redBarStartingLength=startingHealthBarLength;
 	private int healthBarLength = startingHealthBarLength;
 	// Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
@@ -124,7 +125,8 @@ public class BattleScenePanel extends JPanel {
 	private Pokemon currentPokemon;
 
 	private double pokemonFullHealth;
-	private double  pokemonCurrentHealth;
+	private double pokemonCurrentHealth;
+
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -195,8 +197,8 @@ public class BattleScenePanel extends JPanel {
 		default:
 			break;
 		}
-		//TODO: Set the pokemonFullHealth variable.
-		//pokemonFullHealth = pokemonCurrentHealth = pokemon.getHealth();
+		// TODO: Set the pokemonFullHealth variable.
+		// pokemonFullHealth = pokemonCurrentHealth = pokemon.getHealth();
 		animating = true;
 		startingTimer.start();
 		repaint();
@@ -245,9 +247,9 @@ public class BattleScenePanel extends JPanel {
 
 		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
 		startingTimer = new javax.swing.Timer(5, new BeginningListener());
-		projectileTimer = new javax.swing.Timer(15, new throwProjectileListener());
-		shakeTimer  = new javax.swing.Timer(15, new PokemonShakeListener());
-		runTimer = new javax.swing.Timer(15, new PokemonRunListener());
+		projectileTimer = new javax.swing.Timer(5, new throwProjectileListener());
+		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
+		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
 		repaint();
 	}
 
@@ -336,6 +338,11 @@ public class BattleScenePanel extends JPanel {
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
 		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
+		if(healthBarTimer.isRunning()){
+			g2.setColor(Color.red);
+			g2.fillRect(healthBarTopLeftX+healthBarLength, healthBarTopLeftY, 
+					redBarStartingLength-healthBarLength,healthBarHeight);
+		}
 		// Draw a replica image of our button panel, otherwise it flickers...
 		g2.drawImage(selectionBack, -1, 298, 500, 200, null);
 		// Draw the trainer
@@ -439,46 +446,47 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
-	private class PokemonShakeListener implements ActionListener{
+	private class PokemonShakeListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(shakeIndex == 50){
+			if (shakeIndex == 50) {
 				shakeTimer.stop();
 				healthBarTimer.start();
-				shakeIndex=0;
+				shakeIndex = 0;
 			}
-			if(shakeIndex%5==0){
-				if(shakeDirection == Direction.EAST){
+			if (shakeIndex % 5 == 0) {
+				if (shakeDirection == Direction.EAST) {
 					shakeDirection = Direction.WEST;
-				}
-				else{
+				} else {
 					shakeDirection = Direction.EAST;
 				}
 			}
-			if(shakeDirection == Direction.EAST){
-				pokemonX ++;
-			}
-			else{
+			if (shakeDirection == Direction.EAST) {
+				pokemonX++;
+			} else {
 				pokemonX--;
 			}
 			repaint();
 			shakeIndex++;
 		}
-		
+
 	}
-	private class PokemonRunListener implements ActionListener{
+
+	private class PokemonRunListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(pokemonX == pokemonStartingSpotX){
-				
+			if (pokemonX == pokemonStartingSpotX) {
+				animating=false;
+			} else{
+				pokemonX++;
+				repaint();
 			}
-			else pokemonX--;
-			
 		}
-		
+
 	}
+
 	private class DrawHealthBarListener implements ActionListener {
 
 		@Override
@@ -488,9 +496,15 @@ public class BattleScenePanel extends JPanel {
 			// PROBABLY set it to newHealth/fullHealth (Which would be
 			// percentage of the full
 			// Health that the pokemon is now at.
-			if (healthBarLength == 0 ||healthBarLength <= (pokemonCurrentHealth/pokemonFullHealth)*100 -5) {
+			if (healthBarLength == 0) {
+				runTimer.start();
+				healthBarTimer.stop();
+			} else if (healthBarLength <= (pokemonCurrentHealth / pokemonFullHealth) * 100 - 5) {
 				animating = false;
 				healthBarTimer.stop();
+				redBarStartingLength = healthBarLength;
+				repaint();
+
 			} else {
 				healthBarLength--;
 				repaint();
@@ -538,12 +552,11 @@ public class BattleScenePanel extends JPanel {
 				projectileY = projectileStartingSpotY;
 				projectileWidth = 30;
 				projectileLength = 30;
-				if(projType == projectileType.ROCK){
-					pokemonCurrentHealth-=10;
-					System.out.println("Target is : "+ ((pokemonCurrentHealth/pokemonFullHealth)*100 -5));
+				if (projType == projectileType.ROCK) {
+					pokemonCurrentHealth -= 40;
+					System.out.println("Target is : " + ((pokemonCurrentHealth / pokemonFullHealth) * 100 - 5));
 					shakeTimer.start();
-				}
-				else{
+				} else {
 					animating = false;
 				}
 				repaint();
