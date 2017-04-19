@@ -161,6 +161,9 @@ public class BattleScenePanel extends JPanel {
 		pokemonList.add(new Pokemon("Chansey", 50, 30, 250));
 	}
 
+	//Method called by GameFrame after popping this panel.
+	//It switches the pokemon in the frame to the correct one and starts the animation
+	//of the pokemon and trainer sliding in.
 	public void setPokemon(Pokemon poke) {
 		currentPokemon = poke;
 		switch (currentPokemon.toString()) {
@@ -478,6 +481,7 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (pokemonX == pokemonStartingSpotX) {
+				runTimer.stop();
 				animating=false;
 			} else{
 				pokemonX++;
