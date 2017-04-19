@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import model.Game;
 import model.Pokemon;
@@ -82,7 +83,7 @@ public class BattleScenePanel extends JPanel {
 	private BufferedImage rock;
 	private BufferedImage bait;
 
-	private BufferedImage currentPokemon;
+	private BufferedImage currentPokemonImage;
 	private BufferedImage nidoran;
 	private BufferedImage paras;
 	private BufferedImage doduo;
@@ -107,7 +108,7 @@ public class BattleScenePanel extends JPanel {
 	private int index = 0;
 	private boolean animating = false;
 	private projectileType projType = null;
-
+	private Pokemon currentPokemon;
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -143,36 +144,37 @@ public class BattleScenePanel extends JPanel {
 	}
 
 	public void setPokemon(Pokemon poke) {
-		switch (poke.toString()) {
+		currentPokemon = poke;
+		switch (currentPokemon.toString()) {
 		case "Nidoran":
-			currentPokemon = nidoran;
+			currentPokemonImage = nidoran;
 			break;
 		case "Paras":
-			currentPokemon = paras;
+			currentPokemonImage = paras;
 			break;
 		case "Doduo":
-			currentPokemon = doduo;
+			currentPokemonImage = doduo;
 			break;
 		case "Venonat":
-			currentPokemon = venonat;
+			currentPokemonImage = venonat;
 			break;
 		case "Cubone":
-			currentPokemon = cubone;
+			currentPokemonImage = cubone;
 			break;
 		case "Nidorina":
-			currentPokemon = nidorina;
+			currentPokemonImage = nidorina;
 			break;
 		case "Ryhorn":
-			currentPokemon = ryhorn;
+			currentPokemonImage = ryhorn;
 			break;
 		case "Exeggcute":
-			currentPokemon = exeggcute;
+			currentPokemonImage = exeggcute;
 			break;
 		case "Parasect":
-			currentPokemon = parasect;
+			currentPokemonImage = parasect;
 			break;
 		case "Chansey":
-			currentPokemon = chansey;
+			currentPokemonImage = chansey;
 			break;
 		default:
 			break;
@@ -182,6 +184,9 @@ public class BattleScenePanel extends JPanel {
 		repaint();
 	}
 
+	public void drawOpenPokeBall(){
+		
+	}
 	private void initializePanel() {
 
 		this.setSize(500, 500);
@@ -251,10 +256,25 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				healthBarLength = startingHealthBarLength;
-				trainerX = trainerStartingSpotX;
-				pokemonX = pokemonStartingSpotX;
-				repaint();
+				 animating = true;
+				 new Timer(5, new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if(trainerX == trainerStartingSpotX){
+							((Timer)e.getSource()).stop();
+							pokemonX = pokemonStartingSpotX;
+							healthBarLength = startingHealthBarLength;
+							animating = false;
+							//TODO: Let the JFrame know we're running away
+						}
+						else{
+							trainerX -- ;
+							repaint();
+						}
+					}
+					
+				}).start();
 			}
 		});
 
@@ -275,10 +295,10 @@ public class BattleScenePanel extends JPanel {
 		repaint();
 	}
 
-	public void setCurrentPokemon(Pokemon poke) {
 
+	public void adjustHp(int newHP){
+		
 	}
-
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -296,7 +316,7 @@ public class BattleScenePanel extends JPanel {
 		// Draw the trainer
 		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		// Draw the pokemon we're facing.
-		g2.drawImage(currentPokemon, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
+		g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 
 		// If we're throwing something, draw it.
 		if (projectileTimer.isRunning()) {
@@ -341,7 +361,7 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent m) {
 			if (!startingTimer.isRunning()) {
-				setPokemon(pokemonList.get(clicks));
+				setPokemon(pokemonList.get(clicks%pokemonList.size()));
 				clicks++;
 			}
 		}
@@ -458,6 +478,7 @@ public class BattleScenePanel extends JPanel {
 			// Health that the pokemon is now at.
 			if (projectileX == 370) {
 				projectileTimer.stop();
+				System.out.println("x = " + projectileX + " Y: " + projectileY);
 				projectileX = projectileStartingSpotX;
 				projectileY = projectileStartingSpotY;
 				projectileWidth = 30;
