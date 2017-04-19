@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 
 
@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 
 import interfaceEnumMocks.GameInterface;
 import model.Game;
+import view.MapPanel;
+import view.StepCountPanel;
 
 //import InterfacesAndEnums.GameInterface;
 
