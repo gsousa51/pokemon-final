@@ -32,7 +32,7 @@ import interfaceEnumMocks.MapObject;
 public class MapPanel extends JPanel {
 
 	// Each of these holds the various BufferedImages for trainer based on
-	// which direction he is travelling.
+	// which direction he is traveling.
 	List<BufferedImage> west = null;
 	List<BufferedImage> north = null;
 	List<BufferedImage> south = null;

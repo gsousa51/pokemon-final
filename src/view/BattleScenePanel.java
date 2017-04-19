@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import interfaceEnumMocks.Direction;
 import model.Game;
 import model.Pokemon;
 
@@ -79,6 +80,8 @@ public class BattleScenePanel extends JPanel {
 	private javax.swing.Timer healthBarTimer;
 	private javax.swing.Timer startingTimer;
 	private javax.swing.Timer projectileTimer;
+	private javax.swing.Timer shakeTimer;
+	private javax.swing.Timer runTimer;
 
 	// Images used for drawing our panel
 	private BufferedImage backGround;
@@ -114,6 +117,8 @@ public class BattleScenePanel extends JPanel {
 	private Game game;
 	// variable used to size down projectiles as they move farther.
 	private int index = 0;
+	private int shakeIndex = 0;
+	private Direction shakeDirection = Direction.WEST;
 	private boolean animating = false;
 	private projectileType projType = null;
 	private Pokemon currentPokemon;
@@ -241,6 +246,8 @@ public class BattleScenePanel extends JPanel {
 		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
 		startingTimer = new javax.swing.Timer(5, new BeginningListener());
 		projectileTimer = new javax.swing.Timer(15, new throwProjectileListener());
+		shakeTimer  = new javax.swing.Timer(15, new PokemonShakeListener());
+		runTimer = new javax.swing.Timer(15, new PokemonRunListener());
 		repaint();
 	}
 
@@ -432,6 +439,46 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
+	private class PokemonShakeListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(shakeIndex == 50){
+				shakeTimer.stop();
+				healthBarTimer.start();
+				shakeIndex=0;
+			}
+			if(shakeIndex%5==0){
+				if(shakeDirection == Direction.EAST){
+					shakeDirection = Direction.WEST;
+				}
+				else{
+					shakeDirection = Direction.EAST;
+				}
+			}
+			if(shakeDirection == Direction.EAST){
+				pokemonX ++;
+			}
+			else{
+				pokemonX--;
+			}
+			repaint();
+			shakeIndex++;
+		}
+		
+	}
+	private class PokemonRunListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(pokemonX == pokemonStartingSpotX){
+				
+			}
+			else pokemonX--;
+			
+		}
+		
+	}
 	private class DrawHealthBarListener implements ActionListener {
 
 		@Override
@@ -441,11 +488,10 @@ public class BattleScenePanel extends JPanel {
 			// PROBABLY set it to newHealth/fullHealth (Which would be
 			// percentage of the full
 			// Health that the pokemon is now at.
-			if (healthBarLength <= (pokemonCurrentHealth/pokemonFullHealth)*100 -5) {
+			if (healthBarLength == 0 ||healthBarLength <= (pokemonCurrentHealth/pokemonFullHealth)*100 -5) {
 				animating = false;
 				healthBarTimer.stop();
 			} else {
-				System.out.println(healthBarLength);
 				healthBarLength--;
 				repaint();
 			}
@@ -495,7 +541,7 @@ public class BattleScenePanel extends JPanel {
 				if(projType == projectileType.ROCK){
 					pokemonCurrentHealth-=10;
 					System.out.println("Target is : "+ ((pokemonCurrentHealth/pokemonFullHealth)*100 -5));
-					healthBarTimer.start();
+					shakeTimer.start();
 				}
 				else{
 					animating = false;
