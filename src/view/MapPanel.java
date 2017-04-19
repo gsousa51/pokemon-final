@@ -28,13 +28,7 @@ import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
 
-/*
- * NOTE: THIS PANEL IS USING A CLASS CALLED "replaceWithMapObject"
- * 		  as well as "MockGame" for testing purposes.
- * 		  Once we merge our work it will seamlessly work once we change them to MapObject and
- * 		  a regular game object.
- * 	    
- */
+
 public class MapPanel extends JPanel {
 
 	// Each of these holds the various BufferedImages for trainer based on
@@ -48,6 +42,10 @@ public class MapPanel extends JPanel {
 	// the background and trainer
 	BufferedImage map;
 	BufferedImage spriteSheet;
+	
+	//Each set of these is the set of images 
+	// used for drawing user walking/facing different
+	//directions.
 	BufferedImage left1;
 	BufferedImage left2;
 	BufferedImage left3;
@@ -93,18 +91,24 @@ public class MapPanel extends JPanel {
 	// index keeps track of which index we're using in our
 	// ArrayLists that hold our trainer's images.
 	private int index = 0;
+	//Position trainer is at in our model
 	private Point trainerPosition;
+	//The game object used to reference the back end.
 	private GameInterface game;
+	//The mapGrid that is the back end of our map.
 	private MapObject[][] mapGrid;
 	// Flag var used to keep track of if trainer is in process
 	// of moving. (Prevents user from button smashing and ruining everything.)
 	private boolean walking = false;
+	//The Frame holding this panel.
+	//Allows us to interact with it.
 	GameFrame container;
 
 	public MapPanel(GameInterface game, GameFrame container) {
 		this.container = container;
 		// Read in all the necessary images.
 		setImages();
+		
 		this.setSize(width, height);
 		this.repaint();
 		this.addKeyListener(new Keyboard());

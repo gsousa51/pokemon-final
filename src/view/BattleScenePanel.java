@@ -1,3 +1,9 @@
+/*****************************************
+ * 										 
+ * 
+ * NOTE: THIS IS NOT USED IN ITERATION 1.
+ * 
+ ******************************/
 package view;
 
 import java.awt.Color;
@@ -19,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -103,12 +110,16 @@ public class BattleScenePanel extends JPanel {
 	private JButton throwBait;
 	private JButton runAway;
 	private JPanel buttonPanel;
+	private JLabel itemCount;
 	private Game game;
 	// variable used to size down projectiles as they move farther.
 	private int index = 0;
 	private boolean animating = false;
 	private projectileType projType = null;
 	private Pokemon currentPokemon;
+
+	private double pokemonFullHealth;
+	private double  pokemonCurrentHealth;
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -127,7 +138,7 @@ public class BattleScenePanel extends JPanel {
 		this.game = game;
 		initializePanel();
 		initializePokelist();
-	}//end constructor.
+	}// end constructor.
 
 	public void initializePokelist() {
 		pokemonList = new ArrayList<Pokemon>();
@@ -179,26 +190,26 @@ public class BattleScenePanel extends JPanel {
 		default:
 			break;
 		}
+		//TODO: Set the pokemonFullHealth variable.
+		//pokemonFullHealth = pokemonCurrentHealth = pokemon.getHealth();
 		animating = true;
 		startingTimer.start();
 		repaint();
 	}
 
-	public void drawOpenPokeBall(){
-		
-	}
-	private void initializePanel() {
+	public void drawOpenPokeBall() {
 
+	}
+
+	private void initializePanel() {
+		// Temp mouse listener for testing
+		// TODO: delete mouse listener.
+		this.addMouseListener(new mouse());
 		this.setSize(500, 500);
 		this.setLayout(null);
-		Font font = new Font("Dialog.bold", Font.PLAIN, 14);
-
-		// Button panel will hold the buttons.
-		// (Believe it or not)
-		buttonPanel = new JPanel();
-		buttonPanel.setBackground(Color.white);
-		buttonPanel.setSize(500, 200);
-		buttonPanel.setLayout(new GridLayout(2, 2, 20, 20));
+		createButtonPanel();
+		this.add(buttonPanel);
+		buttonPanel.setLocation(0, 300);
 
 		// Read in all the images we need.
 		try {
@@ -211,7 +222,7 @@ public class BattleScenePanel extends JPanel {
 			bait = baitSprite.getSubimage(280, 8, 73, 40);
 			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
-			nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38); 
+			nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
 			paras = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
 			doduo = pokemonSpriteSheet.getSubimage(2168, 180, 70, 45);
 			venonat = pokemonSpriteSheet.getSubimage(1531, 84, 52, 65);
@@ -227,6 +238,25 @@ public class BattleScenePanel extends JPanel {
 			e.printStackTrace();
 		}
 
+		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
+		startingTimer = new javax.swing.Timer(5, new BeginningListener());
+		projectileTimer = new javax.swing.Timer(15, new throwProjectileListener());
+		repaint();
+	}
+
+	private void createButtonPanel() {
+		/*
+		 * TODO : Delete these initializers
+		 */
+		pokemonCurrentHealth = pokemonFullHealth = 100;
+		Font font = new Font("Dialog.bold", Font.PLAIN, 14);
+		// Button panel will hold the buttons.
+		// (Believe it or not)
+		buttonPanel = new JPanel();
+		buttonPanel.setBackground(Color.white);
+		buttonPanel.setSize(500, 200);
+		buttonPanel.setLayout(new GridLayout(2, 2, 20, 20));
+
 		// Create and initialize throw ball button
 		JButton throwBall = new JButton("Throw Ball");
 		throwBall.setContentAreaFilled(false);
@@ -237,11 +267,11 @@ public class BattleScenePanel extends JPanel {
 		throwBall.setFont(font);
 		JButton throwRock = new JButton("Throw Rock");
 		throwRock.addActionListener(new ProjectileButtonListener());
-		
+
 		throwRock.setContentAreaFilled(false);
 		throwRock.setFont(font);
 		throwRock.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
-		
+
 		JButton throwBait = new JButton("Throw Bait");
 		throwBait.setContentAreaFilled(false);
 		throwBait.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
@@ -256,24 +286,23 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 animating = true;
-				 new Timer(5, new ActionListener() {
+				animating = true;
+				new Timer(5, new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if(trainerX == trainerStartingSpotX){
-							((Timer)e.getSource()).stop();
+						if (trainerX == trainerStartingSpotX) {
+							((Timer) e.getSource()).stop();
 							pokemonX = pokemonStartingSpotX;
 							healthBarLength = startingHealthBarLength;
 							animating = false;
-							//TODO: Let the JFrame know we're running away
-						}
-						else{
-							trainerX -- ;
+							// TODO: Let the JFrame know we're running away
+						} else {
+							trainerX--;
 							repaint();
 						}
 					}
-					
+
 				}).start();
 			}
 		});
@@ -282,23 +311,12 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.add(throwRock);
 		buttonPanel.add(throwBall);
 		buttonPanel.add(runAway);
-		this.add(buttonPanel);
-		
-		buttonPanel.setLocation(0, 300);
-		// Temp mouse listener for testing
-		// TODO: delete mouse listener.
-		this.addMouseListener(new mouse());
-
-		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
-		startingTimer = new javax.swing.Timer(5, new BeginningListener());
-		projectileTimer = new javax.swing.Timer(15, new throwProjectileListener());
-		repaint();
 	}
 
+	public void adjustHp(int newHP) {
 
-	public void adjustHp(int newHP){
-		
 	}
+
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -328,10 +346,10 @@ public class BattleScenePanel extends JPanel {
 				g2.drawImage(bait, projectileX, projectileY, projectileWidth, projectileLength, null);
 			}
 		}
-		
-		//If there isn't any animation happening,
-		//Repaint the buttonPanel.
-		if(!animating){
+
+		// If there isn't any animation happening,
+		// Repaint the buttonPanel.
+		if (!animating) {
 			// Cuts down on flickering.
 			buttonPanel.repaint();
 		}
@@ -361,7 +379,7 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent m) {
 			if (!startingTimer.isRunning()) {
-				setPokemon(pokemonList.get(clicks%pokemonList.size()));
+				setPokemon(pokemonList.get(clicks % pokemonList.size()));
 				clicks++;
 			}
 		}
@@ -374,54 +392,46 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
-	private class ProjectileButtonListener implements ActionListener{
+	private class ProjectileButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent buttonPressed) {
-			JButton button = (JButton)buttonPressed.getSource();
-			switch(button.getText()){
-			case "Throw Ball" :
-				/*
-				 * if(trainer.hasBall(){
-				 * 		trainer.throwBall();	
-				 */
-				projType = projectileType.BALL;
-				animating = true;
-				projectileTimer.start();
-				
-				break;
-			case "Throw Bait" :
-				/*
-				 * if(trainer.hasBait(){
-				 * 		trainer.throwBait();	
-				 */
-				projType = projectileType.BAIT;
-				animating = true;
-				projectileTimer.start();
-				break;
-			case "Throw Rock" :
-				/*
-				 * if(trainer.hasRock(){
-				 * 		trainer.throwRock();	
-				 */
-				projType = projectileType.ROCK;
-				animating=true;
-				projectileTimer.start();
-				break;
-			default: 
-				break;
+			JButton button = (JButton) buttonPressed.getSource();
+			if (!animating) {
+				switch (button.getText()) {
+				case "Throw Ball":
+					/*
+					 * if(trainer.hasBall(){ trainer.throwBall();
+					 */
+					projType = projectileType.BALL;
+					animating = true;
+					projectileTimer.start();
+
+					break;
+				case "Throw Bait":
+					/*
+					 * if(trainer.hasBait(){ trainer.throwBait();
+					 */
+					projType = projectileType.BAIT;
+					animating = true;
+					projectileTimer.start();
+					break;
+				case "Throw Rock":
+					/*
+					 * if(trainer.hasRock(){ trainer.throwRock();
+					 */
+					projType = projectileType.ROCK;
+					animating = true;
+					projectileTimer.start();
+					break;
+				default:
+					break;
+				}
 			}
-			/*
-			 * if(trainer.hasRock()){
-			 * 		trainer.throwRock();
-			 * 		projectileTimer.start();
-			 * }
-			 */
-			
-			
 		}
-		
+
 	}
+
 	private class DrawHealthBarListener implements ActionListener {
 
 		@Override
@@ -431,8 +441,8 @@ public class BattleScenePanel extends JPanel {
 			// PROBABLY set it to newHealth/fullHealth (Which would be
 			// percentage of the full
 			// Health that the pokemon is now at.
-			if (healthBarLength == 0) {
-				animating=false;
+			if (healthBarLength <= (pokemonCurrentHealth/pokemonFullHealth)*100 -5) {
+				animating = false;
 				healthBarTimer.stop();
 			} else {
 				System.out.println(healthBarLength);
@@ -454,9 +464,9 @@ public class BattleScenePanel extends JPanel {
 			// percentage of the full
 			// Health that the pokemon is now at.
 			if (trainerX == 45) {
-				animating=false;
+				animating = false;
 				startingTimer.stop();
-				
+
 			} else {
 				trainerX++;
 				pokemonX--;
@@ -478,12 +488,18 @@ public class BattleScenePanel extends JPanel {
 			// Health that the pokemon is now at.
 			if (projectileX == 370) {
 				projectileTimer.stop();
-				System.out.println("x = " + projectileX + " Y: " + projectileY);
 				projectileX = projectileStartingSpotX;
 				projectileY = projectileStartingSpotY;
 				projectileWidth = 30;
 				projectileLength = 30;
-				animating = false;
+				if(projType == projectileType.ROCK){
+					pokemonCurrentHealth-=10;
+					System.out.println("Target is : "+ ((pokemonCurrentHealth/pokemonFullHealth)*100 -5));
+					healthBarTimer.start();
+				}
+				else{
+					animating = false;
+				}
 				repaint();
 			} else {
 				index++;

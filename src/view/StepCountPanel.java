@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,11 +17,9 @@ public class StepCountPanel extends JPanel {
 	
 	public StepCountPanel(GameInterface game){
 		this.setSize(150,500);
+		this.setBackground(Color.white);
 		stepLabel = new JLabel("Steps Left : "+ game.getRemainingSteps());
 		this.add(stepLabel);
-		
-
-		
 		this.game = game;
 	}
 	
