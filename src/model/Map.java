@@ -1,12 +1,13 @@
 package model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 import interfaceEnumMocks.MapObject;
 
 // import InterfacesAndEnums.MapObject;
 
-public class Map
+public class Map implements Serializable
 {
     private static final int MAP_WIDTH = 40;
     private static final int MAP_HEIGHT = 30;

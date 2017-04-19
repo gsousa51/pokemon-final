@@ -1,8 +1,11 @@
 package model;
 
-public class Potion extends Item{
+import java.io.Serializable;
+
+public class Potion extends Item implements Serializable{
 	
-	private int healAmount;
+    private static final long serialVersionUID = 1L;
+    private int healAmount;
 
 	public Potion() {
 		super("Potion");

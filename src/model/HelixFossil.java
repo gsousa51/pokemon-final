@@ -1,6 +1,8 @@
 package model;
 
-public class HelixFossil extends Item {
+import java.io.Serializable;
+
+public class HelixFossil extends Item implements Serializable{
 
 	public HelixFossil() {
 		super("Helix Fossil");

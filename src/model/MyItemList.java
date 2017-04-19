@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MyItemList implements Iterable<Item> {
+public class MyItemList implements Iterable<Item>, Serializable{
 
 	private static MyItemList self;
 	private ArrayList<Item> itemList;

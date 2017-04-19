@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
@@ -10,7 +11,7 @@ import interfaceEnumMocks.MapObject;
 // import InterfacesAndEnums.GameInterface;
 // import InterfacesAndEnums.MapObject;
 
-public class Game implements GameInterface
+public class Game implements GameInterface, Serializable
 {
     private static Map gameMap;
     private static Trainer trainer;
