@@ -202,6 +202,7 @@ public class BattleScenePanel extends JPanel {
 		}
 		// TODO: Set the pokemonFullHealth variable.
 		// pokemonFullHealth = pokemonCurrentHealth = pokemon.getHealth();
+		pokemonFullHealth = pokemonCurrentHealth = 100;
 		animating = true;
 		startingTimer.start();
 		repaint();
@@ -305,8 +306,7 @@ public class BattleScenePanel extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						if (trainerX == trainerStartingSpotX) {
 							((Timer) e.getSource()).stop();
-							pokemonX = pokemonStartingSpotX;
-							healthBarLength = startingHealthBarLength;
+							resetValues();
 							animating = false;
 							// TODO: Let the JFrame know we're running away
 						} else {
@@ -325,6 +325,12 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.add(runAway);
 	}
 
+	private void resetValues(){
+			trainerX = trainerStartingSpotX;
+			pokemonX = pokemonStartingSpotX;
+			healthBarLength = startingHealthBarLength;
+			redBarStartingLength = startingHealthBarLength;
+	}
 	public void adjustHp(int newHP) {
 
 	}
@@ -473,7 +479,6 @@ public class BattleScenePanel extends JPanel {
 			repaint();
 			shakeIndex++;
 		}
-
 	}
 
 	private class PokemonRunListener implements ActionListener {
@@ -481,7 +486,9 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (pokemonX == pokemonStartingSpotX) {
+
 				runTimer.stop();
+				resetValues();
 				animating=false;
 			} else{
 				pokemonX++;
