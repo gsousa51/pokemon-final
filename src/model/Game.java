@@ -26,11 +26,21 @@ public class Game implements GameInterface
     	gameMap = new Map(1);
     	trainer = new Trainer();
     }
-
+    
     @Override
     public MapObject[][] getMap()
     {
         return gameMap.getMap();
+    }
+    
+    public int getMapWidth()
+    {
+        return gameMap.getMapWidth();
+    }
+    
+    public int getMapHeight()
+    {
+        return gameMap.getMapHeight();
     }
 
     @Override

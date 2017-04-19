@@ -22,6 +22,16 @@ public class Map
         else
             makeMapTwo();
     }
+    
+    public int getMapWidth()
+    {
+        return MAP_WIDTH;
+    }
+    
+    public int getMapHeight()
+    {
+        return MAP_HEIGHT;
+    }
 
     /**
      * Return a 2d array of the board
@@ -33,29 +43,14 @@ public class Map
         return mapGrid;
     }
 
-    public void removePokemon(Point remove)
-    {
-        mapGrid[remove.y][remove.x].removePokemon();
-    }
-
+    /**
+     * Delete and do the same thing as Pokemon...
+     * @param remove
     public void removeItem(Point remove)
     {
         mapGrid[remove.y][remove.x].removeItem();
     }
-
-    /**
-     * When a pokemon runs away, this will put it at a new grass location and
-     * removes it from the previous location
-     * 
-     * @param loc
-     *            - location of the pokemon previously
      */
-    public void movePokemon(Point loc)
-    {
-        Pokemon remmovePok = mapGrid[loc.y][loc.x].getPokemon();
-
-        // TODO
-    }
 
     /**
      * Hard code map 1 into mapGrid
