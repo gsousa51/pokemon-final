@@ -138,7 +138,11 @@ public class BattleScenePanel extends JPanel {
 
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
-
+	
+	//TODO: Get rid of these initializers
+	private int baitLeft = 30;
+	private int ballsLeft = 30;
+	private int rocksLeft= 30;
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -321,7 +325,7 @@ public class BattleScenePanel extends JPanel {
 		throwRock.setFont(font);
 		throwRock.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 
-		JButton throwBait = new JButton("Throw Bait");
+		JButton throwBait = new JButton("Throw Bait" + baitLeft);
 		throwBait.setContentAreaFilled(false);
 		throwBait.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBait.setFont(font);

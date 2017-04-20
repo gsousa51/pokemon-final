@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import model.Game;
 
 import view.MapPanel;
-import view.StepCountPanel;
+import view.InfoPanel;
 
 //import InterfacesAndEnums.GameInterface;
 
@@ -25,7 +25,7 @@ import view.StepCountPanel;
 public class GameFrame extends JFrame{
 
     // Instance variables
-    private StepCountPanel step;
+    private InfoPanel step;
     private Game game;
     private MapPanel mapPanel;
 
@@ -61,7 +61,7 @@ public class GameFrame extends JFrame{
 
             this.game = new Game();
             this.mapPanel = new MapPanel(game,this);
-            this.step = new StepCountPanel(game);
+            this.step = new InfoPanel(game);
         } 
 
         else {
@@ -96,7 +96,7 @@ public class GameFrame extends JFrame{
                 this.game = (Game) input.readObject();
                 System.out.println("Read in previous game state.");
                 this.mapPanel = new MapPanel(game,this);
-                this.step = new StepCountPanel(game);
+                this.step = new InfoPanel(game);
                 // this.mapPanel = (MapPanel) input.readObject();
                 // This call gets the playlist to begin playing automatically
                 //juke.getSongQueue().userRestartedSavedJukebox();

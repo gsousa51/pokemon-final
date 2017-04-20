@@ -15,6 +15,7 @@ public class Game implements GameInterface, Serializable
 {
     private  Map gameMap;
     private  Trainer trainer;
+    private MyPokemonList pokedex;
     
 //    public static void main(String[] args)
 //    {
@@ -26,6 +27,7 @@ public class Game implements GameInterface, Serializable
     public Game(){
     	gameMap = new Map(1);
     	trainer = new Trainer();
+    	pokedex = MyPokemonList.getInstance();
     }
     
     @Override
@@ -74,7 +76,9 @@ public class Game implements GameInterface, Serializable
         if(getRemainingSteps() <= 0)
             return true;
         else
-            return false;
-        
+            return false;    
+    }
+    public int getPokemonCount(){
+    	return pokedex.size();
     }
 }

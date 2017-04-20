@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class MyPokemonList implements Iterable<Pokemon>, Serializable {
 
-	private static MyPokemonList self;
+	private static  MyPokemonList self;
 	private ArrayList<Pokemon> pokedex;
 
 	private MyPokemonList() {
