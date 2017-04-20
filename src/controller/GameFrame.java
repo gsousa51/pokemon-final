@@ -36,12 +36,13 @@ public class GameFrame extends JFrame{
 
 
     public GameFrame(){
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         promptUserRestoreGame();
         this.setSize(650, 500);
-        game = new Game();
-        MapPanel mapPanel = new MapPanel(game,this);
-        step = new StepCountPanel(game);
+        // game = new Game();
+        // MapPanel mapPanel = new MapPanel(game,this);
+        // step = new StepCountPanel(game);
         this.add(step);
         step.setLocation(500, 0);
         this.add((mapPanel));
@@ -50,13 +51,14 @@ public class GameFrame extends JFrame{
     }
 
 
-    // TODO fill in this method body for pokemon
+
     private void promptUserRestoreGame() {
+        
+        // prompt user to start with previous state
         int userInput = JOptionPane.showConfirmDialog(null, "Start with previously saved game state?");
+        // Start new game
         if (userInput == JOptionPane.NO_OPTION) {
 
-            // juke = new Jukebox();
-            // this.game = new Game();
             this.game = new Game();
             this.mapPanel = new MapPanel(game,this);
             this.step = new StepCountPanel(game);
@@ -90,9 +92,12 @@ public class GameFrame extends JFrame{
                 //      StepCountPanel
                 //      Game
                 //      MapPanel
-                //this.step = (StepCountPanel) input.readObject();
+                // this.step = (StepCountPanel) input.readObject();
                 this.game = (Game) input.readObject();
-                //this.mapPanel = (MapPanel) input.readObject();
+                System.out.println("Read in previous game state.");
+                this.mapPanel = new MapPanel(game,this);
+                this.step = new StepCountPanel(game);
+                // this.mapPanel = (MapPanel) input.readObject();
                 // This call gets the playlist to begin playing automatically
                 //juke.getSongQueue().userRestartedSavedJukebox();
                 //input.close();
@@ -154,6 +159,8 @@ public class GameFrame extends JFrame{
                     //output.writeObject(juke);
                     // output.writeObject(queue);
                     // output.writeObject(accounts);
+                    // output.writeObject(GameFrame.this.mapPanel);
+                    // output.writeObject(GameFrame.this.step);
                     output.writeObject(GameFrame.this.game);
 
                     // TODO debug delete

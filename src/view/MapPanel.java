@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import controller.GameFrame;
+
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
