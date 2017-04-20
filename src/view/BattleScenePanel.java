@@ -43,7 +43,7 @@ public class BattleScenePanel extends JPanel {
 	// variable for drawing health bar
 	// slides.
 
-	private int redBarStartingLength=startingHealthBarLength;
+	private int redBarStartingLength = startingHealthBarLength;
 	private int healthBarLength = startingHealthBarLength;
 	// Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
@@ -54,6 +54,8 @@ public class BattleScenePanel extends JPanel {
 	// (Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = pokemonStartingSpotX;
 
+	private int wobbleY = 45;
+	private int wobbleX = 370;
 	// Constants for drawing the trainer
 	final static int trainerStartingSpotX = -110;
 	final static int trainerXEndingSpot = 45;
@@ -83,17 +85,27 @@ public class BattleScenePanel extends JPanel {
 	private javax.swing.Timer projectileTimer;
 	private javax.swing.Timer shakeTimer;
 	private javax.swing.Timer runTimer;
+	private javax.swing.Timer wobbleTimer;
 
 	// Images used for drawing our panel
 	private BufferedImage backGround;
 	private BufferedImage trainerBackStanding;
 	private BufferedImage spriteSheet;
+	// Sprite sheet for various pokeballs.
+	private BufferedImage pokeballSpriteSheet;
 	private BufferedImage pokemonSpriteSheet;
 	private BufferedImage pokeball;
 	private BufferedImage selectionBack;
 	private BufferedImage rock;
 	private BufferedImage bait;
-
+	// A list of different pokeball images for animation.
+	private List<BufferedImage> pokeballThrowList;
+	private List<BufferedImage> pokeballWobbleList;
+	// 0 is the normal pokeball picture.
+	private int pokeballIndex = 0;
+	private int wobbleIndex = 0;
+	private final static int pokeballWobbleListSize = 7;
+	private final static int pokeballThrowListSize = 8;
 	private BufferedImage currentPokemonImage;
 	private BufferedImage nidoran;
 	private BufferedImage paras;
@@ -161,9 +173,10 @@ public class BattleScenePanel extends JPanel {
 		pokemonList.add(new Pokemon("Chansey", 50, 30, 250));
 	}
 
-	//Method called by GameFrame after popping this panel.
-	//It switches the pokemon in the frame to the correct one and starts the animation
-	//of the pokemon and trainer sliding in.
+	// Method called by GameFrame after popping this panel.
+	// It switches the pokemon in the frame to the correct one and starts the
+	// animation
+	// of the pokemon and trainer sliding in.
 	public void setPokemon(Pokemon poke) {
 		currentPokemon = poke;
 		switch (currentPokemon.toString()) {
@@ -216,6 +229,8 @@ public class BattleScenePanel extends JPanel {
 		// Temp mouse listener for testing
 		// TODO: delete mouse listener.
 		this.addMouseListener(new mouse());
+		pokeballThrowList = new ArrayList<>();
+		pokeballWobbleList = new ArrayList<>();
 		this.setSize(500, 500);
 		this.setLayout(null);
 		createButtonPanel();
@@ -227,10 +242,29 @@ public class BattleScenePanel extends JPanel {
 			backGround = ImageIO.read(new File("src/view/BattleSceneBackground.png"));
 			spriteSheet = ImageIO.read(new File("src/view/pokemonSprite.png"));
 			pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
+			pokeballSpriteSheet = ImageIO.read(new File("src/view/pokeballSprite.png"));
 			selectionBack = ImageIO.read(new File("src/view/SelectionBackground.PNG"));
 			rock = ImageIO.read(new File("src/view/rock.png"));
 			BufferedImage baitSprite = ImageIO.read(new File("src/view/berry.png"));
 			bait = baitSprite.getSubimage(280, 8, 73, 40);
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 10, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 290, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 250, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 210, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 170, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 130, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 90, 22, 22));
+			pokeballThrowList.add(pokeballSpriteSheet.getSubimage(133, 50, 22, 22));
+
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(133, 10, 23, 23));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(132, 450, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(131, 490, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(133, 10, 22, 22));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(130, 530, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(134, 570, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(135, 610, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(136, 650, 21, 21));
+
 			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
 			nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
@@ -254,6 +288,7 @@ public class BattleScenePanel extends JPanel {
 		projectileTimer = new javax.swing.Timer(5, new throwProjectileListener());
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
 		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
+		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
 		repaint();
 	}
 
@@ -325,12 +360,13 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.add(runAway);
 	}
 
-	private void resetValues(){
-			trainerX = trainerStartingSpotX;
-			pokemonX = pokemonStartingSpotX;
-			healthBarLength = startingHealthBarLength;
-			redBarStartingLength = startingHealthBarLength;
+	private void resetValues() {
+		trainerX = trainerStartingSpotX;
+		pokemonX = pokemonStartingSpotX;
+		healthBarLength = startingHealthBarLength;
+		redBarStartingLength = startingHealthBarLength;
 	}
+
 	public void adjustHp(int newHP) {
 
 	}
@@ -347,10 +383,10 @@ public class BattleScenePanel extends JPanel {
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
 		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
-		if(healthBarTimer.isRunning()){
+		if (healthBarTimer.isRunning()) {
 			g2.setColor(Color.red);
-			g2.fillRect(healthBarTopLeftX+healthBarLength, healthBarTopLeftY, 
-					redBarStartingLength-healthBarLength,healthBarHeight);
+			g2.fillRect(healthBarTopLeftX + healthBarLength, healthBarTopLeftY, redBarStartingLength - healthBarLength,
+					healthBarHeight);
 		}
 		// Draw a replica image of our button panel, otherwise it flickers...
 		g2.drawImage(selectionBack, -1, 298, 500, 200, null);
@@ -362,12 +398,16 @@ public class BattleScenePanel extends JPanel {
 		// If we're throwing something, draw it.
 		if (projectileTimer.isRunning()) {
 			if (projType == projectileType.BALL) {
-				g2.drawImage(pokeball, projectileX, projectileY, projectileWidth, projectileLength, null);
+				g2.drawImage(pokeballThrowList.get(pokeballIndex % pokeballThrowListSize), projectileX, projectileY,
+						projectileWidth, projectileLength, null);
 			} else if (projType == projectileType.ROCK) {
 				g2.drawImage(rock, projectileX, projectileY, projectileWidth, projectileLength, null);
 			} else {
 				g2.drawImage(bait, projectileX, projectileY, projectileWidth, projectileLength, null);
 			}
+		}
+		if (wobbleTimer.isRunning()) {
+			g2.drawImage(pokeballWobbleList.get(wobbleIndex % pokeballWobbleListSize), wobbleX, wobbleY, 20, 20, null);
 		}
 
 		// If there isn't any animation happening,
@@ -489,8 +529,8 @@ public class BattleScenePanel extends JPanel {
 
 				runTimer.stop();
 				resetValues();
-				animating=false;
-			} else{
+				animating = false;
+			} else {
 				pokemonX++;
 				repaint();
 			}
@@ -543,6 +583,34 @@ public class BattleScenePanel extends JPanel {
 				pokemonX--;
 				repaint();
 			}
+		}
+	}
+
+	private class PokeballWobbleListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			pokemonX = pokemonStartingSpotX;
+			if (wobbleY == 100) {
+				if (index == 400) {
+					wobbleTimer.stop();
+					animating = false;
+					// TODO: check if caught.
+				} else {
+					index++;
+					if(index%40==0){
+						wobbleIndex++;
+						repaint();
+					}
+					
+
+				}
+			}
+			else{
+				wobbleY++;
+				repaint();
+			}
+
 
 		}
 
@@ -559,6 +627,7 @@ public class BattleScenePanel extends JPanel {
 			// Health that the pokemon is now at.
 			if (projectileX == 370) {
 				projectileTimer.stop();
+				System.out.println("Y : " + projectileY);
 				projectileX = projectileStartingSpotX;
 				projectileY = projectileStartingSpotY;
 				projectileWidth = 30;
@@ -567,6 +636,8 @@ public class BattleScenePanel extends JPanel {
 					pokemonCurrentHealth -= 40;
 					System.out.println("Target is : " + ((pokemonCurrentHealth / pokemonFullHealth) * 100 - 5));
 					shakeTimer.start();
+				} else if (projType == projectileType.BALL) {
+					wobbleTimer.start();
 				} else {
 					animating = false;
 				}
@@ -575,6 +646,9 @@ public class BattleScenePanel extends JPanel {
 				index++;
 				projectileX += 2;
 				projectileY--;
+				if (index % 5 == 0) {
+					pokeballIndex++;
+				}
 				if (index % 10 == 0) {
 					projectileWidth--;
 					projectileLength--;
