@@ -1,13 +1,15 @@
 package model;
 
 import java.awt.Point;
+import java.io.Serializable;
 
 import interfaceEnumMocks.Direction;
 
 // import InterfacesAndEnums.Direction;
 
-public class Trainer
+public class Trainer implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private int stepsRemaining;
     private int currentRow;
     private int currentCol;

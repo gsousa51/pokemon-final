@@ -1,8 +1,12 @@
 package model;
 
-public class SafariBall extends Item {
+import java.io.Serializable;
 
-	public SafariBall() {
+public class SafariBall extends Item implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
+    public SafariBall() {
 		super("Safari Ball");
 	}
 

@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
+
 import interfaceEnumMocks.MapObject;
 
 // import InterfacesAndEnums.MapObject;
 
-public class Grass extends MapObject
-{
-
+public class Grass extends MapObject implements Serializable
+{ 
     private Pokemon pokemon;
 
     public Grass(Pokemon pok)

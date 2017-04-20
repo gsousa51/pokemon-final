@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MyPokemonList implements Iterable<Pokemon> {
+public class MyPokemonList implements Iterable<Pokemon>, Serializable {
 
 	private static MyPokemonList self;
 	private ArrayList<Pokemon> pokedex;

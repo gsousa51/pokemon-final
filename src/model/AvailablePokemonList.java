@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AvailablePokemonList {
+public class AvailablePokemonList implements Serializable{
 
 	private ArrayList<Pokemon> list;
 	private static AvailablePokemonList self;

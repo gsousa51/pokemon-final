@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 import interfaceEnumMocks.MapObject;
 
 // import InterfacesAndEnums.MapObject;
 
-public class Ground extends MapObject
+public class Ground extends MapObject implements Serializable
 {
     private Item item;
 
