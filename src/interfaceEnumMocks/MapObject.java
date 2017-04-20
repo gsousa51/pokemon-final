@@ -1,10 +1,12 @@
 package interfaceEnumMocks;
 // package InterfacesAndEnums;
 
+import java.io.Serializable;
+
 import model.Item;
 import model.Pokemon;
 
-public abstract class MapObject {
+public abstract class MapObject implements Serializable {
 	
 	private boolean isWalkable;
 	

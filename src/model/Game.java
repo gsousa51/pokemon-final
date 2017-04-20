@@ -13,15 +13,15 @@ import interfaceEnumMocks.MapObject;
 
 public class Game implements GameInterface, Serializable
 {
-    private static Map gameMap;
-    private static Trainer trainer;
+    private  Map gameMap;
+    private  Trainer trainer;
     
-    public static void main(String[] args)
-    {
-        gameMap = new Map(1);
-        trainer = new Trainer();
-        gameMap.printMap();
-    }
+//    public static void main(String[] args)
+//    {
+//        gameMap = new Map(1);
+//        trainer = new Trainer();
+//        gameMap.printMap();
+//    }
 
     public Game(){
     	gameMap = new Map(1);
