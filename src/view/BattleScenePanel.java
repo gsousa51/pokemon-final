@@ -264,6 +264,7 @@ public class BattleScenePanel extends JPanel {
 			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(134, 570, 21, 21));
 			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(135, 610, 21, 21));
 			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(136, 650, 21, 21));
+			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(131, 405, 24, 28));
 
 			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
@@ -407,7 +408,7 @@ public class BattleScenePanel extends JPanel {
 			}
 		}
 		if (wobbleTimer.isRunning()) {
-			g2.drawImage(pokeballWobbleList.get(wobbleIndex % pokeballWobbleListSize), wobbleX, wobbleY, 20, 20, null);
+			g2.drawImage(pokeballWobbleList.get(wobbleIndex), wobbleX, wobbleY, 20, 20, null);
 		}
 
 		// If there isn't any animation happening,
@@ -592,25 +593,37 @@ public class BattleScenePanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			pokemonX = pokemonStartingSpotX;
 			if (wobbleY == 100) {
-				if (index == 400) {
-					wobbleTimer.stop();
-					animating = false;
-					// TODO: check if caught.
+				if (index >= 400) {
+					//TODO : Check if caught
+					//If the pokemon isn't caught, we continue with this
+					//Otherwise we'd stop short, say it's caught and pop the panel.
+					wobbleIndex = 8;
+					repaint();
+					index++;
+					if (index == 500) {
+						wobbleTimer.stop();
+						animating = false;
+						// TODO: check if caught.
+						pokemonX = 350;
+						repaint();
+						wobbleY = 45;
+						index = 0;
+						wobbleIndex = 0;
+					}
 				} else {
 					index++;
-					if(index%40==0){
-						wobbleIndex++;
+					if (index % 40 == 0) {
+						 wobbleIndex++;
+						if (wobbleIndex == 8) {
+							wobbleIndex = 0;
+						}
 						repaint();
 					}
-					
-
 				}
-			}
-			else{
+			} else {
 				wobbleY++;
 				repaint();
 			}
-
 
 		}
 
