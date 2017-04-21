@@ -46,16 +46,17 @@ public class GameFrame extends JFrame{
         this.add(step);
         step.setLocation(500, 0);
         this.add((mapPanel));
+        this.setTitle("Pokemon Safari Zone");
         this.setVisible(true);
         this.addWindowListener(new GameExitEvent());
     }
 
 
-
+    // Asks user to start from previously saved game state
     private void promptUserRestoreGame() {
         
         // prompt user to start with previous state
-        int userInput = JOptionPane.showConfirmDialog(null, "Start with previously saved game state?");
+        int userInput = JOptionPane.showConfirmDialog(null, "Start with previously saved game state?", "Pokemon Safari Zone", JOptionPane.YES_NO_OPTION);
         // Start new game
         if (userInput == JOptionPane.NO_OPTION) {
 
@@ -110,14 +111,17 @@ public class GameFrame extends JFrame{
     }
 
 
+    // TODO refactor this so as to catch all end-of-game conditions for
+    // Iteration 2
     public void walkEnded(){
         step.reset();
         repaint();
         if(game.gameOver()){
             /*
-             * Insert asking if they want to save game logic here.
              * End the game.
              */
+            this.setTitle("Pokemon Safari Zone - Game Over");
+        	JOptionPane.showMessageDialog(null, "You have no more steps - Game over", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -129,7 +133,7 @@ public class GameFrame extends JFrame{
         @Override
         public void windowClosing(WindowEvent event) {
 
-            int userInput = JOptionPane.showConfirmDialog(null, "Would you like to save this game?");
+            int userInput = JOptionPane.showConfirmDialog(null, "Would you like to save this game?", "Pokemon Safari Zone", JOptionPane.YES_NO_OPTION);
             if (userInput == JOptionPane.YES_OPTION) {
                 FileOutputStream stream = null;
                 ObjectOutputStream output = null;

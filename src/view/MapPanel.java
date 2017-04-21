@@ -29,6 +29,8 @@ import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
 
+import model.Game;
+
 
 public class MapPanel extends JPanel {
 
@@ -95,7 +97,8 @@ public class MapPanel extends JPanel {
 	//Position trainer is at in our model
 	private Point trainerPosition;
 	//The game object used to reference the back end.
-	private GameInterface game;
+	//private GameInterface game;
+	private Game game;
 	//The mapGrid that is the back end of our map.
 	private MapObject[][] mapGrid;
 	// Flag var used to keep track of if trainer is in process
@@ -114,7 +117,7 @@ public class MapPanel extends JPanel {
 		this.repaint();
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
-		this.game = game;
+		this.game = (Game) game;
 		trainerPosition = game.getTrainerPosition();
 		mapGrid = game.getMap();
 		// Set the top left corner of subimage for background
@@ -356,6 +359,16 @@ public class MapPanel extends JPanel {
 	public class Keyboard implements KeyListener {
 		@Override
 		public void keyPressed(KeyEvent key) {
+
+            // TODO this will need to be generalized to lock the rest of the UI
+            // when there are more ways to interact with the GUI. Currently
+            // wer are only using navigation keys so when the game is over I'm
+            // just making a keypress a no-op
+            // If the game is over, do nothing
+            if (MapPanel.this.game.gameOver()) {
+
+                return;
+            }
 			// If user isn't already in the middle of a move, read the key
 			// typed.
 			if (!walking) {
