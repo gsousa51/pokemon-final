@@ -21,16 +21,6 @@ public abstract class MapObject implements Serializable {
 		return isWalkable;
 	}
 	
-	/**
-	 * Override in grass to remove the pokemon 
-	 * when it's caught
-	 * 
-	 * @author Morgan Henry
-	 */
-	public void removePokemon()
-	{
-	}
-	
 	
 	/**
 	 * Override in ground to remove the item
@@ -42,13 +32,4 @@ public abstract class MapObject implements Serializable {
 	{
 	}
 
-	/**
-	 * Override in grass to move get the pokemon
-	 * 
-	 * @author Morgan Henry
-	 */
-	public Pokemon getPokemon()
-	{
-	    return null;
-	}
 }

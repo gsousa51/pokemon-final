@@ -60,7 +60,9 @@ public class GameFrame extends JFrame{
         // Start new game
         if (userInput == JOptionPane.NO_OPTION) {
 
-            this.game = new Game();
+            //TODO: Change one to the choice of the user for which map to use
+            //1 = map 1, anything else = map 2
+            this.game = new Game(1);
             this.mapPanel = new MapPanel(game,this);
             this.step = new InfoPanel(game);
         } 

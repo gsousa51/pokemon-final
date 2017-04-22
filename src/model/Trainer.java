@@ -13,6 +13,8 @@ public class Trainer implements Serializable
     private int stepsRemaining;
     private int currentRow;
     private int currentCol;
+    private MyItemList items;
+    private MyPokemonList pokemon;
     
     /**
      * Steps start at 500. Currently the starting
@@ -27,6 +29,9 @@ public class Trainer implements Serializable
         //TODO: set to correct location or add parameters!!!
         currentRow = 14;
         currentCol = 20;
+        
+        items = MyItemList.getInstance();
+        pokemon = MyPokemonList.getInstance();
     }
 
     /**
@@ -75,6 +80,11 @@ public class Trainer implements Serializable
             currentCol--;
 
         stepsRemaining--;
+    }
+
+    public void addPokemon(Pokemon pok)
+    {
+        pokemon.addPokemon(pok);
     }
 
 }

@@ -17,15 +17,9 @@ public class Game implements GameInterface, Serializable
     private  Trainer trainer;
     private MyPokemonList pokedex;
     
-//    public static void main(String[] args)
-//    {
-//        gameMap = new Map(1);
-//        trainer = new Trainer();
-//        gameMap.printMap();
-//    }
 
-    public Game(){
-    	gameMap = new Map(1);
+    public Game(int map){
+    	gameMap = new Map(map);
     	trainer = new Trainer();
     	pokedex = MyPokemonList.getInstance();
     }
@@ -45,7 +39,12 @@ public class Game implements GameInterface, Serializable
     {
         return gameMap.getMapHeight();
     }
-
+    
+    public void addPokemon(Pokemon pok)
+    {
+        trainer.addPokemon(pok);
+    }
+    
     @Override
     public Point getTrainerPosition()
     {
