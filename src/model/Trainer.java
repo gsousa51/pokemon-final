@@ -15,6 +15,7 @@ public class Trainer implements Serializable
     private int currentCol;
     private MyItemList items;
     private MyPokemonList pokemon;
+    private int remainingBalls;
     
     /**
      * Steps start at 500. Currently the starting
@@ -24,9 +25,8 @@ public class Trainer implements Serializable
      */
     public Trainer()
     {
-        // stepsRemaining = 5;   
         stepsRemaining = 500;
-        //TODO: set to correct location or add parameters!!!
+        remainingBalls  = 30;
         currentRow = 14;
         currentCol = 20;
         
@@ -46,6 +46,22 @@ public class Trainer implements Serializable
     public Point getPosition()
     {
         return new Point(currentCol, currentRow);
+    }
+    
+    /**
+     * Decrement remaining balls by one
+     */
+    public void throwBall()
+    {
+        remainingBalls--;
+    }
+    
+    /**
+     * add one to remaining balls
+     */
+    public void findBall()
+    {
+        remainingBalls++;
     }
 
     /**
@@ -85,6 +101,11 @@ public class Trainer implements Serializable
     public void addPokemon(Pokemon pok)
     {
         pokemon.addPokemon(pok);
+    }
+
+    public int getRemainingBalls()
+    {
+        return remainingBalls;
     }
 
 }
