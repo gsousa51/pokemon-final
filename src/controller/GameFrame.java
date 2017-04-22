@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import interfaceEnumMocks.GameOverOptions;
 import model.Game;
 
 import view.MapPanel;
@@ -62,7 +63,7 @@ public class GameFrame extends JFrame{
 
             //TODO: Change one to the choice of the user for which map to use
             //1 = map 1, anything else = map 2
-            this.game = new Game(1);
+            this.game = new Game(1, GameOverOptions.NO_BALL);
             this.mapPanel = new MapPanel(game,this);
             this.step = new InfoPanel(game);
         } 
