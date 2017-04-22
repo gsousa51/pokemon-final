@@ -65,8 +65,10 @@ public class Pokemon implements Serializable{
 	 * Method used for testing because hitWithRock() uses random numbers
 	 */
 	public void hitWithRock(boolean random) {
-		if (random)
+		if (random){
 			angryCount += (int) (Math.random() * 5 + 1);
+			currentHP -= 10;
+		}
 		else
 			angryCount += 2;
 		eatingCount = 0;
@@ -86,6 +88,7 @@ public class Pokemon implements Serializable{
 	public void hitWithBait(boolean random) {
 		if (random)
 			eatingCount += (int) (Math.random() * 5 + 1);
+		
 		else
 			eatingCount += 2;
 		angryCount = 0;

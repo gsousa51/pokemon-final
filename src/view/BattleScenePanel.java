@@ -26,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -138,11 +139,12 @@ public class BattleScenePanel extends JPanel {
 
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
-	
-	//TODO: Get rid of these initializers
+
+	// TODO: Get rid of these initializers
 	private int baitLeft = 30;
 	private int ballsLeft = 30;
-	private int rocksLeft= 30;
+	private int rocksLeft = 30;
+
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -175,6 +177,7 @@ public class BattleScenePanel extends JPanel {
 		pokemonList.add(new Pokemon("Exeggcute", 40, 90, 60));
 		pokemonList.add(new Pokemon("Parasect", 30, 75, 60));
 		pokemonList.add(new Pokemon("Chansey", 50, 30, 250));
+
 	}
 
 	// Method called by GameFrame after popping this panel.
@@ -217,14 +220,14 @@ public class BattleScenePanel extends JPanel {
 		default:
 			break;
 		}
-		// TODO: Set the pokemonFullHealth variable.
-		// pokemonFullHealth = pokemonCurrentHealth = pokemon.getHealth();
-		pokemonFullHealth = pokemonCurrentHealth = 100;
+
+		pokemonFullHealth = pokemonCurrentHealth = poke.getHealth()[1];
 		animating = true;
 		startingTimer.start();
 		repaint();
 	}
 
+	
 	public void drawOpenPokeBall() {
 
 	}
@@ -298,10 +301,7 @@ public class BattleScenePanel extends JPanel {
 	}
 
 	private void createButtonPanel() {
-		/*
-		 * TODO : Delete these initializers
-		 */
-		pokemonCurrentHealth = pokemonFullHealth = 100;
+
 		Font font = new Font("Dialog.bold", Font.PLAIN, 14);
 		// Button panel will hold the buttons.
 		// (Believe it or not)
@@ -325,7 +325,7 @@ public class BattleScenePanel extends JPanel {
 		throwRock.setFont(font);
 		throwRock.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 
-		JButton throwBait = new JButton("Throw Bait" + baitLeft);
+		JButton throwBait = new JButton("Throw Bait");
 		throwBait.setContentAreaFilled(false);
 		throwBait.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBait.setFont(font);
@@ -346,7 +346,7 @@ public class BattleScenePanel extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						if (trainerX == trainerStartingSpotX) {
 							((Timer) e.getSource()).stop();
-							resetValues();
+							endOfBattle();
 							animating = false;
 							// TODO: Let the JFrame know we're running away
 						} else {
@@ -365,16 +365,24 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.add(runAway);
 	}
 
-	private void resetValues() {
+	private void endOfTurn() {
+		projectileWidth = 30;
+		projectileLength = 30;
+		projectileX = projectileStartingSpotX;
+		projectileY = projectileStartingSpotY;
+		wobbleIndex = 0;
+		index = 0;
+		wobbleY = 45;
+	}
+	
+	private void endOfBattle(){
 		trainerX = trainerStartingSpotX;
 		pokemonX = pokemonStartingSpotX;
 		healthBarLength = startingHealthBarLength;
 		redBarStartingLength = startingHealthBarLength;
 	}
 
-	public void adjustHp(int newHP) {
 
-	}
 
 	@Override
 	public void paint(Graphics g) {
@@ -506,6 +514,7 @@ public class BattleScenePanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (shakeIndex == 50) {
 				shakeTimer.stop();
+				endOfTurn();
 				healthBarTimer.start();
 				shakeIndex = 0;
 			}
@@ -533,7 +542,7 @@ public class BattleScenePanel extends JPanel {
 			if (pokemonX == pokemonStartingSpotX) {
 
 				runTimer.stop();
-				resetValues();
+				endOfBattle();
 				animating = false;
 			} else {
 				pokemonX++;
@@ -598,26 +607,51 @@ public class BattleScenePanel extends JPanel {
 			pokemonX = pokemonStartingSpotX;
 			if (wobbleY == 100) {
 				if (index >= 400) {
-					//TODO : Check if caught
-					//If the pokemon isn't caught, we continue with this
-					//Otherwise we'd stop short, say it's caught and pop the panel.
-					wobbleIndex = 8;
-					repaint();
-					index++;
+					//Check if its caught ONLY ONCE. (At index 400)
+					if (index == 400) {
+						//If it is caught, Set to the correct pokeball picture
+						//Pop a Window that say the pokemon is caught.
+						if (currentPokemon.isCaught()) {
+							wobbleIndex = 4;
+							repaint();
+							/*
+							 * TODO: Pop a window. Tell "Game" to add Pokemon to
+							 * collection Tell JFrame to pop the map back
+							 */
+							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + currentPokemon.toString(), "",
+									JOptionPane.INFORMATION_MESSAGE);
+							endOfTurn();
+							endOfBattle();
+
+							wobbleTimer.stop();
+							animating = false;
+						}
+						//Otherwise it isn't caught.
+						//Set the pokeball to open and finish the animation
+						else {
+							wobbleIndex = 8;
+							repaint();
+							index++;
+						}
+					}
+					else{
+						index++;
+					}
 					if (index == 500) {
 						wobbleTimer.stop();
 						animating = false;
-						// TODO: check if caught.
 						pokemonX = 350;
 						repaint();
 						wobbleY = 45;
 						index = 0;
 						wobbleIndex = 0;
+
 					}
-				} else {
+				} // end if index==400 "if"
+				else {
 					index++;
 					if (index % 40 == 0) {
-						 wobbleIndex++;
+						wobbleIndex++;
 						if (wobbleIndex == 8) {
 							wobbleIndex = 0;
 						}
@@ -637,25 +671,28 @@ public class BattleScenePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
-			// Replace this with a condition of where the health bar length
-			// should sto
-			// PROBABLY set it to newHealth/fullHealth (Which would be
-			// percentage of the full
-			// Health that the pokemon is now at.
+			//Once the projectile hit desired distance.
 			if (projectileX == 370) {
+				//stop the timer
 				projectileTimer.stop();
-				System.out.println("Y : " + projectileY);
-				projectileX = projectileStartingSpotX;
-				projectileY = projectileStartingSpotY;
-				projectileWidth = 30;
-				projectileLength = 30;
+				
 				if (projType == projectileType.ROCK) {
-					pokemonCurrentHealth -= 40;
-					System.out.println("Target is : " + ((pokemonCurrentHealth / pokemonFullHealth) * 100 - 5));
+					// Let the pokemon know it was hit with a rock
+					System.out.println(currentPokemon.toString());
+					System.out.println("Before: " + currentPokemon.getHealth()[0]);
+					currentPokemon.hitWithRock();
+					// Get its new current health.
+					pokemonCurrentHealth = currentPokemon.getHealth()[0];
+					System.out.println("After: " + currentPokemon.getHealth()[0]);
 					shakeTimer.start();
-				} else if (projType == projectileType.BALL) {
+				}
+				//If we threw a ball, start the wobble animation.
+				else if (projType == projectileType.BALL) {
 					wobbleTimer.start();
-				} else {
+				}
+				//Otherwise we threw bait. Just reset the projectile values.
+				else {
+					endOfTurn();
 					animating = false;
 				}
 				repaint();
