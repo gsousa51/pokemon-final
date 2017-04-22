@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import interfaceEnumMocks.Direction;
+import interfaceEnumMocks.GameOverOptions;
 import model.Game;
 import model.Pokemon;
 
@@ -140,11 +141,6 @@ public class BattleScenePanel extends JPanel {
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
 
-	// TODO: Get rid of these initializers
-	private int baitLeft = 30;
-	private int ballsLeft = 30;
-	private int rocksLeft = 30;
-
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
@@ -154,7 +150,7 @@ public class BattleScenePanel extends JPanel {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setSize(520, 550);
-		frame.add(new BattleScenePanel(new Game()));
+		frame.add(new BattleScenePanel(new Game(1, GameOverOptions.NO_BALL)));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -227,11 +223,6 @@ public class BattleScenePanel extends JPanel {
 		repaint();
 	}
 
-	
-	public void drawOpenPokeBall() {
-
-	}
-
 	private void initializePanel() {
 		// Temp mouse listener for testing
 		// TODO: delete mouse listener.
@@ -297,11 +288,11 @@ public class BattleScenePanel extends JPanel {
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
 		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
 		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
+		
 		repaint();
 	}
 
 	private void createButtonPanel() {
-
 		Font font = new Font("Dialog.bold", Font.PLAIN, 14);
 		// Button panel will hold the buttons.
 		// (Believe it or not)
@@ -456,7 +447,6 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override
@@ -523,6 +513,7 @@ public class BattleScenePanel extends JPanel {
 				shakeTimer.stop();
 				healthBarTimer.start();
 				shakeIndex = 0;
+				endOfTurn();
 
 			}
 			if (shakeIndex % 5 == 0) {
