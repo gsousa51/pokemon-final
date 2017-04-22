@@ -370,9 +370,16 @@ public class BattleScenePanel extends JPanel {
 		projectileLength = 30;
 		projectileX = projectileStartingSpotX;
 		projectileY = projectileStartingSpotY;
+		//Put the wobbleIndex back to the start.
 		wobbleIndex = 0;
+		//Set the index we use for timers to 0.
 		index = 0;
 		wobbleY = 45;
+		if(!currentPokemon.doTurn()){
+			runTimer.start();
+			JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	
 	private void endOfBattle(){
@@ -514,9 +521,9 @@ public class BattleScenePanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (shakeIndex == 50) {
 				shakeTimer.stop();
-				endOfTurn();
 				healthBarTimer.start();
 				shakeIndex = 0;
+
 			}
 			if (shakeIndex % 5 == 0) {
 				if (shakeDirection == Direction.EAST) {
@@ -564,6 +571,11 @@ public class BattleScenePanel extends JPanel {
 			if (healthBarLength == 0) {
 				runTimer.start();
 				healthBarTimer.stop();
+				if(currentPokemon.isAngry()){
+					JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				endOfTurn();
 			} else if (healthBarLength <= (pokemonCurrentHealth / pokemonFullHealth) * 100 - 5) {
 				animating = false;
 				healthBarTimer.stop();
@@ -637,15 +649,15 @@ public class BattleScenePanel extends JPanel {
 					else{
 						index++;
 					}
+					//At index == 500 we stop the animation.
 					if (index == 500) {
 						wobbleTimer.stop();
 						animating = false;
+						//Pokemon got free, reset its x position.
 						pokemonX = 350;
 						repaint();
 						wobbleY = 45;
-						index = 0;
-						wobbleIndex = 0;
-
+						endOfTurn();
 					}
 				} // end if index==400 "if"
 				else {
