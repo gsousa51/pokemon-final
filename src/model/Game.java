@@ -59,6 +59,16 @@ public class Game implements GameInterface, Serializable
     {
         return trainer.getRemainingStep();
     }
+    
+    public void throwBall()
+    {
+        trainer.throwBall();
+    }
+    
+    public void findBall()
+    {
+        trainer.findBall();
+    }
 
     @Override
     public void moveTrainer(Direction dir)
