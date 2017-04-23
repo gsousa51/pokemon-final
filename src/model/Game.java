@@ -103,8 +103,10 @@ public class Game implements GameInterface, Serializable
             return false;    
     }
     
-    
-    
+    //TODO: Implement ballsLeft()
+//    public int ballsLeft(){
+//    	//TODO: implementThis
+//    }
     public int getPokemonCount(){
     	return pokedex.size();
     }

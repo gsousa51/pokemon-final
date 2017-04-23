@@ -143,6 +143,7 @@ public class BattleScenePanel extends JPanel {
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
 	private GameFrame gamePanel;
+	private String name;
 
 	private boolean caught = false;
 
@@ -228,6 +229,7 @@ public class BattleScenePanel extends JPanel {
 		animating = true;
 		caught = false;
 		startingTimer.start();
+		name = poke.toString();
 		repaint();
 	}
 
@@ -235,6 +237,11 @@ public class BattleScenePanel extends JPanel {
 
 		pokeballThrowList = new ArrayList<>();
 		pokeballWobbleList = new ArrayList<>();
+		name = "Pokemon Name";
+	
+		
+		
+		
 		this.setSize(500, 500);
 		this.setLayout(null);
 		createButtonPanel();
@@ -380,6 +387,9 @@ public class BattleScenePanel extends JPanel {
 						JOptionPane.INFORMATION_MESSAGE);
 				endOfBattle();
 			}
+			else if(currentPokemon.isAngry() || currentPokemon.isEating()){
+				shakeTimer.start();
+			}
 		}
 	}
 
@@ -396,12 +406,17 @@ public class BattleScenePanel extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+		
 		g2.setColor(Color.white);
 		// First draw a white rectangle the size of the screen.
 		// This is necessary since to "refresh" the screen.
 		g2.fillRect(0, 0, 500, 300);
 		// Draw the background
 		g2.drawImage(backGround, 0, 0, 500, 300, null);
+		g2.setColor(Color.black);
+		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
+		//g2.drawString("Balls Left: " + String.valueOf(game.getBallsLeft()), x, y);
+		g2.drawString(name, 60, 55);
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
 		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
@@ -438,7 +453,6 @@ public class BattleScenePanel extends JPanel {
 			// Cuts down on flickering.
 			buttonPanel.repaint();
 		}
-
 	}
 
 
