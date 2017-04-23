@@ -393,7 +393,7 @@ public class MapPanel extends JPanel {
 			} else {
 				// If we get here, user is already walking
 				// or userpushed a key outside of valid keys
-				System.out.println("Skipped key press");
+				
 			}
 		}
 

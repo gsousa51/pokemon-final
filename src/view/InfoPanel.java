@@ -29,5 +29,6 @@ public class InfoPanel extends JPanel {
 	public void reset(){
 		stepLabel.setText("Steps Left : " + String.valueOf(game.getRemainingSteps()));
 		pokemonCount.setText("Caught : " + String.valueOf(game.getPokemonCount()));
+		repaint();
 	}
 }

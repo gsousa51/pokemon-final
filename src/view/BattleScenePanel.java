@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controller.GameFrame;
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameOverOptions;
 import model.Game;
@@ -51,7 +52,8 @@ public class BattleScenePanel extends JPanel {
 	final static int pokemonLength = 125;
 	final static int pokemonWidth = 125;
 	final static int pokemonY = 20;
-	final static int pokemonStartingSpotX = 500;
+	final static int pokemonStartingSpotX = 350;
+	final static int pokemonOffScreen = -200;
 	// Variable used for pokemon's top left x coord.
 	// (Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = pokemonStartingSpotX;
@@ -140,23 +142,28 @@ public class BattleScenePanel extends JPanel {
 
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
+	private GameFrame gamePanel;
+
+	private boolean caught = false;
 
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
 	}
 
-	// main method for testing
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(520, 550);
-		frame.add(new BattleScenePanel(new Game(1, GameOverOptions.NO_BALL)));
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+	// // main method for testing
+	// public static void main(String[] args) {
+	// JFrame frame = new JFrame();
+	// frame.setSize(520, 550);
+	// frame.add(new BattleScenePanel(new Game(1,
+	// GameOverOptions.NO_BALL),frame));
+	// frame.setVisible(true);
+	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// }
 
-	public BattleScenePanel(Game game) {
+	public BattleScenePanel(Game game, GameFrame frame) {
 		this.game = game;
+		this.gamePanel = frame;
 		initializePanel();
 		initializePokelist();
 	}// end constructor.
@@ -219,6 +226,7 @@ public class BattleScenePanel extends JPanel {
 
 		pokemonFullHealth = pokemonCurrentHealth = poke.getHealth()[1];
 		animating = true;
+		caught = false;
 		startingTimer.start();
 		repaint();
 	}
@@ -288,7 +296,7 @@ public class BattleScenePanel extends JPanel {
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
 		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
 		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
-		
+
 		repaint();
 	}
 
@@ -361,26 +369,29 @@ public class BattleScenePanel extends JPanel {
 		projectileLength = 30;
 		projectileX = projectileStartingSpotX;
 		projectileY = projectileStartingSpotY;
-		//Put the wobbleIndex back to the start.
+		// Put the wobbleIndex back to the start.
 		wobbleIndex = 0;
-		//Set the index we use for timers to 0.
+		// Set the index we use for timers to 0.
 		index = 0;
 		wobbleY = 45;
-		if(!currentPokemon.doTurn()){
-			runTimer.start();
-			JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
-					JOptionPane.INFORMATION_MESSAGE);
+		if (!caught) {
+			if (!currentPokemon.doTurn()) {
+				runTimer.start();
+				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
-	
-	private void endOfBattle(){
+
+	private void endOfBattle() {
 		trainerX = trainerStartingSpotX;
 		pokemonX = pokemonStartingSpotX;
 		healthBarLength = startingHealthBarLength;
 		redBarStartingLength = startingHealthBarLength;
+		caught = false;
+		gamePanel.switchPanels();
+		
 	}
-
-
 
 	@Override
 	public void paint(Graphics g) {
@@ -540,6 +551,7 @@ public class BattleScenePanel extends JPanel {
 			if (pokemonX == pokemonStartingSpotX) {
 
 				runTimer.stop();
+				endOfTurn();
 				endOfBattle();
 				animating = false;
 			} else {
@@ -562,7 +574,7 @@ public class BattleScenePanel extends JPanel {
 			if (healthBarLength == 0) {
 				runTimer.start();
 				healthBarTimer.stop();
-				if(currentPokemon.isAngry()){
+				if (currentPokemon.isAngry()) {
 					JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -597,7 +609,6 @@ public class BattleScenePanel extends JPanel {
 
 			} else {
 				trainerX++;
-				pokemonX--;
 				repaint();
 			}
 		}
@@ -607,15 +618,16 @@ public class BattleScenePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			pokemonX = pokemonStartingSpotX;
+			pokemonX = pokemonOffScreen;
 			if (wobbleY == 100) {
 				if (index >= 400) {
-					//Check if its caught ONLY ONCE. (At index 400)
+					// Check if its caught ONLY ONCE. (At index 400)
 					if (index == 400) {
-						//If it is caught, Set to the correct pokeball picture
-						//Pop a Window that say the pokemon is caught.
+						// If it is caught, Set to the correct pokeball picture
+						// Pop a Window that say the pokemon is caught.
 						if (currentPokemon.isCaught()) {
-							wobbleIndex = 4;
+							wobbleIndex = 3;
+							caught = true;
 							repaint();
 							/*
 							 * TODO: Pop a window. Tell "Game" to add Pokemon to
@@ -623,28 +635,27 @@ public class BattleScenePanel extends JPanel {
 							 */
 							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + currentPokemon.toString(), "",
 									JOptionPane.INFORMATION_MESSAGE);
+							game.addPokemon(currentPokemon);
 							endOfTurn();
 							endOfBattle();
-
 							wobbleTimer.stop();
 							animating = false;
 						}
-						//Otherwise it isn't caught.
-						//Set the pokeball to open and finish the animation
+						// Otherwise it isn't caught.
+						// Set the pokeball to open and finish the animation
 						else {
 							wobbleIndex = 8;
 							repaint();
 							index++;
 						}
-					}
-					else{
+					} else {
 						index++;
 					}
-					//At index == 500 we stop the animation.
+					// At index == 500 we stop the animation.
 					if (index == 500) {
 						wobbleTimer.stop();
 						animating = false;
-						//Pokemon got free, reset its x position.
+						// Pokemon got free, reset its x position.
 						pokemonX = 350;
 						repaint();
 						wobbleY = 45;
@@ -674,11 +685,11 @@ public class BattleScenePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
-			//Once the projectile hit desired distance.
+			// Once the projectile hit desired distance.
 			if (projectileX == 370) {
-				//stop the timer
+				// stop the timer
 				projectileTimer.stop();
-				
+
 				if (projType == projectileType.ROCK) {
 					// Let the pokemon know it was hit with a rock
 					System.out.println(currentPokemon.toString());
@@ -689,11 +700,11 @@ public class BattleScenePanel extends JPanel {
 					System.out.println("After: " + currentPokemon.getHealth()[0]);
 					shakeTimer.start();
 				}
-				//If we threw a ball, start the wobble animation.
+				// If we threw a ball, start the wobble animation.
 				else if (projType == projectileType.BALL) {
 					wobbleTimer.start();
 				}
-				//Otherwise we threw bait. Just reset the projectile values.
+				// Otherwise we threw bait. Just reset the projectile values.
 				else {
 					endOfTurn();
 					animating = false;
