@@ -232,9 +232,7 @@ public class BattleScenePanel extends JPanel {
 	}
 
 	private void initializePanel() {
-		// Temp mouse listener for testing
-		// TODO: delete mouse listener.
-		this.addMouseListener(new mouse());
+
 		pokeballThrowList = new ArrayList<>();
 		pokeballWobbleList = new ArrayList<>();
 		this.setSize(500, 500);
@@ -376,9 +374,11 @@ public class BattleScenePanel extends JPanel {
 		wobbleY = 45;
 		if (!caught) {
 			if (!currentPokemon.doTurn()) {
-				runTimer.start();
+				pokemonX = pokemonOffScreen;
+				repaint();
 				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
+				endOfBattle();
 			}
 		}
 	}
@@ -441,40 +441,7 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
-	// Temp mouselistener for testing
-	// TODO : delete mouse listener...
-	public class mouse implements MouseListener {
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
 
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mousePressed(MouseEvent m) {
-			if (!startingTimer.isRunning()) {
-				setPokemon(pokemonList.get(clicks % pokemonList.size()));
-				clicks++;
-			}
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
 
 	private class ProjectileButtonListener implements ActionListener {
 

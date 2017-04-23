@@ -14,8 +14,7 @@ public class Pokemon implements Serializable{
 		currentCatchRate = initialCatchRate = catchRate;
 		angryCount = eatingCount = 0;
 		this.name = name;
-		maxHP = maxHitPoints;
-		currentHP = (int) (0.75 * maxHitPoints);
+		maxHP = currentHP =maxHitPoints;
 	}
 
 	/**
