@@ -57,7 +57,8 @@ public class BattleScenePanel extends JPanel {
 	// Variable used for pokemon's top left x coord.
 	// (Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = pokemonStartingSpotX;
-
+	private int trainerIndex = 0;
+	private int slidingWidth = 1;
 	private int wobbleY = 45;
 	private int wobbleX = 370;
 	// Constants for drawing the trainer
@@ -189,7 +190,7 @@ public class BattleScenePanel extends JPanel {
 	// of the pokemon and trainer sliding in.
 	public void setPokemon(Pokemon poke) {
 		currentPokemon = poke;
-		switch (currentPokemon.toString()) {
+		switch (poke.toString()) {
 		case "Nidoran":
 			currentPokemonImage = nidoran;
 			break;
@@ -231,7 +232,7 @@ public class BattleScenePanel extends JPanel {
 		animating = true;
 		caught = false;
 		startingTimer.start();
-		name = poke.toString();
+		name = poke.toString().toUpperCase();
 		repaint();
 	}
 
@@ -384,11 +385,11 @@ public class BattleScenePanel extends JPanel {
 			if (!currentPokemon.doTurn()) {
 				pokemonX = pokemonOffScreen;
 				repaint();
-				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " RAN AWAY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				endOfBattle();
 			} else if (currentPokemon.isAngry()) {
-				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " IS ANGRY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
@@ -419,7 +420,8 @@ public class BattleScenePanel extends JPanel {
 		g2.setColor(Color.black);
 		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
 		g2.drawString("Balls Left: 30" /* + game.ballsLeft() */, 350, 180);
-		g2.drawString(name, 60, 55);
+		g2.drawString(name, 40, 55);
+		g2.drawString(pokemonCurrentHealth + " / " + pokemonFullHealth, 120, 55);
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
 		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, (int) healthBarLength, healthBarHeight);
@@ -433,7 +435,9 @@ public class BattleScenePanel extends JPanel {
 		// Draw the trainer
 		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		// Draw the pokemon we're facing.
-		g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
+		
+			g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
+		
 
 		// If we're throwing something, draw it.
 		if (projectileTimer.isRunning()) {
@@ -532,7 +536,7 @@ public class BattleScenePanel extends JPanel {
 		public void actionPerformed(ActionEvent action) {
 			// If the length is zero, the pokemon was killed.
 			if (healthBarLength == 0) {
-				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " WAS RUTHLESSLY MURDERED!", "",
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " WAS RUTHLESSLY MURDERED!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				healthBarTimer.stop();
 				// Set caught to true so we don't allow the pokemon to do their
@@ -595,7 +599,7 @@ public class BattleScenePanel extends JPanel {
 							 * TODO: Pop a window. Tell "Game" to add Pokemon to
 							 * collection Tell JFrame to pop the map back
 							 */
-							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + currentPokemon.toString(), "",
+							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + name.toUpperCase(), "",
 									JOptionPane.INFORMATION_MESSAGE);
 							game.addPokemon(currentPokemon);
 							endOfTurn();
@@ -654,7 +658,7 @@ public class BattleScenePanel extends JPanel {
 
 				if (projType == projectileType.ROCK) {
 					// Let the pokemon know it was hit with a rock
-					System.out.println(currentPokemon.toString());
+					System.out.println(name.toUpperCase());
 					System.out.println("Before: " + currentPokemon.getHealth()[0]);
 					currentPokemon.hitWithRock();
 					// Get its new current health.
@@ -670,10 +674,10 @@ public class BattleScenePanel extends JPanel {
 				else {
 					currentPokemon.hitWithBait();
 					if (currentPokemon.isEating()) {
-						JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS EATING!", "",
+						JOptionPane.showMessageDialog(null, name.toUpperCase() + " IS EATING!", "",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(null, currentPokemon.toString() + " REFUSED TO EAT!", "",
+						JOptionPane.showMessageDialog(null, name.toUpperCase() + " REFUSED TO EAT!", "",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 					endOfTurn();
