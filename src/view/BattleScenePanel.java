@@ -47,7 +47,7 @@ public class BattleScenePanel extends JPanel {
 	// slides.
 
 	private int redBarStartingLength = startingHealthBarLength;
-	private int healthBarLength = startingHealthBarLength;
+	private double healthBarLength = startingHealthBarLength;
 	// Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
 	final static int pokemonWidth = 125;
@@ -88,7 +88,6 @@ public class BattleScenePanel extends JPanel {
 	private javax.swing.Timer startingTimer;
 	private javax.swing.Timer projectileTimer;
 	private javax.swing.Timer shakeTimer;
-	private javax.swing.Timer runTimer;
 	private javax.swing.Timer wobbleTimer;
 
 	// Images used for drawing our panel
@@ -142,7 +141,7 @@ public class BattleScenePanel extends JPanel {
 
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
-	private GameFrame gamePanel;
+	private GameFrame container;
 	private String name;
 
 	private boolean caught = false;
@@ -164,7 +163,7 @@ public class BattleScenePanel extends JPanel {
 
 	public BattleScenePanel(Game game, GameFrame frame) {
 		this.game = game;
-		this.gamePanel = frame;
+		this.container = frame;
 		initializePanel();
 		initializePokelist();
 	}// end constructor.
@@ -225,7 +224,10 @@ public class BattleScenePanel extends JPanel {
 			break;
 		}
 
-		pokemonFullHealth = pokemonCurrentHealth = poke.getHealth()[1];
+		pokemonFullHealth = poke.getHealth()[1];
+		pokemonCurrentHealth = poke.getHealth()[0];
+		healthBarLength = (((pokemonCurrentHealth / pokemonFullHealth) * 100) - 5);
+		redBarStartingLength = (int) healthBarLength;
 		animating = true;
 		caught = false;
 		startingTimer.start();
@@ -238,10 +240,7 @@ public class BattleScenePanel extends JPanel {
 		pokeballThrowList = new ArrayList<>();
 		pokeballWobbleList = new ArrayList<>();
 		name = "Pokemon Name";
-	
-		
-		
-		
+
 		this.setSize(500, 500);
 		this.setLayout(null);
 		createButtonPanel();
@@ -299,7 +298,6 @@ public class BattleScenePanel extends JPanel {
 		startingTimer = new javax.swing.Timer(5, new BeginningListener());
 		projectileTimer = new javax.swing.Timer(5, new throwProjectileListener());
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
-		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
 		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
 
 		repaint();
@@ -343,23 +341,24 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				animating = true;
-				new Timer(5, new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (trainerX == trainerStartingSpotX) {
-							((Timer) e.getSource()).stop();
-							endOfBattle();
-							animating = false;
-							// TODO: Let the JFrame know we're running away
-						} else {
-							trainerX--;
-							repaint();
+				if (!animating) {
+					animating = true;
+					new Timer(5, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if (trainerX == trainerStartingSpotX) {
+								((Timer) e.getSource()).stop();
+								endOfBattle();
+								animating = false;
+								// TODO: Let the JFrame know we're running away
+							} else {
+								trainerX--;
+								repaint();
+							}
 						}
-					}
 
-				}).start();
+					}).start();
+				}
 			}
 		});
 
@@ -379,18 +378,22 @@ public class BattleScenePanel extends JPanel {
 		// Set the index we use for timers to 0.
 		index = 0;
 		wobbleY = 45;
-		if (!caught) {
+		if (game.gameOver()) {
+			container.gameOver();
+		} else if (!caught && pokemonCurrentHealth > 0) {
 			if (!currentPokemon.doTurn()) {
 				pokemonX = pokemonOffScreen;
 				repaint();
 				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				endOfBattle();
+			} else if (currentPokemon.isAngry()) {
+				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
-			else if(currentPokemon.isAngry() || currentPokemon.isEating()){
-				shakeTimer.start();
-			}
+
 		}
+
 	}
 
 	private void endOfBattle() {
@@ -399,14 +402,14 @@ public class BattleScenePanel extends JPanel {
 		healthBarLength = startingHealthBarLength;
 		redBarStartingLength = startingHealthBarLength;
 		caught = false;
-		gamePanel.switchPanels();
-		
+		container.switchPanels();
+
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		
+
 		g2.setColor(Color.white);
 		// First draw a white rectangle the size of the screen.
 		// This is necessary since to "refresh" the screen.
@@ -415,15 +418,15 @@ public class BattleScenePanel extends JPanel {
 		g2.drawImage(backGround, 0, 0, 500, 300, null);
 		g2.setColor(Color.black);
 		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
-		//g2.drawString("Balls Left: " + String.valueOf(game.getBallsLeft()), x, y);
+		g2.drawString("Balls Left: 30" /* + game.ballsLeft() */, 350, 180);
 		g2.drawString(name, 60, 55);
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
-		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
+		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, (int) healthBarLength, healthBarHeight);
 		if (healthBarTimer.isRunning()) {
 			g2.setColor(Color.red);
-			g2.fillRect(healthBarTopLeftX + healthBarLength, healthBarTopLeftY, redBarStartingLength - healthBarLength,
-					healthBarHeight);
+			g2.fillRect(healthBarTopLeftX + (int) healthBarLength, healthBarTopLeftY,
+					redBarStartingLength - (int) healthBarLength, healthBarHeight);
 		}
 		// Draw a replica image of our button panel, otherwise it flickers...
 		g2.drawImage(selectionBack, -1, 298, 500, 200, null);
@@ -454,8 +457,6 @@ public class BattleScenePanel extends JPanel {
 			buttonPanel.repaint();
 		}
 	}
-
-
 
 	private class ProjectileButtonListener implements ActionListener {
 
@@ -525,45 +526,25 @@ public class BattleScenePanel extends JPanel {
 		}
 	}
 
-	private class PokemonRunListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (pokemonX == pokemonStartingSpotX) {
-
-				runTimer.stop();
-				endOfTurn();
-				endOfBattle();
-				animating = false;
-			} else {
-				pokemonX++;
-				repaint();
-			}
-		}
-
-	}
-
 	private class DrawHealthBarListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
-			// Replace this with a condition of where the health bar length
-			// should sto
-			// PROBABLY set it to newHealth/fullHealth (Which would be
-			// percentage of the full
-			// Health that the pokemon is now at.
+			// If the length is zero, the pokemon was killed.
 			if (healthBarLength == 0) {
-				runTimer.start();
+				JOptionPane.showMessageDialog(null, currentPokemon.toString() + " WAS RUTHLESSLY MURDERED!", "",
+						JOptionPane.INFORMATION_MESSAGE);
 				healthBarTimer.stop();
-				if (currentPokemon.isAngry()) {
-					JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
+				// Set caught to true so we don't allow the pokemon to do their
+				// move.
+				caught = true;
+				// Call end of turn and end of battle.
 				endOfTurn();
+				endOfBattle();
 			} else if (healthBarLength <= (pokemonCurrentHealth / pokemonFullHealth) * 100 - 5) {
 				animating = false;
 				healthBarTimer.stop();
-				redBarStartingLength = healthBarLength;
+				redBarStartingLength = (int) healthBarLength;
 				repaint();
 
 			} else {
@@ -687,6 +668,14 @@ public class BattleScenePanel extends JPanel {
 				}
 				// Otherwise we threw bait. Just reset the projectile values.
 				else {
+					currentPokemon.hitWithBait();
+					if (currentPokemon.isEating()) {
+						JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS EATING!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, currentPokemon.toString() + " REFUSED TO EAT!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 					endOfTurn();
 					animating = false;
 				}

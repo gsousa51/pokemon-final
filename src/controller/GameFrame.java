@@ -192,6 +192,13 @@ public class GameFrame extends JFrame {
 
 	}
 
+	//TODO: Implement this.
+	//		It will be the "Game Summary" that is called whenever the user
+	//		forfeits the game OR when the user runs of out of steps or balls.
+	
+	public void gameOver(){
+		
+	}
 	// When user closes window, inquire if they wish to save the game to play
 	// in the future
 	private class GameExitEvent extends WindowAdapter {
