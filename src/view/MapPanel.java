@@ -159,13 +159,12 @@ public class MapPanel extends JPanel {
 					index++;
 					repaint();
 				}
-
 			}
 		};
 
 		// Initialize the walkTimer giving it animationPerformer as its
 		// actionListener
-		walkTimer = new javax.swing.Timer(100, animationPerformer);
+		walkTimer = new javax.swing.Timer(50, animationPerformer);
 	}
 
 	// Method assigns the correct filePath to our BufferedImages

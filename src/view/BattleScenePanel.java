@@ -419,7 +419,7 @@ public class BattleScenePanel extends JPanel {
 		g2.drawImage(backGround, 0, 0, 500, 300, null);
 		g2.setColor(Color.black);
 		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
-		g2.drawString("Balls Left: 30" /* + game.ballsLeft() */, 350, 180);
+		g2.drawString("Balls Left: " + game.ballsLeft(), 350, 180);
 		g2.drawString(name, 40, 55);
 		g2.drawString(pokemonCurrentHealth + " / " + pokemonFullHealth, 120, 55);
 		// Draw the health bar.
@@ -435,9 +435,8 @@ public class BattleScenePanel extends JPanel {
 		// Draw the trainer
 		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		// Draw the pokemon we're facing.
-		
-			g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
-		
+
+		g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 
 		// If we're throwing something, draw it.
 		if (projectileTimer.isRunning()) {
@@ -470,26 +469,25 @@ public class BattleScenePanel extends JPanel {
 			if (!animating) {
 				switch (button.getText()) {
 				case "Throw Ball":
-					/*
-					 * if(trainer.hasBall(){ trainer.throwBall();
-					 */
-					projType = projectileType.BALL;
-					animating = true;
-					projectileTimer.start();
-
+					if (game.ballsLeft() > 0) {
+						projType = projectileType.BALL;
+						animating = true;
+						projectileTimer.start();
+						game.throwBall();
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "OUT OF BALLS!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 					break;
 				case "Throw Bait":
-					/*
-					 * if(trainer.hasBait(){ trainer.throwBait();
-					 */
+					
 					projType = projectileType.BAIT;
 					animating = true;
 					projectileTimer.start();
 					break;
 				case "Throw Rock":
-					/*
-					 * if(trainer.hasRock(){ trainer.throwRock();
-					 */
+					
 					projType = projectileType.ROCK;
 					animating = true;
 					projectileTimer.start();
