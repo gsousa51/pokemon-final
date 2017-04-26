@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controller.GameFrame;
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameOverOptions;
 import model.Game;
@@ -46,16 +47,18 @@ public class BattleScenePanel extends JPanel {
 	// slides.
 
 	private int redBarStartingLength = startingHealthBarLength;
-	private int healthBarLength = startingHealthBarLength;
+	private double healthBarLength = startingHealthBarLength;
 	// Constants used for drawing the pokemon
 	final static int pokemonLength = 125;
 	final static int pokemonWidth = 125;
 	final static int pokemonY = 20;
-	final static int pokemonStartingSpotX = 500;
+	final static int pokemonStartingSpotX = 350;
+	final static int pokemonOffScreen = -200;
 	// Variable used for pokemon's top left x coord.
 	// (Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = pokemonStartingSpotX;
-
+	private int trainerIndex = 0;
+	private int slidingWidth = 1;
 	private int wobbleY = 45;
 	private int wobbleX = 370;
 	// Constants for drawing the trainer
@@ -86,7 +89,6 @@ public class BattleScenePanel extends JPanel {
 	private javax.swing.Timer startingTimer;
 	private javax.swing.Timer projectileTimer;
 	private javax.swing.Timer shakeTimer;
-	private javax.swing.Timer runTimer;
 	private javax.swing.Timer wobbleTimer;
 
 	// Images used for drawing our panel
@@ -140,23 +142,29 @@ public class BattleScenePanel extends JPanel {
 
 	private double pokemonFullHealth;
 	private double pokemonCurrentHealth;
+	private GameFrame container;
+	private String name;
+
+	private boolean caught = false;
 
 	// enums for what projectile to throw.
 	private enum projectileType {
 		ROCK, BALL, BAIT;
 	}
 
-	// main method for testing
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(520, 550);
-		frame.add(new BattleScenePanel(new Game(1, GameOverOptions.NO_BALL)));
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+	// // main method for testing
+	// public static void main(String[] args) {
+	// JFrame frame = new JFrame();
+	// frame.setSize(520, 550);
+	// frame.add(new BattleScenePanel(new Game(1,
+	// GameOverOptions.NO_BALL),frame));
+	// frame.setVisible(true);
+	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// }
 
-	public BattleScenePanel(Game game) {
+	public BattleScenePanel(Game game, GameFrame frame) {
 		this.game = game;
+		this.container = frame;
 		initializePanel();
 		initializePokelist();
 	}// end constructor.
@@ -182,7 +190,7 @@ public class BattleScenePanel extends JPanel {
 	// of the pokemon and trainer sliding in.
 	public void setPokemon(Pokemon poke) {
 		currentPokemon = poke;
-		switch (currentPokemon.toString()) {
+		switch (poke.toString()) {
 		case "Nidoran":
 			currentPokemonImage = nidoran;
 			break;
@@ -217,18 +225,23 @@ public class BattleScenePanel extends JPanel {
 			break;
 		}
 
-		pokemonFullHealth = pokemonCurrentHealth = poke.getHealth()[1];
+		pokemonFullHealth = poke.getHealth()[1];
+		pokemonCurrentHealth = poke.getHealth()[0];
+		healthBarLength = (((pokemonCurrentHealth / pokemonFullHealth) * 100) - 5);
+		redBarStartingLength = (int) healthBarLength;
 		animating = true;
+		caught = false;
 		startingTimer.start();
+		name = poke.toString().toUpperCase();
 		repaint();
 	}
 
 	private void initializePanel() {
-		// Temp mouse listener for testing
-		// TODO: delete mouse listener.
-		this.addMouseListener(new mouse());
+
 		pokeballThrowList = new ArrayList<>();
 		pokeballWobbleList = new ArrayList<>();
+		name = "Pokemon Name";
+
 		this.setSize(500, 500);
 		this.setLayout(null);
 		createButtonPanel();
@@ -286,9 +299,8 @@ public class BattleScenePanel extends JPanel {
 		startingTimer = new javax.swing.Timer(5, new BeginningListener());
 		projectileTimer = new javax.swing.Timer(5, new throwProjectileListener());
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
-		runTimer = new javax.swing.Timer(5, new PokemonRunListener());
 		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
-		
+
 		repaint();
 	}
 
@@ -330,23 +342,24 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				animating = true;
-				new Timer(5, new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (trainerX == trainerStartingSpotX) {
-							((Timer) e.getSource()).stop();
-							endOfBattle();
-							animating = false;
-							// TODO: Let the JFrame know we're running away
-						} else {
-							trainerX--;
-							repaint();
+				if (!animating) {
+					animating = true;
+					new Timer(5, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if (trainerX == trainerStartingSpotX) {
+								((Timer) e.getSource()).stop();
+								endOfBattle();
+								animating = false;
+								// TODO: Let the JFrame know we're running away
+							} else {
+								trainerX--;
+								repaint();
+							}
 						}
-					}
 
-				}).start();
+					}).start();
+				}
 			}
 		});
 
@@ -361,49 +374,68 @@ public class BattleScenePanel extends JPanel {
 		projectileLength = 30;
 		projectileX = projectileStartingSpotX;
 		projectileY = projectileStartingSpotY;
-		//Put the wobbleIndex back to the start.
+		// Put the wobbleIndex back to the start.
 		wobbleIndex = 0;
-		//Set the index we use for timers to 0.
+		// Set the index we use for timers to 0.
 		index = 0;
 		wobbleY = 45;
-		if(!currentPokemon.doTurn()){
-			runTimer.start();
-			JOptionPane.showMessageDialog(null, currentPokemon.toString() + " RAN AWAY!", "",
-					JOptionPane.INFORMATION_MESSAGE);
+		if (game.gameOver()) {
+			container.gameOver();
+		} else if (!caught && pokemonCurrentHealth > 0) {
+			if (!currentPokemon.doTurn()) {
+				pokemonX = pokemonOffScreen;
+				repaint();
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " RAN AWAY!", "",
+						JOptionPane.INFORMATION_MESSAGE);
+				endOfBattle();
+			} else if (currentPokemon.isAngry()) {
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " IS ANGRY!", "",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+
 		}
+
 	}
-	
-	private void endOfBattle(){
+
+	private void endOfBattle() {
 		trainerX = trainerStartingSpotX;
 		pokemonX = pokemonStartingSpotX;
 		healthBarLength = startingHealthBarLength;
 		redBarStartingLength = startingHealthBarLength;
+		caught = false;
+		container.switchPanels();
+
 	}
-
-
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+
 		g2.setColor(Color.white);
 		// First draw a white rectangle the size of the screen.
 		// This is necessary since to "refresh" the screen.
 		g2.fillRect(0, 0, 500, 300);
 		// Draw the background
 		g2.drawImage(backGround, 0, 0, 500, 300, null);
+		g2.setColor(Color.black);
+		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
+		g2.drawString("Balls Left: " + game.ballsLeft(), 350, 180);
+		g2.drawString(name, 40, 55);
+		g2.drawString(pokemonCurrentHealth + " / " + pokemonFullHealth, 120, 55);
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
-		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, healthBarLength, healthBarHeight);
+		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, (int) healthBarLength, healthBarHeight);
 		if (healthBarTimer.isRunning()) {
 			g2.setColor(Color.red);
-			g2.fillRect(healthBarTopLeftX + healthBarLength, healthBarTopLeftY, redBarStartingLength - healthBarLength,
-					healthBarHeight);
+			g2.fillRect(healthBarTopLeftX + (int) healthBarLength, healthBarTopLeftY,
+					redBarStartingLength - (int) healthBarLength, healthBarHeight);
 		}
 		// Draw a replica image of our button panel, otherwise it flickers...
 		g2.drawImage(selectionBack, -1, 298, 500, 200, null);
 		// Draw the trainer
 		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		// Draw the pokemon we're facing.
+
 		g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 
 		// If we're throwing something, draw it.
@@ -427,42 +459,6 @@ public class BattleScenePanel extends JPanel {
 			// Cuts down on flickering.
 			buttonPanel.repaint();
 		}
-
-	}
-
-	// Temp mouselistener for testing
-	// TODO : delete mouse listener...
-	public class mouse implements MouseListener {
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mousePressed(MouseEvent m) {
-			if (!startingTimer.isRunning()) {
-				setPokemon(pokemonList.get(clicks % pokemonList.size()));
-				clicks++;
-			}
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	private class ProjectileButtonListener implements ActionListener {
@@ -473,26 +469,25 @@ public class BattleScenePanel extends JPanel {
 			if (!animating) {
 				switch (button.getText()) {
 				case "Throw Ball":
-					/*
-					 * if(trainer.hasBall(){ trainer.throwBall();
-					 */
-					projType = projectileType.BALL;
-					animating = true;
-					projectileTimer.start();
-
+					if (game.ballsLeft() > 0) {
+						projType = projectileType.BALL;
+						animating = true;
+						projectileTimer.start();
+						game.throwBall();
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "OUT OF BALLS!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 					break;
 				case "Throw Bait":
-					/*
-					 * if(trainer.hasBait(){ trainer.throwBait();
-					 */
+					
 					projType = projectileType.BAIT;
 					animating = true;
 					projectileTimer.start();
 					break;
 				case "Throw Rock":
-					/*
-					 * if(trainer.hasRock(){ trainer.throwRock();
-					 */
+					
 					projType = projectileType.ROCK;
 					animating = true;
 					projectileTimer.start();
@@ -533,44 +528,25 @@ public class BattleScenePanel extends JPanel {
 		}
 	}
 
-	private class PokemonRunListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (pokemonX == pokemonStartingSpotX) {
-
-				runTimer.stop();
-				endOfBattle();
-				animating = false;
-			} else {
-				pokemonX++;
-				repaint();
-			}
-		}
-
-	}
-
 	private class DrawHealthBarListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
-			// Replace this with a condition of where the health bar length
-			// should sto
-			// PROBABLY set it to newHealth/fullHealth (Which would be
-			// percentage of the full
-			// Health that the pokemon is now at.
+			// If the length is zero, the pokemon was killed.
 			if (healthBarLength == 0) {
-				runTimer.start();
+				JOptionPane.showMessageDialog(null, name.toUpperCase() + " WAS RUTHLESSLY MURDERED!", "",
+						JOptionPane.INFORMATION_MESSAGE);
 				healthBarTimer.stop();
-				if(currentPokemon.isAngry()){
-					JOptionPane.showMessageDialog(null, currentPokemon.toString() + " IS ANGRY!", "",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
+				// Set caught to true so we don't allow the pokemon to do their
+				// move.
+				caught = true;
+				// Call end of turn and end of battle.
 				endOfTurn();
+				endOfBattle();
 			} else if (healthBarLength <= (pokemonCurrentHealth / pokemonFullHealth) * 100 - 5) {
 				animating = false;
 				healthBarTimer.stop();
-				redBarStartingLength = healthBarLength;
+				redBarStartingLength = (int) healthBarLength;
 				repaint();
 
 			} else {
@@ -597,7 +573,6 @@ public class BattleScenePanel extends JPanel {
 
 			} else {
 				trainerX++;
-				pokemonX--;
 				repaint();
 			}
 		}
@@ -607,44 +582,44 @@ public class BattleScenePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			pokemonX = pokemonStartingSpotX;
+			pokemonX = pokemonOffScreen;
 			if (wobbleY == 100) {
 				if (index >= 400) {
-					//Check if its caught ONLY ONCE. (At index 400)
+					// Check if its caught ONLY ONCE. (At index 400)
 					if (index == 400) {
-						//If it is caught, Set to the correct pokeball picture
-						//Pop a Window that say the pokemon is caught.
+						// If it is caught, Set to the correct pokeball picture
+						// Pop a Window that say the pokemon is caught.
 						if (currentPokemon.isCaught()) {
-							wobbleIndex = 4;
+							wobbleIndex = 3;
+							caught = true;
 							repaint();
 							/*
 							 * TODO: Pop a window. Tell "Game" to add Pokemon to
 							 * collection Tell JFrame to pop the map back
 							 */
-							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + currentPokemon.toString(), "",
+							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + name.toUpperCase(), "",
 									JOptionPane.INFORMATION_MESSAGE);
+							game.addPokemon(currentPokemon);
 							endOfTurn();
 							endOfBattle();
-
 							wobbleTimer.stop();
 							animating = false;
 						}
-						//Otherwise it isn't caught.
-						//Set the pokeball to open and finish the animation
+						// Otherwise it isn't caught.
+						// Set the pokeball to open and finish the animation
 						else {
 							wobbleIndex = 8;
 							repaint();
 							index++;
 						}
-					}
-					else{
+					} else {
 						index++;
 					}
-					//At index == 500 we stop the animation.
+					// At index == 500 we stop the animation.
 					if (index == 500) {
 						wobbleTimer.stop();
 						animating = false;
-						//Pokemon got free, reset its x position.
+						// Pokemon got free, reset its x position.
 						pokemonX = 350;
 						repaint();
 						wobbleY = 45;
@@ -674,14 +649,14 @@ public class BattleScenePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent action) {
-			//Once the projectile hit desired distance.
+			// Once the projectile hit desired distance.
 			if (projectileX == 370) {
-				//stop the timer
+				// stop the timer
 				projectileTimer.stop();
-				
+
 				if (projType == projectileType.ROCK) {
 					// Let the pokemon know it was hit with a rock
-					System.out.println(currentPokemon.toString());
+					System.out.println(name.toUpperCase());
 					System.out.println("Before: " + currentPokemon.getHealth()[0]);
 					currentPokemon.hitWithRock();
 					// Get its new current health.
@@ -689,12 +664,20 @@ public class BattleScenePanel extends JPanel {
 					System.out.println("After: " + currentPokemon.getHealth()[0]);
 					shakeTimer.start();
 				}
-				//If we threw a ball, start the wobble animation.
+				// If we threw a ball, start the wobble animation.
 				else if (projType == projectileType.BALL) {
 					wobbleTimer.start();
 				}
-				//Otherwise we threw bait. Just reset the projectile values.
+				// Otherwise we threw bait. Just reset the projectile values.
 				else {
+					currentPokemon.hitWithBait();
+					if (currentPokemon.isEating()) {
+						JOptionPane.showMessageDialog(null, name.toUpperCase() + " IS EATING!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, name.toUpperCase() + " REFUSED TO EAT!", "",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 					endOfTurn();
 					animating = false;
 				}

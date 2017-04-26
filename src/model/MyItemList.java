@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MyItemList implements Iterable<Item>, Serializable{
+public class MyItemList implements Iterable<Item>, Serializable {
 
 	private static MyItemList self;
 	private ArrayList<Item> itemList;
 
 	private MyItemList() {
 		itemList = new ArrayList<Item>();
+		for (int i = 0; i < 30; i++) {
+			itemList.add(new SafariBall());
+		}
 	}
 
 	public static synchronized MyItemList getInstance() {
@@ -22,17 +25,31 @@ public class MyItemList implements Iterable<Item>, Serializable{
 	public void addItem(Item item) {
 		itemList.add(item);
 	}
-	
+
 	public Item getItem(Item item) {
 		return itemList.get(itemList.indexOf(item));
 	}
-	
-	public void removeItem(Item item) {
-		itemList.remove(itemList.indexOf(item));
+
+	public void removeItem(String itemName) {
+		for (Item i : itemList) {
+			if (i.toString().equals(itemName)) {
+				itemList.remove(i);
+				break;
+			}
+		}
 	}
-	
+
 	public int size() {
 		return itemList.size();
+	}
+
+	public int getItemCount(String itemName) {
+		int count = 0;
+		for (Item i : itemList) {
+			if (i.toString().equals(itemName))
+				count++;
+		}
+		return count;
 	}
 
 	@Override

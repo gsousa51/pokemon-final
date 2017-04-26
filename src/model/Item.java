@@ -19,6 +19,10 @@ public abstract class Item implements Serializable{
 		return name;
 	}
 	
+	public boolean equals(Item item) {
+		return this.toString().equals(item.toString());
+	}
+	
 	/**
 	 * Returns the message given when examining the item
 	 * 
