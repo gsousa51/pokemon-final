@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.CardLayout;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

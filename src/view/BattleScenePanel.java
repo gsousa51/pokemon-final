@@ -349,8 +349,9 @@ public class BattleScenePanel extends JPanel {
 						public void actionPerformed(ActionEvent e) {
 							if (trainerX == trainerStartingSpotX) {
 								((Timer) e.getSource()).stop();
-								endOfBattle();
 								animating = false;
+								endOfBattle();
+								
 								// TODO: Let the JFrame know we're running away
 							} else {
 								trainerX--;
@@ -533,7 +534,7 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent action) {
 			// If the length is zero, the pokemon was killed.
-			if (healthBarLength == 0) {
+			if (healthBarLength <= 0) {
 				JOptionPane.showMessageDialog(null, name.toUpperCase() + " WAS RUTHLESSLY MURDERED!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				healthBarTimer.stop();
@@ -660,7 +661,7 @@ public class BattleScenePanel extends JPanel {
 					System.out.println("Before: " + currentPokemon.getHealth()[0]);
 					currentPokemon.hitWithRock();
 					// Get its new current health.
-					pokemonCurrentHealth = currentPokemon.getHealth()[0];
+					pokemonCurrentHealth = Math.max(0,currentPokemon.getHealth()[0]);
 					System.out.println("After: " + currentPokemon.getHealth()[0]);
 					shakeTimer.start();
 				}

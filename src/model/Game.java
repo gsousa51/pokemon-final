@@ -70,6 +70,9 @@ public class Game implements GameInterface, Serializable
         trainer.findBall();
     }
 
+    public int ballsLeft(){
+    	return trainer.getRemainingBalls();
+    }
     @Override
     public void moveTrainer(Direction dir)
     {
