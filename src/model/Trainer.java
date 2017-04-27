@@ -24,6 +24,7 @@ public class Trainer implements Serializable
      */
     public Trainer()
     {
+    	
         stepsRemaining = 500;
         currentRow = 14;
         currentCol = 20;

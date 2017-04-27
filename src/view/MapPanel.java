@@ -22,13 +22,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.GameFrame;
-
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
-
 import model.Game;
 
 
@@ -107,6 +106,7 @@ public class MapPanel extends JPanel {
 	//The Frame holding this panel.
 	//Allows us to interact with it.
 	GameFrame container;
+	Timer transitionTimer ;
 
 	public MapPanel(GameInterface game, GameFrame container) {
 		this.container = container;
@@ -117,6 +117,7 @@ public class MapPanel extends JPanel {
 		this.repaint();
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
+		transitionTimer = new Timer(25,new TransitionListener());
 		this.game = (Game) game;
 		trainerPosition = game.getTrainerPosition();
 		mapGrid = game.getMap();
@@ -167,6 +168,21 @@ public class MapPanel extends JPanel {
 		walkTimer = new javax.swing.Timer(50, animationPerformer);
 	}
 
+	public void animateLeaving(){
+		transitionTimer.start();
+		//TODO: Put at the end of the timer.
+		///container.switchPanels();
+		
+	}
+	
+	private class TransitionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			 
+		}
+		
+	}
 	// Method assigns the correct filePath to our BufferedImages
 	public void setImages() {
 		try {
