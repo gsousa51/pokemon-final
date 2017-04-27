@@ -15,28 +15,36 @@ public class Trainer implements Serializable
     private int currentCol;
     private MyItemList items;
     private MyPokemonList pokemon;
-    
+
     /**
-     * Steps start at 500. Currently the starting
-     * point is hard coded, can be changed later
+     * Steps start at 500. Currently the starting point is hard coded, can be
+     * changed later
      * 
      * @author Morgan Henry
      */
-    public Trainer()
+    public Trainer(int map)
     {
-    	
+
         stepsRemaining = 500;
-        currentRow = 14;
-        currentCol = 20;
-        
+        if (map == 1)
+        {
+            currentRow = 14;
+            currentCol = 20;
+        }
+        else
+        {
+            currentRow = 15;
+            currentCol = 19;
+        }
+     
+
         items = MyItemList.getInstance();
         pokemon = MyPokemonList.getInstance();
     }
 
     /**
-     * Return the postion of the training in a Point
-     * The x is the current col and the y is the current
-     * row. 
+     * Return the postion of the training in a Point The x is the current col
+     * and the y is the current row.
      * 
      * @return
      * 
@@ -46,7 +54,7 @@ public class Trainer implements Serializable
     {
         return new Point(currentCol, currentRow);
     }
-    
+
     /**
      * Decrement remaining balls by one
      */
@@ -54,18 +62,19 @@ public class Trainer implements Serializable
     {
         items.removeItem("Safari Ball");
     }
-    
+
     /**
      * add one to remaining balls
      */
     public void findBall()
     {
-       items.addItem(new SafariBall());
+        items.addItem(new SafariBall());
     }
 
     /**
-     * Return the amount of steps remaining. Starts
-     * at 500 and decrements one every move
+     * Return the amount of steps remaining. Starts at 500 and decrements one
+     * every move
+     * 
      * @return
      * 
      * @author Morgan Henry
@@ -76,22 +85,22 @@ public class Trainer implements Serializable
     }
 
     /**
-     * Move the trainer in the direction
-     * This doesn't do any error checking for how many moves
-     * or if the location is movable!
+     * Move the trainer in the direction This doesn't do any error checking for
+     * how many moves or if the location is movable!
+     * 
      * @param dir
      * 
      * @author Morgan Henry
      */
     public void move(Direction dir)
     {
-        if(dir == Direction.NORTH)
+        if (dir == Direction.NORTH)
             currentRow--;
-        else if(dir == Direction.SOUTH)
+        else if (dir == Direction.SOUTH)
             currentRow++;
-        else if(dir == Direction.EAST)
+        else if (dir == Direction.EAST)
             currentCol++;
-        else if(dir == Direction.WEST)
+        else if (dir == Direction.WEST)
             currentCol--;
 
         stepsRemaining--;

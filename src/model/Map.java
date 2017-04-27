@@ -240,13 +240,21 @@ public class Map implements Serializable
      */
     public void printMap()
     {
+        for(int i = 0; i < 40; i++)
+        {
+            if(i < 10)
+            System.out.print(" "+ i + " ");
+            else
+            System.out.print(i + " ");
+        }
+        System.out.println();
         for (int r = 0; r < MAP_HEIGHT; r++)
         {
             for (int c = 0; c < MAP_WIDTH; c++)
             {
                 System.out.print("[" + mapGrid[r][c] + "]");
             }
-            System.out.println();
+            System.out.println(r + " ");
         }
     }
 
@@ -257,8 +265,133 @@ public class Map implements Serializable
      */
     private void makeMapTwo()
     {
-        // TODO Auto-generated method stub
+        // initialize everything to Ground
+        for (int r = 0; r < MAP_HEIGHT; r++)
+        {
+            for (int c = 0; c < MAP_WIDTH; c++)
+            {
+                mapGrid[r][c] = new Ground(null);
+            }
+        }
 
+        // make rock borders for whole map to avoid walking off the map
+        for (int r = 0; r < MAP_HEIGHT; r++)
+        {
+            mapGrid[r][0] = new Rock();
+            mapGrid[r][MAP_WIDTH - 1] = new Rock();
+        }
+        for (int c = 0; c < MAP_WIDTH; c++)
+        {
+            mapGrid[0][c] = new Rock();
+            mapGrid[MAP_HEIGHT - 1][c] = new Rock();
+        }
+        
+        
+        //Make the smaler inside box
+        for(int c = 15; c < 24; c++)
+            mapGrid[11][c] = new Rock();
+        for(int c = 15; c < 24; c++)
+            mapGrid[18][c] = new Rock();
+        for(int r = 12; r < 14; r++)
+        {
+            mapGrid[r][23] = new Rock();
+            mapGrid[r][15] = new Rock();
+        }
+        for(int r = 16; r < 18; r++)
+        {
+            mapGrid[r][23] = new Rock();
+            mapGrid[r][15] = new Rock();
+        }
+        mapGrid[11][19] = new Ground(null);
+        mapGrid[18][19] = new Ground(null);
+        
+        //Add grass to small box
+        //bottom right corner
+        for(int c = 20; c<23;c++)
+            mapGrid[17][c] = new Grass();
+        for(int c = 21; c<23;c++)
+            mapGrid[16][c] = new Grass();
+        //top left corner
+        for(int c = 16; c <19; c++)
+            mapGrid[12][c] = new Grass();
+        for(int c = 16; c <18; c++)
+            mapGrid[13][c] = new Grass();
+            
+        
+        //make bigger box
+        for(int c = 6; c < 34; c++)
+            mapGrid[6][c] = new Rock();
+        for(int c = 6; c < 34; c++)
+            mapGrid[23][c] = new Rock();
+        for(int r = 7; r < 13; r++)
+        {
+            mapGrid[r][33] = new Rock();
+            mapGrid[r][6] = new Rock();
+        }
+        for(int r = 17; r < 23; r++)
+        {
+            mapGrid[r][33] = new Rock();
+            mapGrid[r][6] = new Rock();
+        }
+        for(int c = 11; c < 13; c++)
+            mapGrid[23][c] = new Ground(null);
+        for(int c = 26; c < 28; c++)
+            mapGrid[23][c] = new Ground(null);
+        for(int c = 17; c < 22; c++)
+            mapGrid[6][c] = new Ground(null);
+        
+        
+        //add grass to big box
+        //bottom middle
+        for(int c = 17; c <22; c++)
+        {
+            mapGrid[22][c] = new Grass();
+            mapGrid[21][c] = new Grass();
+        }
+        for(int c = 18; c < 21; c++)
+            mapGrid[20][c] = new Grass();
+        
+        //top left corner
+        for(int c = 7; c < 13; c++)
+        {
+            mapGrid[7][c] = new Grass();
+            mapGrid[8][c] = new Grass();
+        }
+        for(int c = 7; c < 12; c++)
+        {
+            mapGrid[9][c] = new Grass();
+            mapGrid[10][c] = new Grass();
+        }
+        for(int c = 7; c < 10; c++)
+            mapGrid[11][c] = new Grass();
+        
+        //bottom left corner
+        for(int c = 7; c < 11; c++)
+            mapGrid[22][c] = new Grass();
+        for(int c = 7; c < 10; c++)
+        {
+            mapGrid[21][c] = new Grass();
+            mapGrid[20][c] = new Grass();
+        }
+        for(int c = 7; c < 9; c++)
+        {
+            mapGrid[19][c] = new Grass();
+        }
+        
+        
+            mapGrid[15][19] = new Grass();
+        
+    }
+    
+    public static void main(String[] args)
+    {
+        Map map = new Map(2);
+        map.printMap();
+       
+        System.out.println("\n--------------------------------\n");
+        
+        Map map1 = new Map(1);
+        //map1.printMap();
     }
 
 }

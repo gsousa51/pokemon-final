@@ -12,7 +12,6 @@ import interfaceEnumMocks.MapObject;
 // import InterfacesAndEnums.GameInterface;
 // import InterfacesAndEnums.MapObject;
 
-<<<<<<< HEAD
 public class Game implements GameInterface, Serializable
 {
     private Map gameMap;
@@ -23,7 +22,7 @@ public class Game implements GameInterface, Serializable
     public Game(int map, GameOverOptions end)
     {
         gameMap = new Map(map);
-        trainer = new Trainer();
+        trainer = new Trainer(map);
         pokedex = MyPokemonList.getInstance();
         endGame = end;
     }
