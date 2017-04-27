@@ -97,7 +97,17 @@ public class GameFrame extends JFrame {
         pokemonViewButton.setSize(500, 50);
         pokemonViewButton.setLocation(100, 515);
         pokemonViewButton.setText("View Pokemon and Items");
-        pokemonViewButton.addActionListener(e -> System.out.println("view pokemon and items"));
+        // TODO Steve note hoist this out if you want - this is just a temporary stub
+        // note the needed setFocusable stuff... if that is not there, clicking
+        // the button renders the mapPanel unresponsive
+        pokemonViewButton.addActionListener(e -> {
+                    System.out.println("view pokemon and items");
+                    mapPanel.repaint();
+                    mapPanel.setFocusable(true);
+                    mapPanel.requestFocusInWindow();
+                    mapPanel.setEnabled(true);
+                    this.setFocusable(false);
+        });
         this.add(pokemonViewButton);
 
 
