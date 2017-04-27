@@ -11,6 +11,7 @@ public class MyItemList implements Iterable<Item>, Serializable {
 
 	private MyItemList() {
 		itemList = new ArrayList<Item>();
+
 		for (int i = 0; i < 30; i++) {
 			itemList.add(new SafariBall());
 		}
