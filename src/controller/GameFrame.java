@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,15 +13,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import interfaceEnumMocks.GameOverOptions;
+
 import model.Game;
 import model.Grass;
 import model.Pokemon;
+
 import view.BattleScenePanel;
 import view.InfoPanel;
 import view.MapPanel;
@@ -43,6 +47,9 @@ public class GameFrame extends JFrame {
 	private GameOverOptions gameOver;
 	private int mapNumber;
 	private boolean gameOverStatus = false;
+    private JButton pokemonViewButton;
+    private JButton itemViewButton;;
+
 
 	// Main method - RUNNER
 	public static void main(String[] args) {
@@ -53,8 +60,11 @@ public class GameFrame extends JFrame {
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// this.setLayout(new CardLayout());
+
+        // using absolute locations for placement of elements
+        this.setLayout(null);
 		promptUserRestoreGame();
-		this.setSize(650, 600);
+		this.setSize(700, 700);
 		inBattle = false;
 		// game = new Game();
 		// MapPanel mapPanel = new MapPanel(game,this);
@@ -73,6 +83,19 @@ public class GameFrame extends JFrame {
 		currentPanel = mapPanel;
 		step.setLocation(505, 0);
 		// this.add((currentPanel));
+
+        // Allow for opening another panel to view pokemon and items, and use
+        // items
+        this.pokemonViewButton = new JButton();
+        pokemonViewButton.setPreferredSize(new Dimension(75, 50));
+        //pokemonViewButton.setSize(new Dimension(75, 50));
+        pokemonViewButton.setSize(500, 50);
+        pokemonViewButton.setLocation(100, 515);
+        pokemonViewButton.setText("View Pokemon and Items");
+        this.add(pokemonViewButton);
+
+
+        // View Trainer's Items
 
 		this.setTitle("Pokemon Safari Zone");
 		this.setVisible(true);
