@@ -238,9 +238,9 @@ public class GameFrame extends JFrame {
                 try
                 {
 
-                    gameMusicClip = AudioSystem.getClip();
-                    gameMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/pokemon_safari.wav")));
-                    gameMusicClip.start();
+                        gameMusicClip = AudioSystem.getClip();
+                        gameMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/pokemon_safari.wav")));
+                        gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
                 }
                 catch (Exception exc)
                 {
