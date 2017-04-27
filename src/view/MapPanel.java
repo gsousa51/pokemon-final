@@ -108,7 +108,7 @@ public class MapPanel extends JPanel {
 	GameFrame container;
 	Timer transitionTimer ;
 
-	public MapPanel(GameInterface game, GameFrame container) {
+	public MapPanel(Game game, GameFrame container) {
 		this.container = container;
 		// Read in all the necessary images.
 		setImages();
@@ -118,7 +118,7 @@ public class MapPanel extends JPanel {
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
 		transitionTimer = new Timer(25,new TransitionListener());
-		this.game = (Game) game;
+		this.game = game;
 		trainerPosition = game.getTrainerPosition();
 		mapGrid = game.getMap();
 		// Set the top left corner of subimage for background
@@ -380,8 +380,7 @@ public class MapPanel extends JPanel {
             // wer are only using navigation keys so when the game is over I'm
             // just making a keypress a no-op
             // If the game is over, do nothing
-            if (MapPanel.this.game.gameOver()) {
-
+            if (container.isGameOver()) {
                 return;
             }
 			// If user isn't already in the middle of a move, read the key
