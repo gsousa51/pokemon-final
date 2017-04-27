@@ -113,7 +113,7 @@ public class GameFrame extends JFrame {
 		if (userInput == JOptionPane.NO_OPTION) {
 			Object[] options1 = { "Walk 500 Steps", "Throw 30 Balls", "Catch 15 Pokemon" };
 			Object[] options2 = { "Map 1", "Map 2" };
-			int gameOverChoice = JOptionPane.showOptionDialog(null, dialogPanel, "Choose Game Over Option",
+			int gameOverChoice = JOptionPane.showOptionDialog(null, "Choose a Gameover Option!", "Pokemon Safari Zone",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options1, null);
 			// If user chose walk 500 steps
 			if (gameOverChoice == JOptionPane.YES_OPTION) {
@@ -126,7 +126,7 @@ public class GameFrame extends JFrame {
 				gameOver = GameOverOptions.POKEMON_CAUGHT;
 			}
 
-			int mapChoice = JOptionPane.showOptionDialog(null, dialogPanel, "Choose Map To Play On",
+			int mapChoice = JOptionPane.showOptionDialog(null, "Choose Map To Play On!", "Pokemon Safari Zone",
 					JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options2, null);
 			// TODO: Change one to the choice of the user for which map to use
 			// 1 = map 1, anything else = map 2
