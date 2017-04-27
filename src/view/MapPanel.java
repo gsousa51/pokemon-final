@@ -22,13 +22,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.GameFrame;
-
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
-
 import model.Game;
 
 
@@ -107,8 +106,9 @@ public class MapPanel extends JPanel {
 	//The Frame holding this panel.
 	//Allows us to interact with it.
 	GameFrame container;
+	Timer transitionTimer ;
 
-	public MapPanel(GameInterface game, GameFrame container) {
+	public MapPanel(Game game, GameFrame container) {
 		this.container = container;
 		// Read in all the necessary images.
 		setImages();
@@ -117,7 +117,8 @@ public class MapPanel extends JPanel {
 		this.repaint();
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
-		this.game = (Game) game;
+		transitionTimer = new Timer(25,new TransitionListener());
+		this.game = game;
 		trainerPosition = game.getTrainerPosition();
 		mapGrid = game.getMap();
 		// Set the top left corner of subimage for background
@@ -167,6 +168,21 @@ public class MapPanel extends JPanel {
 		walkTimer = new javax.swing.Timer(50, animationPerformer);
 	}
 
+	public void animateLeaving(){
+		transitionTimer.start();
+		//TODO: Put at the end of the timer.
+		///container.switchPanels();
+		
+	}
+	
+	private class TransitionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			 
+		}
+		
+	}
 	// Method assigns the correct filePath to our BufferedImages
 	public void setImages() {
 		try {
@@ -364,8 +380,7 @@ public class MapPanel extends JPanel {
             // wer are only using navigation keys so when the game is over I'm
             // just making a keypress a no-op
             // If the game is over, do nothing
-            if (MapPanel.this.game.gameOver()) {
-
+            if (container.isGameOver()) {
                 return;
             }
 			// If user isn't already in the middle of a move, read the key

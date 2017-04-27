@@ -342,15 +342,16 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!animating) {
+				if (!animating && !container.isGameOver()) {
 					animating = true;
 					new Timer(5, new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							if (trainerX == trainerStartingSpotX) {
 								((Timer) e.getSource()).stop();
-								endOfBattle();
 								animating = false;
+								endOfBattle();
+
 								// TODO: Let the JFrame know we're running away
 							} else {
 								trainerX--;
@@ -469,28 +470,28 @@ public class BattleScenePanel extends JPanel {
 			if (!animating) {
 				switch (button.getText()) {
 				case "Throw Ball":
-					if (game.ballsLeft() > 0) {
+					if (game.ballsLeft() > 0 && !container.isGameOver()) {
 						projType = projectileType.BALL;
 						animating = true;
 						projectileTimer.start();
 						game.throwBall();
-					}
-					else{
-						JOptionPane.showMessageDialog(null, "OUT OF BALLS!", "",
-								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "OUT OF BALLS!", "", JOptionPane.INFORMATION_MESSAGE);
 					}
 					break;
 				case "Throw Bait":
-					
-					projType = projectileType.BAIT;
-					animating = true;
-					projectileTimer.start();
+					if (!container.isGameOver()) {
+						projType = projectileType.BAIT;
+						animating = true;
+						projectileTimer.start();
+					}
 					break;
 				case "Throw Rock":
-					
-					projType = projectileType.ROCK;
-					animating = true;
-					projectileTimer.start();
+					if (!container.isGameOver()) {
+						projType = projectileType.ROCK;
+						animating = true;
+						projectileTimer.start();
+					}
 					break;
 				default:
 					break;
@@ -533,7 +534,7 @@ public class BattleScenePanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent action) {
 			// If the length is zero, the pokemon was killed.
-			if (healthBarLength == 0) {
+			if (healthBarLength <= 0) {
 				JOptionPane.showMessageDialog(null, name.toUpperCase() + " WAS RUTHLESSLY MURDERED!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				healthBarTimer.stop();
@@ -660,7 +661,7 @@ public class BattleScenePanel extends JPanel {
 					System.out.println("Before: " + currentPokemon.getHealth()[0]);
 					currentPokemon.hitWithRock();
 					// Get its new current health.
-					pokemonCurrentHealth = currentPokemon.getHealth()[0];
+					pokemonCurrentHealth = Math.max(0, currentPokemon.getHealth()[0]);
 					System.out.println("After: " + currentPokemon.getHealth()[0]);
 					shakeTimer.start();
 				}
