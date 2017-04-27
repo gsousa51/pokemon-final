@@ -26,6 +26,11 @@ public class Game implements GameInterface, Serializable
         pokedex = MyPokemonList.getInstance();
         endGame = end;
     }
+    
+    public int ballsLeft()
+    {
+        return trainer.getRemainingBalls();
+    }
 
     @Override
     public MapObject[][] getMap()
