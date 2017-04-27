@@ -215,7 +215,7 @@ public class GameFrame extends JFrame {
                 {
                     battleMusicClip = AudioSystem.getClip();
                     battleMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/battle.wav")));
-                    battleMusicClip.start();
+                    battleMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
                 }
                 catch (Exception exc)
                 {
@@ -271,15 +271,26 @@ public class GameFrame extends JFrame {
 
     public void switchPanels() {
         if (currentPanel.equals(mapPanel)) {
+            
+            stopGameMusic();
+
+            startBattleMusic();
+
             inBattle = true;
-            System.out.println("Switched panel... or tried to");
+            System.out.println("Switched panel to battlePanel");
             currentPanel = battlePanel;
             this.remove(mapPanel);
             this.add(battlePanel);
             battlePanel.repaint();
 
         } else {
+
+            stopBattleMusic();
+
+            startGameMusic();
+
             inBattle = false;
+            System.out.println("Switched panel to mapPanel");
             currentPanel = mapPanel;
             this.remove(battlePanel);
             this.add(mapPanel);
