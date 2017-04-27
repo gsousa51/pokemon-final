@@ -12,7 +12,7 @@ import interfaceEnumMocks.MapObject;
 // import InterfacesAndEnums.GameInterface;
 // import InterfacesAndEnums.MapObject;
 
-<<<<<<< HEAD
+
 public class Game implements GameInterface, Serializable
 {
     private Map gameMap;
