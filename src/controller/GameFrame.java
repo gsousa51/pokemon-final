@@ -49,7 +49,6 @@ public class GameFrame extends JFrame {
     private Timer transitionTimer;
     private GameOverOptions gameOver;
     private int mapNumber;
-    private boolean gameOverStatus = false;
     private JButton pokemonViewButton;
     private JButton itemViewButton;;
     private Clip gameMusicClip;
@@ -345,15 +344,12 @@ public class GameFrame extends JFrame {
     // forfeits the game OR when the user runs of out of steps or balls.
 
     public void gameOver() {
-        gameOverStatus = true;
         this.setTitle("Pokemon Safari Zone - Game Over");
         JOptionPane.showMessageDialog(null, "This game has ended. We still need to show you items and pokemon", "Game Over",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public boolean isGameOver(){
-        return gameOverStatus;
-    }
+
 
     // When user closes window, inquire if they wish to save the game to play
     // in the future
@@ -361,7 +357,7 @@ public class GameFrame extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent event) {
-            if (!inBattle&&!isGameOver()) {
+            if (!inBattle&&!game.gameOver()) {
                 int userInput = JOptionPane.showConfirmDialog(null, "Would you like to save this game?",
                         "Pokemon Safari Zone", JOptionPane.YES_NO_OPTION);
                 if (userInput == JOptionPane.YES_OPTION) {

@@ -380,7 +380,7 @@ public class MapPanel extends JPanel {
             // wer are only using navigation keys so when the game is over I'm
             // just making a keypress a no-op
             // If the game is over, do nothing
-            if (container.isGameOver()) {
+            if (game.gameOver()) {
                 return;
             }
 			// If user isn't already in the middle of a move, read the key

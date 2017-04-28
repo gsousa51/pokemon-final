@@ -342,7 +342,7 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!animating && !container.isGameOver()) {
+				if (!animating && !game.gameOver()) {
 					animating = true;
 					new Timer(5, new ActionListener() {
 						@Override
@@ -470,7 +470,7 @@ public class BattleScenePanel extends JPanel {
 			if (!animating) {
 				switch (button.getText()) {
 				case "Throw Ball":
-					if (game.ballsLeft() > 0 && !container.isGameOver()) {
+					if (game.ballsLeft() > 0 && !game.gameOver()) {
 						projType = projectileType.BALL;
 						animating = true;
 						projectileTimer.start();
@@ -480,14 +480,14 @@ public class BattleScenePanel extends JPanel {
 					}
 					break;
 				case "Throw Bait":
-					if (!container.isGameOver()) {
+					if (!game.gameOver()) {
 						projType = projectileType.BAIT;
 						animating = true;
 						projectileTimer.start();
 					}
 					break;
 				case "Throw Rock":
-					if (!container.isGameOver()) {
+					if (!game.gameOver()) {
 						projType = projectileType.ROCK;
 						animating = true;
 						projectileTimer.start();
