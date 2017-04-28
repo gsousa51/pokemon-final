@@ -31,6 +31,9 @@ public class Game implements GameInterface, Serializable
     public int getMapNumber(){
     	return this.mapNumber;
     }
+    public GameOverOptions getGameOverCondition(){
+    	return endGame;
+    }
     public int ballsLeft()
     {
         return trainer.getRemainingBalls();

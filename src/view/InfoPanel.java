@@ -5,7 +5,6 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import interfaceEnumMocks.GameInterface;
 import model.Game;
 
 //import InterfacesAndEnums.GameInterface;

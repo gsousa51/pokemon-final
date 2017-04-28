@@ -283,7 +283,7 @@ public class MapPanel extends JPanel {
 	// Method called when we call repaint()
 	// Redraws everything on map with he updated varaible values.
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		// Draw the subimage of the correct size as our background
 		g2.drawImage(map.getSubimage(subImageX, subImageY, width, height), 0, 0, width, height, null);
