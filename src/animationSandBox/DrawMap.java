@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interfaceEnumMocks.GameOverOptions;
 import interfaceEnumMocks.MapObject;
 import model.Game;
 import model.Grass;
@@ -33,7 +34,7 @@ public class DrawMap extends JPanel  {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setSize(5000, 5000);
-		Game game = new Game();
+		Game game = new Game(2 , GameOverOptions.NO_BALL);
 		frame.add(new DrawMap(game.getMap()));
 		frame.setVisible(true);
 
@@ -54,7 +55,7 @@ public class DrawMap extends JPanel  {
 		BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
 		this.paint(img.getGraphics());
 		try {
-			ImageIO.write(img, "png", new File("finalMap1.png"));
+			ImageIO.write(img, "png", new File("finalMap2.png"));
 
 			System.out.println("panel saved as image");
 

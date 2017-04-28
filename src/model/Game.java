@@ -18,15 +18,19 @@ public class Game implements GameInterface, Serializable
     private Trainer trainer;
     private MyPokemonList pokedex;
     private GameOverOptions endGame;
-
+    private int mapNumber;
     public Game(int map, GameOverOptions end)
     {
-        gameMap = new Map(map);
-        trainer = new Trainer(map);
+    	this.mapNumber = map;
+        gameMap = new Map(mapNumber);
+        trainer = new Trainer(mapNumber);
         pokedex = MyPokemonList.getInstance();
         endGame = end;
     }
     
+    public int getMapNumber(){
+    	return this.mapNumber;
+    }
     public int ballsLeft()
     {
         return trainer.getRemainingBalls();

@@ -73,7 +73,7 @@ public class GameFrame extends JFrame {
         // game = new Game();
         // MapPanel mapPanel = new MapPanel(game,this);
         // step = new StepCountPanel(game);
-        this.mapPanel = new MapPanel(game, this);
+
         this.battlePanel = new BattleScenePanel(game, this);
         this.step = new InfoPanel(game);
 
@@ -126,7 +126,6 @@ public class GameFrame extends JFrame {
         int userInput = JOptionPane.showConfirmDialog(null, "Start with previously saved game state?",
                 "Pokemon Safari Zone", JOptionPane.YES_NO_OPTION);
         // Start new game
-        JPanel dialogPanel = new JPanel();
         if (userInput == JOptionPane.NO_OPTION) {
             Object[] options1 = { "Walk 500 Steps", "Throw 30 Balls", "Catch 15 Pokemon" };
             Object[] options2 = { "Map 1", "Map 2" };
@@ -157,7 +156,7 @@ public class GameFrame extends JFrame {
             System.out.println("Created game with map number " + mapNumber +" and " + gameOver );
 
             this.game = new Game(mapNumber, gameOver);
-
+            mapPanel  = new MapPanel(game, this, mapNumber);
             // this.add(mapPanel);
 
         }
@@ -193,6 +192,8 @@ public class GameFrame extends JFrame {
                 // this.step = (StepCountPanel) input.readObject();
                 this.game = (Game) input.readObject();
                 System.out.println("Read in previous game state.");
+                //Create a mapPanel, using the map option they chose when they last played the game.
+                this.mapPanel = new MapPanel(game,this,game.getMapNumber());
                 // this.mapPanel = new MapPanel(game,this);
                 // this.battlePanel = new BattleScenePanel(game,this);
                 // mapPanel.setLocation(0, 0);

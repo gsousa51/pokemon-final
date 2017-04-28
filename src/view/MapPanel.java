@@ -30,94 +30,96 @@ import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.MapObject;
 import model.Game;
 
-
 public class MapPanel extends JPanel {
 
 	// Each of these holds the various BufferedImages for trainer based on
 	// which direction he is traveling.
-	List<BufferedImage> west = null;
-	List<BufferedImage> north = null;
-	List<BufferedImage> south = null;
-	List<BufferedImage> east = null;
+	private List<BufferedImage> west = null;
+	private List<BufferedImage> north = null;
+	private List<BufferedImage> south = null;
+	private List<BufferedImage> east = null;
 
 	// All the buffered images we need for drawing
 	// the background and trainer
-	BufferedImage map;
-	BufferedImage spriteSheet;
-	
-	//Each set of these is the set of images 
+	private BufferedImage map;
+	private BufferedImage spriteSheet;
+
+	// Each set of these is the set of images
 	// used for drawing user walking/facing different
-	//directions.
-	BufferedImage left1;
-	BufferedImage left2;
-	BufferedImage left3;
+	// directions.
+	private BufferedImage left1;
+	private BufferedImage left2;
+	private BufferedImage left3;
 
-	BufferedImage up1;
-	BufferedImage up2;
-	BufferedImage up3;
+	private BufferedImage up1;
+	private BufferedImage up2;
+	private BufferedImage up3;
 
-	BufferedImage down1;
-	BufferedImage down2;
-	BufferedImage down3;
+	private BufferedImage down1;
+	private BufferedImage down2;
+	private BufferedImage down3;
 
-	BufferedImage right1;
-	BufferedImage right2;
-	BufferedImage right3;
+	private BufferedImage right1;
+	private BufferedImage right2;
+	private BufferedImage right3;
 
 	// Variables keep track of the top left corner coords
 	// For the subimage we create.
-	int subImageX;
-	int subImageY;
+	private int subImageX;
+	private int subImageY;
 	// Height and width constants for drawing our background
-	final static int height = 500;
-	final static int width = 500;
+	private final static int height = 500;
+	private final static int width = 500;
 	// x and y coords to for drawing our player
 	// Player is ALWAYS in center of our panel.
-	final static int playerX = 250;
-	final static int playerY = 250;
+	private final static int playerX = 250;
+	private final static int playerY = 250;
 	// Height and width contsants for drawing the picture of player.
-	final static int playerW = 50;
-	final static int playerL = 50;
+	private final static int playerW = 50;
+	private final static int playerL = 50;
 	// Constants to keep track of the length/width of our MapObjects array.
-	final static int mapWidth = 40;
-	final static int mapHeight = 30;
+	private final static int mapWidth = 40;
+	private final static int mapHeight = 30;
 	// Constant for pixel size of each square of mapgrid.
 	// (Might be unnecessary but if we change the size later it'll be handy)
-	final static int pixelSize = 50;
+	private final static int pixelSize = 50;
 	// Timer we use for animation when user moves.
-	javax.swing.Timer walkTimer;
+	private javax.swing.Timer walkTimer;
 	// An action listener for our timer.
-	ActionListener animationPerformer;
+	private ActionListener animationPerformer;
 	// Initialize the trainer to be facing South
 	private Direction direction = Direction.SOUTH;
 	// index keeps track of which index we're using in our
 	// ArrayLists that hold our trainer's images.
 	private int index = 0;
-	//Position trainer is at in our model
+	// Position trainer is at in our model
 	private Point trainerPosition;
-	//The game object used to reference the back end.
-	//private GameInterface game;
+	// The game object used to reference the back end.
+	// private GameInterface game;
 	private Game game;
-	//The mapGrid that is the back end of our map.
+	// The mapGrid that is the back end of our map.
 	private MapObject[][] mapGrid;
 	// Flag var used to keep track of if trainer is in process
 	// of moving. (Prevents user from button smashing and ruining everything.)
 	private boolean walking = false;
-	//The Frame holding this panel.
-	//Allows us to interact with it.
-	GameFrame container;
-	Timer transitionTimer ;
+	// The Frame holding this panel.
+	// Allows us to interact with it.
+	private GameFrame container;
+	//TODO: Create the transition timer.
+	private Timer transitionTimer;
+	private int mapNumber;
 
-	public MapPanel(Game game, GameFrame container) {
+	public MapPanel(Game game, GameFrame container, int mapNumber) {
 		this.container = container;
+		this.mapNumber = mapNumber;
 		// Read in all the necessary images.
 		setImages();
-		
+
 		this.setSize(width, height);
 		this.repaint();
 		this.addKeyListener(new Keyboard());
 		this.setFocusable(true);
-		transitionTimer = new Timer(25,new TransitionListener());
+		transitionTimer = new Timer(25, new TransitionListener());
 		this.game = game;
 		trainerPosition = game.getTrainerPosition();
 		mapGrid = game.getMap();
@@ -168,27 +170,32 @@ public class MapPanel extends JPanel {
 		walkTimer = new javax.swing.Timer(50, animationPerformer);
 	}
 
-	public void animateLeaving(){
+	public void animateLeaving() {
 		transitionTimer.start();
-		//TODO: Put at the end of the timer.
-		///container.switchPanels();
-		
+		// TODO: Put at the end of the timer.
+		/// container.switchPanels();
+
 	}
-	
-	private class TransitionListener implements ActionListener{
+
+	private class TransitionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			 
+
 		}
-		
+
 	}
+
 	// Method assigns the correct filePath to our BufferedImages
 	public void setImages() {
 		try {
 			// Sprite sheet containing the images of the trainer
 			spriteSheet = ImageIO.read(new File("src/animationSandBox/pokemonSprite.png"));
-			map = ImageIO.read(new File("src/view/finalMap1.png"));
+			if (mapNumber == 1) {
+				map = ImageIO.read(new File("src/view/finalMap1.png"));
+			} else {
+				map = ImageIO.read(new File("src/view/finalMap2.png"));
+			}
 			// We get the subimages from the sprite sheet that we need for our
 			// trainer.
 			left1 = spriteSheet.getSubimage(30, 0, 15, 20);
@@ -297,15 +304,15 @@ public class MapPanel extends JPanel {
 		direction = Direction.NORTH;
 		if (!canMove()) {
 			walking = false;
-			//This draws the user facing the direction they tried to move.
+			// This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
-			//Else we can mvoe, notify game trainer is moving.
+			// Else we can mvoe, notify game trainer is moving.
 			game.moveTrainer(direction);
-			//Reset position variable.
+			// Reset position variable.
 			trainerPosition = game.getTrainerPosition();
-			//Start timer for animation.
+			// Start timer for animation.
 			walkTimer.start();
 			super.repaint();
 		}
@@ -315,15 +322,15 @@ public class MapPanel extends JPanel {
 		direction = Direction.WEST;
 		if (!canMove()) {
 			walking = false;
-			//This draws the user facing the direction they tried to move.
+			// This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
-			//Else we can move, notify game we're moving.
+			// Else we can move, notify game we're moving.
 			game.moveTrainer(direction);
-			//Reset position variable.
+			// Reset position variable.
 			trainerPosition = game.getTrainerPosition();
-			//Start time for animation
+			// Start time for animation
 			walkTimer.start();
 			super.repaint();
 		}
@@ -335,15 +342,15 @@ public class MapPanel extends JPanel {
 		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
-			//This draws the user facing the direction they tried to move.
+			// This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
-			//Else we can move. Notify game we're moving.
+			// Else we can move. Notify game we're moving.
 			game.moveTrainer(direction);
-			//Update the position variable
+			// Update the position variable
 			trainerPosition = game.getTrainerPosition();
-			//Begin the timer for animation.
+			// Begin the timer for animation.
 			walkTimer.start();
 			super.repaint();
 		}
@@ -355,16 +362,16 @@ public class MapPanel extends JPanel {
 		// If we can't move, set walking to false and return.
 		if (!canMove()) {
 			walking = false;
-			//This draws the user facing the direction they tried to move.
+			// This draws the user facing the direction they tried to move.
 			super.repaint();
 			return;
 		} else {
-			//else we can move.
-			//Tell the game the trainer is moving to the east.
+			// else we can move.
+			// Tell the game the trainer is moving to the east.
 			game.moveTrainer(direction);
-			//Reset our position variable
+			// Reset our position variable
 			trainerPosition = game.getTrainerPosition();
-			//Start the timer to begin animation of trainer.
+			// Start the timer to begin animation of trainer.
 			walkTimer.start();
 			super.repaint();
 		}
@@ -375,14 +382,14 @@ public class MapPanel extends JPanel {
 		@Override
 		public void keyPressed(KeyEvent key) {
 
-            // TODO this will need to be generalized to lock the rest of the UI
-            // when there are more ways to interact with the GUI. Currently
-            // wer are only using navigation keys so when the game is over I'm
-            // just making a keypress a no-op
-            // If the game is over, do nothing
-            if (game.gameOver()) {
-                return;
-            }
+			// TODO this will need to be generalized to lock the rest of the UI
+			// when there are more ways to interact with the GUI. Currently
+			// wer are only using navigation keys so when the game is over I'm
+			// just making a keypress a no-op
+			// If the game is over, do nothing
+			if (game.gameOver()) {
+				return;
+			}
 			// If user isn't already in the middle of a move, read the key
 			// typed.
 			if (!walking) {
@@ -390,7 +397,7 @@ public class MapPanel extends JPanel {
 				if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_UP) {
 					walking = true;
 					moveNorth();
-					
+
 				} else if (key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT) {
 					walking = true;
 					moveWest();
@@ -400,14 +407,13 @@ public class MapPanel extends JPanel {
 				} else if (key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT) {
 					walking = true;
 					moveEast();
-				}
-				else{
+				} else {
 					return;
 				}
 			} else {
 				// If we get here, user is already walking
 				// or userpushed a key outside of valid keys
-				
+
 			}
 		}
 
