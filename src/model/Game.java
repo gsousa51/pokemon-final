@@ -39,6 +39,12 @@ public class Game implements GameInterface, Serializable
     {
         return trainer.getRemainingBalls();
     }
+    
+    public void foundItem(Item item)
+    {
+        MyItemList items = MyItemList.getInstance();
+        items.addItem(item);
+    }
 
     @Override
     public MapObject[][] getMap()
