@@ -44,9 +44,9 @@ public class ModelTests
         Game game = new Game(1, GameOverOptions.NO_STEPS);
 
         game.findBall();
-        assertEquals(game.ballsLeft(), 31);
+        assertEquals(game.ballsLeft(), 34);
         game.throwBall();
-        assertEquals(game.ballsLeft(), 30);
+        assertEquals(game.ballsLeft(), 33);
         
         assertEquals(game.getRemainingSteps(), 500);
         assertFalse(game.gameOver());
@@ -77,15 +77,16 @@ public class ModelTests
         assertEquals(game.getMapNumber(), 1);
         assertEquals(game.getGameOverCondition(), GameOverOptions.NO_STEPS);
         game.addPokemon(new Pokemon("Test", 0, 0, 0));
-        assertEquals(game.getPokemonCount(), 1);
+        assertEquals(game.getPokemonCount(), 7);
 
         Game game2 = new Game(2, GameOverOptions.NO_BALL);
-        
-        for(int i = 0; i < 30; i++)
+
+        for(int i = 0; i < 33; i++)
             game2.throwBall();
         assertTrue(game2.gameOver());
         
         Game game3 = new Game(2, GameOverOptions.POKEMON_CAUGHT);
+        game3.checkPokemon();
         for(int i = 0; i < 15; i++)
             game3.addPokemon(new Pokemon("Test" , 0, 0, 0));
         assertTrue(game3.gameOver());

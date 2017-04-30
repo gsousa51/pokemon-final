@@ -110,7 +110,7 @@ public class Game implements GameInterface, Serializable
             return true;
         else if (trainer.getRemainingBalls() <= 0 && endGame == GameOverOptions.NO_BALL)
             return true;
-        else if (MyPokemonList.getInstance().size() == 15 & endGame == GameOverOptions.POKEMON_CAUGHT)
+        else if (MyPokemonList.getInstance().size() >= 15 & endGame == GameOverOptions.POKEMON_CAUGHT)
             return true;
         else
             return false;
