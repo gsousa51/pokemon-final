@@ -32,4 +32,14 @@ public abstract class MapObject implements Serializable {
 	{
 	}
 
+	/**
+	 * Override in ground to get item
+	 * when it's found
+	 * 
+	 * @author Morgan Henry
+	 */
+	public Item getItem()
+	{
+	    return null;
+	}
 }

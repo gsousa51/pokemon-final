@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.Random;
 
 import interfaceEnumMocks.MapObject;
 
@@ -228,6 +229,54 @@ public class Map implements Serializable
 
         // temp to show middle where trainer starts
         mapGrid[15][20] = new Rock();
+
+        addItems();
+    }
+
+    private void addItems()
+    {
+        Random rand = new Random();
+
+        int y = rand.nextInt(MAP_WIDTH - 2) + 1;
+        int x = rand.nextInt(MAP_HEIGHT - 2) + 1;
+
+        int numBalls = 0;
+        int numFossils = 0;
+        int numPotion = 0;
+
+        while (numBalls < 10)
+        {
+            if (mapGrid[x][y] instanceof Ground && mapGrid[x][y].getItem() == null)
+            {
+                mapGrid[x][y] = new Ground(new SafariBall());
+                numBalls++;
+            }
+            y = rand.nextInt(MAP_WIDTH - 2) + 1;
+            x = rand.nextInt(MAP_HEIGHT - 2) + 1;
+        }
+        
+        while(numFossils < 7)
+        {
+            if (mapGrid[x][y] instanceof Ground && mapGrid[x][y].getItem() == null)
+            {
+                mapGrid[x][y] = new Ground(new HelixFossil());
+                numFossils++;
+            }
+            y = rand.nextInt(MAP_WIDTH - 2) + 1;
+            x = rand.nextInt(MAP_HEIGHT - 2) + 1;
+        }
+
+        while(numPotion < 7)
+        {
+            if (mapGrid[x][y] instanceof Ground && mapGrid[x][y].getItem() == null)
+            {
+                mapGrid[x][y] = new Ground(new Potion());
+                numPotion++;
+            }
+            y = rand.nextInt(MAP_WIDTH - 2) + 1;
+            x = rand.nextInt(MAP_HEIGHT - 2) + 1;
+        }
+
     }
 
     /**
@@ -427,31 +476,31 @@ public class Map implements Serializable
             if (c > 17 && c < 21)
                 mapGrid[27][c] = new Grass();
         }
-        
-        //top middle
-        for(int c = 1; c < 10; c+=2)
+
+        // top middle
+        for (int c = 1; c < 10; c += 2)
         {
             mapGrid[1][c] = new Grass();
-            mapGrid[2][c+1] = new Grass();
+            mapGrid[2][c + 1] = new Grass();
             mapGrid[3][c] = new Grass();
 
             mapGrid[28][c] = new Grass();
-            mapGrid[27][c+1] = new Grass();
+            mapGrid[27][c + 1] = new Grass();
             mapGrid[26][c] = new Grass();
         }
-        
-        for(int c = 30; c < 39; c+=2)
+
+        for (int c = 30; c < 39; c += 2)
         {
             mapGrid[1][c] = new Grass();
-            mapGrid[2][c-1] = new Grass();
+            mapGrid[2][c - 1] = new Grass();
             mapGrid[3][c] = new Grass();
 
             mapGrid[28][c] = new Grass();
-            mapGrid[27][c-1] = new Grass();
+            mapGrid[27][c - 1] = new Grass();
             mapGrid[26][c] = new Grass();
         }
-        
-        //bottom left corner
+
+        addItems();
 
     }
 
@@ -459,6 +508,9 @@ public class Map implements Serializable
     {
         Map map = new Map(2);
         map.printMap();
+
+        Map map1 = new Map(1);
+        map1.printMap();
     }
 
 }

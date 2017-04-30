@@ -15,9 +15,10 @@ public class Ground extends MapObject implements Serializable
         super(true);
         item = it;
     }
-    
+
     /**
      * Will return the Item, null if there is no item
+     * 
      * @return
      * 
      * @author Morgan Henry
@@ -26,7 +27,7 @@ public class Ground extends MapObject implements Serializable
     {
         return item;
     }
-    
+
     /**
      * Will make the item null
      * 
@@ -40,7 +41,10 @@ public class Ground extends MapObject implements Serializable
     @Override
     public String toString()
     {
-        return " ";
+        if (item == null)
+            return " ";
+        else
+            return item.toString();
     }
-    
+
 }
