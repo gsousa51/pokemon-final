@@ -19,6 +19,7 @@ public class Game implements GameInterface, Serializable
     private MyPokemonList pokedex;
     private GameOverOptions endGame;
     private int mapNumber;
+    
     public Game(int map, GameOverOptions end)
     {
     	this.mapNumber = map;
