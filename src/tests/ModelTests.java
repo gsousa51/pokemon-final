@@ -7,9 +7,11 @@ import java.awt.Point;
 import org.junit.Test;
 
 import interfaceEnumMocks.Direction;
+import interfaceEnumMocks.GameOverOptions;
 import interfaceEnumMocks.MapObject;
 import model.Game;
 import model.Map;
+import model.Pokemon;
 import model.Trainer;
 
 public class ModelTests
@@ -17,7 +19,7 @@ public class ModelTests
     @Test
     public void testTrainer()
     {
-        Trainer trainer = new Trainer();
+        Trainer trainer = new Trainer(1);
         
         assertEquals(trainer.getRemainingStep(), 500);
         assertEquals(trainer.getPosition(), new Point(20,14));
@@ -38,8 +40,13 @@ public class ModelTests
     
     @Test
     public void testGame()
-    {
-        Game game = new Game();
+    { 
+        Game game = new Game(1, GameOverOptions.NO_STEPS);
+
+        game.findBall();
+        assertEquals(game.ballsLeft(), 31);
+        game.throwBall();
+        assertEquals(game.ballsLeft(), 30);
         
         assertEquals(game.getRemainingSteps(), 500);
         assertFalse(game.gameOver());
@@ -66,6 +73,24 @@ public class ModelTests
         
         assertTrue(game.gameOver());
         
+        
+        assertEquals(game.getMapNumber(), 1);
+        assertEquals(game.getGameOverCondition(), GameOverOptions.NO_STEPS);
+        game.addPokemon(new Pokemon("Test", 0, 0, 0));
+        assertEquals(game.getPokemonCount(), 1);
+
+        Game game2 = new Game(2, GameOverOptions.NO_BALL);
+        
+        for(int i = 0; i < 30; i++)
+            game2.throwBall();
+        assertTrue(game2.gameOver());
+        
+        Game game3 = new Game(2, GameOverOptions.POKEMON_CAUGHT);
+        for(int i = 0; i < 15; i++)
+            game3.addPokemon(new Pokemon("Test" , 0, 0, 0));
+        assertTrue(game3.gameOver());
+                
+               
         
     }
    

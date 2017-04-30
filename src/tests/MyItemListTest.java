@@ -37,8 +37,8 @@ public class MyItemListTest {
 		list.addItem(potion);
 		list.addItem(ball);
 		int size = list.size();
-		list.removeItem(potion);
-		list.removeItem(ball);
+		list.removeItem(potion.toString());
+		list.removeItem(ball.toString());
 		assertEquals(size-2, list.size());
 	}
 	

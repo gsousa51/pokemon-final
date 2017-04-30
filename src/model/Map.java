@@ -504,13 +504,18 @@ public class Map implements Serializable
 
     }
 
+    /*
     public static void main(String[] args)
     {
         Map map = new Map(2);
         map.printMap();
 
+        System.out.println("\n\n");
+
         Map map1 = new Map(1);
         map1.printMap();
     }
+    
+    */
 
 }
