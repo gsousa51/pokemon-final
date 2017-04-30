@@ -23,11 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import interfaceEnumMocks.GameOverOptions;
-
 import model.Game;
 import model.Grass;
+import model.Item;
 import model.Pokemon;
-
 import view.BattleScenePanel;
 import view.InfoPanel;
 import view.MapPanel;
@@ -336,6 +335,17 @@ public class GameFrame extends JFrame {
                     repaint();
                 }
             }
+            //Else we're on ground, might be an item.
+            else{
+            	Item currItem = game.getMap()[trainerPos.y][trainerPos.x].getItem();
+            	if(currItem != null){
+            		System.out.println("Found a " + currItem.toString());
+            		//game.foundItem();
+            	       JOptionPane.showMessageDialog(null, "Found a " + currItem.toString()+" !", "Pokemon Safari Zone",
+            	                JOptionPane.INFORMATION_MESSAGE);
+            	       game.getMap()[trainerPos.y][trainerPos.x].removeItem();
+            	}//end if
+            }//end else
         }
 
     }
