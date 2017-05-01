@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Pokemon implements Serializable{
+public class Pokemon implements Serializable {
 
 	private int runRate, currentCatchRate, initialCatchRate;
 	private int angryCount, eatingCount;
@@ -14,7 +14,7 @@ public class Pokemon implements Serializable{
 		currentCatchRate = initialCatchRate = catchRate;
 		angryCount = eatingCount = 0;
 		this.name = name;
-		maxHP = currentHP =maxHitPoints;
+		maxHP = currentHP = maxHitPoints;
 	}
 
 	/**
@@ -64,12 +64,11 @@ public class Pokemon implements Serializable{
 	 * Method used for testing because hitWithRock() uses random numbers
 	 */
 	public void hitWithRock(boolean random) {
-		if (random){
+		if (random)
 			angryCount += (int) (Math.random() * 5 + 1);
-			currentHP -= 10;
-		}
 		else
 			angryCount += 2;
+		currentHP -= 10;
 		eatingCount = 0;
 		currentCatchRate = Math.min(255, currentCatchRate * 2);
 	}
@@ -87,7 +86,7 @@ public class Pokemon implements Serializable{
 	public void hitWithBait(boolean random) {
 		if (random)
 			eatingCount += (int) (Math.random() * 5 + 1);
-		
+
 		else
 			eatingCount += 2;
 		angryCount = 0;

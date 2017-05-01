@@ -47,7 +47,12 @@ public class PokemonTest {
 	@Test
 	public void testHeal() {
 		Pokemon mon = new Pokemon("Chansey", 50, 30, 250);
-		int[] testHealth = new int[] {187, 250};
+		mon.hitWithRock(false);
+		mon.hitWithRock(false);
+		mon.hitWithRock(false);
+		mon.hitWithRock(false);
+		mon.hitWithRock(false);
+		int[] testHealth = new int[] {200, 250};
 		int[] monHealth = mon.getHealth();
 		for(int i=0; i<2; i++)
 			assertEquals(testHealth[i], monHealth[i]);
