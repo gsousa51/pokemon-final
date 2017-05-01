@@ -17,6 +17,7 @@ public class Game implements GameInterface, Serializable
     private Map gameMap;
     private Trainer trainer;
     private MyPokemonList pokedex;
+    private MyItemList items;
     private GameOverOptions endGame;
     private int mapNumber;
     
@@ -26,6 +27,7 @@ public class Game implements GameInterface, Serializable
         gameMap = new Map(mapNumber);
         trainer = new Trainer(mapNumber);
         pokedex = MyPokemonList.getInstance();
+        this.items = MyItemList.getInstance();
         endGame = end;
     }
     
@@ -42,7 +44,6 @@ public class Game implements GameInterface, Serializable
     
     public void foundItem(Item item)
     {
-        MyItemList items = MyItemList.getInstance();
         items.addItem(item);
     }
 

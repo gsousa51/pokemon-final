@@ -24,7 +24,6 @@ public class Trainer implements Serializable
      */
     public Trainer(int map)
     {
-
         stepsRemaining = 500;
         if (map == 1)
         {
@@ -116,4 +115,7 @@ public class Trainer implements Serializable
         return items.getItemCount("Safari Ball");
     }
 
+    public MyItemList getItemList(){
+    	return items;
+    }
 }

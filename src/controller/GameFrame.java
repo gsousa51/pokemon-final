@@ -49,7 +49,7 @@ public class GameFrame extends JFrame {
     private GameOverOptions gameOver;
     private int mapNumber;
     private JButton pokemonViewButton;
-    private JButton itemViewButton;;
+    private JButton itemViewButton;
     private Clip gameMusicClip;
     private Clip battleMusicClip;
 
@@ -143,7 +143,7 @@ public class GameFrame extends JFrame {
 
             int mapChoice = JOptionPane.showOptionDialog(null, "Choose Map To Play On!", "Pokemon Safari Zone",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options2, null);
-            // TODO: Change one to the choice of the user for which map to use
+
             // 1 = map 1, anything else = map 2
             if (mapChoice == JOptionPane.YES_OPTION) {
                 mapNumber = 1;
@@ -314,17 +314,21 @@ public class GameFrame extends JFrame {
         repaint();
     }
 
-    // TODO refactor this so as to catch all end-of-game conditions for
-    // Iteration 2
+
     public void walkEnded() {
         Point trainerPos = game.getTrainerPosition();
+        //reset our info panel 
         step.reset();
+        //repaint the frame
         repaint();
+        //If the game is over (only would happen if the user is out of steps, here)
         if (game.gameOver()) {
 
+        	//Pop our gameOver panel.
             gameOver();
-
-        } else {
+        }
+        //Else, check if we're on grass, if we are, check if we found a pokemon.
+        else {
             if (game.getMap()[trainerPos.y][trainerPos.x] instanceof Grass) {
                 System.out.println("We're in grass");
                 Pokemon pokemonAtPosition = game.checkPokemon();
@@ -335,12 +339,12 @@ public class GameFrame extends JFrame {
                     repaint();
                 }
             }
-            //Else we're on ground, might be an item.
+            //Else we're on ground, might be an item found
             else{
             	Item currItem = game.getMap()[trainerPos.y][trainerPos.x].getItem();
             	if(currItem != null){
             		System.out.println("Found a " + currItem.toString());
-            		//game.foundItem();
+            		game.foundItem(currItem);
             	       JOptionPane.showMessageDialog(null, "Found a " + currItem.toString()+" !", "Pokemon Safari Zone",
             	                JOptionPane.INFORMATION_MESSAGE);
             	       game.getMap()[trainerPos.y][trainerPos.x].removeItem();
