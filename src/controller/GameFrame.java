@@ -213,7 +213,7 @@ public class GameFrame extends JFrame {
 	}
 
 	// Start game battle music in a separate thread
-	public void startBattleMusic() {
+	private void startBattleMusic() {
 
 		Thread musicThread = new Thread(new Runnable() {
 
@@ -233,7 +233,7 @@ public class GameFrame extends JFrame {
 	}
 
 	// Start game background music in a separate thread
-	public void startGameMusic() {
+	private void startGameMusic() {
 
 		Thread musicThread = new Thread(new Runnable() {
 
@@ -254,13 +254,13 @@ public class GameFrame extends JFrame {
 	}
 
 	// Stop the background game music
-	public void stopGameMusic() {
+	private void stopGameMusic() {
 
 		gameMusicClip.stop();
 	}
 
 	// Stop the background game music
-	public void stopBattleMusic() {
+	private void stopBattleMusic() {
 
 		battleMusicClip.stop();
 	}
