@@ -221,7 +221,7 @@ public class GameFrame extends JFrame {
 
 				try {
 					battleMusicClip = AudioSystem.getClip();
-					battleMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/battle.wav")));
+					battleMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/battle_final.wav")));
 					battleMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
 				} catch (Exception exc) {
 					exc.printStackTrace(System.out);
