@@ -291,13 +291,13 @@ public class BattleScenePanel extends JPanel {
 			chansey = pokemonSpriteSheet.getSubimage(5, 336, 58, 46);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 
 		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
-		startingTimer = new javax.swing.Timer(5, new BeginningListener());
-		projectileTimer = new javax.swing.Timer(5, new throwProjectileListener());
+		startingTimer = new javax.swing.Timer(2, new BeginningListener());
+		projectileTimer = new javax.swing.Timer(2, new throwProjectileListener());
 		shakeTimer = new javax.swing.Timer(15, new PokemonShakeListener());
 		wobbleTimer = new javax.swing.Timer(5, new PokeballWobbleListener());
 
@@ -352,7 +352,6 @@ public class BattleScenePanel extends JPanel {
 								animating = false;
 								endOfBattle();
 
-								// TODO: Let the JFrame know we're running away
 							} else {
 								trainerX--;
 								repaint();
@@ -594,10 +593,7 @@ public class BattleScenePanel extends JPanel {
 							wobbleIndex = 3;
 							caught = true;
 							repaint();
-							/*
-							 * TODO: Pop a window. Tell "Game" to add Pokemon to
-							 * collection Tell JFrame to pop the map back
-							 */
+
 							JOptionPane.showMessageDialog(null, "YOU CAUGHT " + name.toUpperCase(), "",
 									JOptionPane.INFORMATION_MESSAGE);
 							game.addPokemon(currentPokemon);

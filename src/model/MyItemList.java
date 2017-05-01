@@ -25,10 +25,6 @@ public class MyItemList implements Iterable<Item>, Serializable {
 
 	public void addItem(Item item) {
 		itemList.add(item);
-		//TODO: Remove this. Used for testing.
-		for(Item i : itemList){
-			System.out.println(i.toString());
-		}
 	}
 
 	public Item getItem(Item item) {
