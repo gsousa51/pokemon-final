@@ -24,5 +24,11 @@ public class ItemTest {
 		assertEquals("Safari Ball", ball.toString());
 		assertEquals("A piece of ancient marine Pokémon's seashell.", fossil.examineMessage());
 		assertEquals("Helix Fossil", fossil.toString());
+		assertTrue(potion.equals(new Potion()));
+		assertTrue(ball.equals(new SafariBall()));
+		assertTrue(fossil.equals(new HelixFossil()));
+		assertFalse(ball.equals(potion));
+		assertFalse(potion.equals(fossil));
+		assertFalse(fossil.equals(ball));
 	}
 }
