@@ -13,8 +13,6 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,15 +22,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import controller.GameFrame;
 import interfaceEnumMocks.Direction;
-import interfaceEnumMocks.GameOverOptions;
 import model.Game;
 import model.Pokemon;
 
@@ -57,8 +52,7 @@ public class BattleScenePanel extends JPanel {
 	// Variable used for pokemon's top left x coord.
 	// (Not a constant since we use it for sliding pokemon into frame)
 	private int pokemonX = pokemonStartingSpotX;
-	private int trainerIndex = 0;
-	private int slidingWidth = 1;
+
 	private int wobbleY = 45;
 	private int wobbleX = 370;
 	// Constants for drawing the trainer
@@ -80,10 +74,6 @@ public class BattleScenePanel extends JPanel {
 	private int projectileX = projectileStartingSpotX;
 	private int projectileY = projectileStartingSpotY;
 
-	// Temporary variable used for testing
-	// TODO: delete this variable.
-	private int clicks = 0;
-
 	// Timers used for different animations.
 	private javax.swing.Timer healthBarTimer;
 	private javax.swing.Timer startingTimer;
@@ -98,7 +88,6 @@ public class BattleScenePanel extends JPanel {
 	// Sprite sheet for various pokeballs.
 	private BufferedImage pokeballSpriteSheet;
 	private BufferedImage pokemonSpriteSheet;
-	private BufferedImage pokeball;
 	private BufferedImage selectionBack;
 	private BufferedImage rock;
 	private BufferedImage bait;
@@ -108,8 +97,9 @@ public class BattleScenePanel extends JPanel {
 	// 0 is the normal pokeball picture.
 	private int pokeballIndex = 0;
 	private int wobbleIndex = 0;
-	private final static int pokeballWobbleListSize = 7;
+	// Used for reference for the size of our picture list.
 	private final static int pokeballThrowListSize = 8;
+
 	private BufferedImage currentPokemonImage;
 	private BufferedImage nidoran;
 	private BufferedImage paras;
@@ -121,16 +111,13 @@ public class BattleScenePanel extends JPanel {
 	private BufferedImage exeggcute;
 	private BufferedImage parasect;
 	private BufferedImage chansey;
-	// Used for testing
-	// TODO: delete pokemon list
-	private List<Pokemon> pokemonList;
+
 	// buttons used to trigger animations/actions in game.
 	private JButton throwBall;
 	private JButton throwRock;
 	private JButton throwBait;
 	private JButton runAway;
 	private JPanel buttonPanel;
-	private JLabel itemCount;
 	private Game game;
 	// variable used to size down projectiles as they move farther.
 	private int index = 0;
@@ -152,42 +139,16 @@ public class BattleScenePanel extends JPanel {
 		ROCK, BALL, BAIT;
 	}
 
-	// // main method for testing
-	// public static void main(String[] args) {
-	// JFrame frame = new JFrame();
-	// frame.setSize(520, 550);
-	// frame.add(new BattleScenePanel(new Game(1,
-	// GameOverOptions.NO_BALL),frame));
-	// frame.setVisible(true);
-	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	// }
-
 	public BattleScenePanel(Game game, GameFrame frame) {
 		this.game = game;
 		this.container = frame;
 		initializePanel();
-		initializePokelist();
 	}// end constructor.
 
-	public void initializePokelist() {
-		pokemonList = new ArrayList<Pokemon>();
-		pokemonList.add(new Pokemon("Nidoran", 41, 235, 55));
-		pokemonList.add(new Pokemon("Paras", 25, 190, 35));
-		pokemonList.add(new Pokemon("Doduo", 75, 190, 35));
-		pokemonList.add(new Pokemon("Venonat", 45, 190, 60));
-		pokemonList.add(new Pokemon("Cubone", 35, 190, 50));
-		pokemonList.add(new Pokemon("Nidorina", 56, 120, 70));
-		pokemonList.add(new Pokemon("Ryhorn", 25, 120, 80));
-		pokemonList.add(new Pokemon("Exeggcute", 40, 90, 60));
-		pokemonList.add(new Pokemon("Parasect", 30, 75, 60));
-		pokemonList.add(new Pokemon("Chansey", 50, 30, 250));
-
-	}
-
 	// Method called by GameFrame after popping this panel.
-	// It switches the pokemon in the frame to the correct one and starts the
+	// It switches the Pokemon in the frame to the correct one and starts the
 	// animation
-	// of the pokemon and trainer sliding in.
+	// of the Pokemon and trainer sliding in.
 	public void setPokemon(Pokemon poke) {
 		currentPokemon = poke;
 		switch (poke.toString()) {
@@ -225,12 +186,21 @@ public class BattleScenePanel extends JPanel {
 			break;
 		}
 
+		// Set our variables.
+		// Index 1 of getHealth is the full health of the pokemon.
 		pokemonFullHealth = poke.getHealth()[1];
+		// Index 0 is the current health.
 		pokemonCurrentHealth = poke.getHealth()[0];
+		// The pixel length of a FULL health bar is 95, so we calculate it
+		// accordingly.
 		healthBarLength = (((pokemonCurrentHealth / pokemonFullHealth) * 100) - 5);
+		// Set the starting spot of the red bar used for the animation of a
+		// decreasing health bar.
 		redBarStartingLength = (int) healthBarLength;
+		// Set our boolean flags to false.
 		animating = true;
 		caught = false;
+		// Start the "sliding in" animation.
 		startingTimer.start();
 		name = poke.toString().toUpperCase();
 		repaint();
@@ -238,6 +208,8 @@ public class BattleScenePanel extends JPanel {
 
 	private void initializePanel() {
 
+		// Ours lists to contain the various pictures of the pokeball.
+		// Used for animation.
 		pokeballThrowList = new ArrayList<>();
 		pokeballWobbleList = new ArrayList<>();
 		name = "Pokemon Name";
@@ -277,7 +249,6 @@ public class BattleScenePanel extends JPanel {
 			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(136, 650, 21, 21));
 			pokeballWobbleList.add(pokeballSpriteSheet.getSubimage(131, 405, 24, 28));
 
-			pokeball = spriteSheet.getSubimage(300, 64, 16, 13);
 			trainerBackStanding = spriteSheet.getSubimage(175, 180, 55, 50);
 			nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
 			paras = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
@@ -295,6 +266,7 @@ public class BattleScenePanel extends JPanel {
 			e.printStackTrace();
 		}
 
+		// Initialize all the necessary timers for animation.
 		healthBarTimer = new javax.swing.Timer(30, new DrawHealthBarListener());
 		startingTimer = new javax.swing.Timer(2, new BeginningListener());
 		projectileTimer = new javax.swing.Timer(2, new throwProjectileListener());
@@ -314,27 +286,27 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.setLayout(new GridLayout(2, 2, 20, 20));
 
 		// Create and initialize throw ball button
-		JButton throwBall = new JButton("Throw Ball");
+		throwBall = new JButton("Throw Ball");
 		throwBall.setContentAreaFilled(false);
 		throwBall.setEnabled(true);
 		throwBall.addActionListener(new ProjectileButtonListener());
 
 		throwBall.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBall.setFont(font);
-		JButton throwRock = new JButton("Throw Rock");
+		throwRock = new JButton("Throw Rock");
 		throwRock.addActionListener(new ProjectileButtonListener());
 
 		throwRock.setContentAreaFilled(false);
 		throwRock.setFont(font);
 		throwRock.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 
-		JButton throwBait = new JButton("Throw Bait");
+		throwBait = new JButton("Throw Bait");
 		throwBait.setContentAreaFilled(false);
 		throwBait.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		throwBait.setFont(font);
 		throwBait.addActionListener(new ProjectileButtonListener());
 
-		JButton runAway = new JButton("Run Away");
+		runAway = new JButton("Run Away");
 		runAway.setContentAreaFilled(false);
 		runAway.setBorder(BorderFactory.createDashedBorder(null, 3, 2, 4, true));
 		runAway.setFont(font);
@@ -342,17 +314,25 @@ public class BattleScenePanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Don't allow a click if there's something happening already or
+				// the game is over.
 				if (!animating && !game.gameOver()) {
+					// set the flag to true.
 					animating = true;
+					// Start a new timer that animates the trainer leaving.
 					new Timer(5, new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
+							// If trainer hits spot off screen, end the
+							// animation and battle.
 							if (trainerX == trainerStartingSpotX) {
 								((Timer) e.getSource()).stop();
 								animating = false;
 								endOfBattle();
 
-							} else {
+							}
+							// Else keep sliding the trainer.
+							else {
 								trainerX--;
 								repaint();
 							}
@@ -369,9 +349,13 @@ public class BattleScenePanel extends JPanel {
 		buttonPanel.add(runAway);
 	}
 
+	// Method called after use throws something.
+	// Used for resetting the variables used for animation.
 	private void endOfTurn() {
+		// Set width and length back to their starting point.
 		projectileWidth = 30;
 		projectileLength = 30;
+		// Put them back where they begin.
 		projectileX = projectileStartingSpotX;
 		projectileY = projectileStartingSpotY;
 		// Put the wobbleIndex back to the start.
@@ -379,16 +363,25 @@ public class BattleScenePanel extends JPanel {
 		// Set the index we use for timers to 0.
 		index = 0;
 		wobbleY = 45;
+		// If the game is over, tell the JFrame.
 		if (game.gameOver()) {
 			container.gameOver();
-		} else if (!caught && pokemonCurrentHealth > 0) {
+		}
+		// Else, if the pokemon isn't caught AND it's still alive.
+		else if (!caught && pokemonCurrentHealth > 0) {
+			// If the pokemon returns false for their turn, they ran away.
 			if (!currentPokemon.doTurn()) {
+				// Move them off screen,
 				pokemonX = pokemonOffScreen;
 				repaint();
+				// Show message they ran.
 				JOptionPane.showMessageDialog(null, name.toUpperCase() + " RAN AWAY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 				endOfBattle();
-			} else if (currentPokemon.isAngry()) {
+			}
+			// If pokemon didn't run away, check if it's angry.
+			// If so, show message.
+			else if (currentPokemon.isAngry()) {
 				JOptionPane.showMessageDialog(null, name.toUpperCase() + " IS ANGRY!", "",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -397,15 +390,23 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
+	// Method used when pokemon is either caught, killed, or it runs away.
 	private void endOfBattle() {
+		// Resets the positions so they're ready to start a new battle.
 		trainerX = trainerStartingSpotX;
 		pokemonX = pokemonStartingSpotX;
 		healthBarLength = startingHealthBarLength;
 		redBarStartingLength = startingHealthBarLength;
 		caught = false;
+		// Tell JFrame to switch back to the map.
 		container.switchPanels();
-
 	}
+
+	/**
+	 * Override the paint component so we can draw JPanel they way we want.
+	 * Method is called using repaint(). To create animation, we change the
+	 * position variables used for drawing and repaint repeatedly.
+	 */
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -417,14 +418,18 @@ public class BattleScenePanel extends JPanel {
 		g2.fillRect(0, 0, 500, 300);
 		// Draw the background
 		g2.drawImage(backGround, 0, 0, 500, 300, null);
+		// Set color to black and write out the pokemon's name and how many
+		// balls are left.
 		g2.setColor(Color.black);
 		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
 		g2.drawString("Balls Left: " + game.ballsLeft(), 350, 180);
 		g2.drawString(name, 40, 55);
+		// write out the amount of health pokemon has left.
 		g2.drawString(pokemonCurrentHealth + " / " + pokemonFullHealth, 120, 55);
 		// Draw the health bar.
 		g2.setColor(Color.GREEN);
 		g2.fillRect(healthBarTopLeftX, healthBarTopLeftY, (int) healthBarLength, healthBarHeight);
+		// If timer is running, animate the health decreasing.
 		if (healthBarTimer.isRunning()) {
 			g2.setColor(Color.red);
 			g2.fillRect(healthBarTopLeftX + (int) healthBarLength, healthBarTopLeftY,
@@ -435,7 +440,6 @@ public class BattleScenePanel extends JPanel {
 		// Draw the trainer
 		g2.drawImage(trainerBackStanding, trainerX, trainerY, trainerWidth, trainerHeight, null);
 		// Draw the pokemon we're facing.
-
 		g2.drawImage(currentPokemonImage, pokemonX, pokemonY, pokemonWidth, pokemonLength, null);
 
 		// If we're throwing something, draw it.
@@ -449,6 +453,8 @@ public class BattleScenePanel extends JPanel {
 				g2.drawImage(bait, projectileX, projectileY, projectileWidth, projectileLength, null);
 			}
 		}
+		// If wobbleTimer is running, we're animating after the ball is thrown.
+		// Draw the ball in the correct spot.
 		if (wobbleTimer.isRunning()) {
 			g2.drawImage(pokeballWobbleList.get(wobbleIndex), wobbleX, wobbleY, 20, 20, null);
 		}
@@ -461,36 +467,50 @@ public class BattleScenePanel extends JPanel {
 		}
 	}
 
+	/**
+	 * 
+	 * ActionListener for the button's the are used for throwing objects at
+	 * pokemon. Based on the message in the button, we animate throwing the
+	 * correct object.
+	 *
+	 */
 	private class ProjectileButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent buttonPressed) {
 			JButton button = (JButton) buttonPressed.getSource();
-			if (!animating) {
+			// If something is already being animated or game is over, ignore click.
+			if (!animating && !game.gameOver()) {
 				switch (button.getText()) {
+				//User is attempting to throw ball.
 				case "Throw Ball":
-					if (game.ballsLeft() > 0 && !game.gameOver()) {
+					//If user has pokeballs, throw one.
+					if (game.ballsLeft() > 0) {
 						projType = projectileType.BALL;
 						animating = true;
+						//Start the timer
 						projectileTimer.start();
+						//Tell the Game that ball was thrown.
 						game.throwBall();
-					} else {
+					}
+					//Else user is out, show message.
+					else {
 						JOptionPane.showMessageDialog(null, "OUT OF BALLS!", "", JOptionPane.INFORMATION_MESSAGE);
 					}
 					break;
+					//Infinite bait, start animation.
 				case "Throw Bait":
-					if (!game.gameOver()) {
-						projType = projectileType.BAIT;
-						animating = true;
-						projectileTimer.start();
-					}
+					projType = projectileType.BAIT;
+					animating = true;
+					projectileTimer.start();
+
 					break;
+					//Infinite rocks, start animation.
 				case "Throw Rock":
-					if (!game.gameOver()) {
-						projType = projectileType.ROCK;
-						animating = true;
-						projectileTimer.start();
-					}
+					projType = projectileType.ROCK;
+					animating = true;
+					projectileTimer.start();
+
 					break;
 				default:
 					break;
@@ -500,17 +520,27 @@ public class BattleScenePanel extends JPanel {
 
 	}
 
+	/**
+	 * ActionListener that animate the pokemon shaking after being hit by rock.
+	 * Works by moving the top-left corner of pokemon drawing by 1 and repainting.
+	 * Every five movements of the pixel we change directions.
+	 */
 	private class PokemonShakeListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//If we've moved pokemon pixel 50 times, stop the timer.
 			if (shakeIndex == 50) {
 				shakeTimer.stop();
+				//Start the healthBarTimer.
 				healthBarTimer.start();
+				//Reset the shakeIndex to 0.
 				shakeIndex = 0;
+				//Call end of turn method.
 				endOfTurn();
 
 			}
+			//Every 5 movements, change direction.
 			if (shakeIndex % 5 == 0) {
 				if (shakeDirection == Direction.EAST) {
 					shakeDirection = Direction.WEST;
@@ -518,6 +548,7 @@ public class BattleScenePanel extends JPanel {
 					shakeDirection = Direction.EAST;
 				}
 			}
+			//Change positon based on direction.
 			if (shakeDirection == Direction.EAST) {
 				pokemonX++;
 			} else {
@@ -681,11 +712,14 @@ public class BattleScenePanel extends JPanel {
 				repaint();
 			} else {
 				index++;
+				//We change x by 2 and y by one to animate a line of slope 1/2
+				//That the projectile follows.
 				projectileX += 2;
 				projectileY--;
 				if (index % 5 == 0) {
 					pokeballIndex++;
 				}
+				//Every 10 changes, shrink the projectile so it looks like it's moving away.
 				if (index % 10 == 0) {
 					projectileWidth--;
 					projectileLength--;
