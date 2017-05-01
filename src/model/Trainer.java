@@ -115,7 +115,4 @@ public class Trainer implements Serializable
         return items.getItemCount("Safari Ball");
     }
 
-    public MyItemList getItemList(){
-    	return items;
-    }
 }
