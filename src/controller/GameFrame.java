@@ -342,6 +342,10 @@ public class GameFrame extends JFrame {
                 "Game Over", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public InfoPanel getInfoPanel() {
+        return this.step;
+    }
+
     // When user closes window, inquire if they wish to save the game to play
     // in the future
     private class GameExitEvent extends WindowAdapter {
@@ -406,14 +410,15 @@ public class GameFrame extends JFrame {
             System.out.println("view pokemon and items");
             // print out all pokemon and items
             for (Pokemon p : GameFrame.this.game.getTrainersPokemon()) {
-                System.out.println(p.toString());
-                System.out.println(p.getHealth()[0]);
-                System.out.println(p.getHealth()[1]);
+                System.out.println("Name: " + p.toString());
+                System.out.println("Current HP: " + p.getHealth()[0]);
+                System.out.println("Total HP  :" +p.getHealth()[1]);
             }
 
-            for (Item i : GameFrame.this.game.getTrainersItems()) {
-                System.out.println(i.toString());
-            }
+            System.out.println("Helix Fossils: " + GameFrame.this.game.getTrainersItems().getItemCount("Helix Fossil"));
+            System.out.println("Potions: " + GameFrame.this.game.getTrainersItems().getItemCount("Potion"));
+            System.out.println("Safari Balls: " + GameFrame.this.game.getTrainersItems().getItemCount("Safari Ball"));
+
             mapPanel.repaint();
             mapPanel.setFocusable(true);
             mapPanel.requestFocusInWindow();

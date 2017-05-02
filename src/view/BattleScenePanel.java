@@ -388,6 +388,9 @@ public class BattleScenePanel extends JPanel {
 
 		}
 
+        // Steve - attempt to uptate pokeball count during battle
+        this.container.getInfoPanel().reset();
+
 	}
 
 	// Method used when pokemon is either caught, killed, or it runs away.
