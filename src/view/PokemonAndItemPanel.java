@@ -36,6 +36,7 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage parasect;
     private BufferedImage chansey;
     private BufferedImage pokemonSpriteSheet;
+    private BufferedImage caughtPokemonLabel;
 
 
     // Constructor
@@ -95,6 +96,7 @@ public class PokemonAndItemPanel extends JPanel {
         try {
 
             pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
+            caughtPokemonLabel = ImageIO.read(new File("src/view/Caught-Pokemon-label.png"));
             
         } catch (IOException exception) {
 
@@ -123,27 +125,23 @@ public class PokemonAndItemPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
-            int pokemonDisplayed = 0;
-        int xPoint = 0;
-        int yPoint = 0;
+        int pokemonDisplayed = 0;
+        int xPoint = 20;
+        int yPoint = 100;
+        int widgetSize = 150;
 
+        g2.setColor(new Color(51,51,51));
         g2.fillRect(0, 0, 800, 800);
-        //Draw the background
-        //      g2.drawImage(nidoran, 0, 0, 500, 300, null);
-                      //// Set color to black and write out the
-                      //pokemon's name and how many
-                              // balls are left.
-                                      g2.setColor(Color.black);
-        //g2.drawImage(nidoran, 10, 10, 50, 50, null);
-        
+        g2.drawImage(caughtPokemonLabel, 130, 10, 500, 100, null);
+
 
         for(Pokemon p : this.game.getTrainersPokemon()) {
         // for(int i=0; i <16; i++) {
 
             
             // TODO make draw right pokemon - right now just getting count
-            g2.drawImage(nidoran, xPoint, yPoint, 50, 50, null);
-            xPoint+=50;
+            g2.drawImage(nidoran, xPoint, yPoint, widgetSize, widgetSize, null);
+            xPoint+= widgetSize;
             //yPoint+=50;
             System.out.println("displayed poke ");
             pokemonDisplayed++;
@@ -151,8 +149,8 @@ public class PokemonAndItemPanel extends JPanel {
             // if we have displayed 5 pokemon, start a new row
             if (pokemonDisplayed % 5 == 0) {
                 System.out.println("increment y");
-                yPoint += 50;
-                xPoint = 0;
+                yPoint += widgetSize;
+                xPoint = 20;
             }
         }
     }
