@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
@@ -128,10 +129,14 @@ public class PokemonAndItemPanel extends JPanel {
         int pokemonDisplayed = 0;
         int xPoint = 20;
         int yPoint = 100;
-        int widgetSize = 150;
+        int widgetSize = 180;
+        int pokeImageSize = 100;
 
+        // Draw background
         g2.setColor(new Color(51,51,51));
         g2.fillRect(0, 0, 800, 800);
+
+        // Label for this window
         g2.drawImage(caughtPokemonLabel, 130, 10, 500, 100, null);
 
 
@@ -140,7 +145,11 @@ public class PokemonAndItemPanel extends JPanel {
 
             
             // TODO make draw right pokemon - right now just getting count
-            g2.drawImage(nidoran, xPoint, yPoint, widgetSize, widgetSize, null);
+            g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            g2.setColor(Color.WHITE);
+            g2.drawString("HP:", xPoint + 110, yPoint + 20);
+            g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
+            g2.drawString("Nidoran", xPoint + 10, yPoint + 120);
             xPoint+= widgetSize;
             //yPoint+=50;
             System.out.println("displayed poke ");
