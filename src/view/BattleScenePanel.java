@@ -352,6 +352,8 @@ public class BattleScenePanel extends JPanel {
 	// Method called after use throws something.
 	// Used for resetting the variables used for animation.
 	private void endOfTurn() {
+        
+
 		// Set width and length back to their starting point.
 		projectileWidth = 30;
 		projectileLength = 30;
@@ -388,8 +390,6 @@ public class BattleScenePanel extends JPanel {
 
 		}
 
-        // Steve - attempt to uptate pokeball count during battle
-        this.container.getInfoPanel().reset();
 
 	}
 
@@ -426,6 +426,8 @@ public class BattleScenePanel extends JPanel {
 		g2.setColor(Color.black);
 		g2.setFont(new Font("Dialog.bold", Font.BOLD, 12));
 		g2.drawString("Balls Left: " + game.ballsLeft(), 350, 180);
+        // Steve - uptate pokeball count during battle
+        this.container.getInfoPanel().reset();
 		g2.drawString(name, 40, 55);
 		// write out the amount of health pokemon has left.
 		g2.drawString(pokemonCurrentHealth + " / " + pokemonFullHealth, 120, 55);
