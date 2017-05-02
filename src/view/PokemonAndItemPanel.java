@@ -55,14 +55,14 @@ public class PokemonAndItemPanel extends JPanel {
         //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Parasect", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Ryhorn", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidorina", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
@@ -84,13 +84,13 @@ public class PokemonAndItemPanel extends JPanel {
         // Frame to hold the display
         frame = new JFrame();
         frame.setTitle("Pokemon and Items");
-        frame.setSize(1000, 800);
+        frame.setSize(1100, 800);
         frame.setLayout(null);
         frame.setVisible(true);
         // Unlock the main UI when window closed
         frame.addWindowListener(new ClosedPanelAdapter());
 
-        this.setSize(1000, 800);
+        this.setSize(1100, 800);
         frame.add(this);
         repaint();
     }
@@ -107,16 +107,16 @@ public class PokemonAndItemPanel extends JPanel {
             exception.printStackTrace();
         }
  
-        nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
-        paras = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
-        doduo = pokemonSpriteSheet.getSubimage(2168, 180, 70, 45);
-        venonat = pokemonSpriteSheet.getSubimage(1531, 84, 52, 65);
-        cubone = pokemonSpriteSheet.getSubimage(1539, 260, 35, 42);
-        nidorina = pokemonSpriteSheet.getSubimage(100, 105, 50, 40);
-        ryhorn = pokemonSpriteSheet.getSubimage(2094, 240, 60, 65);
+        nidoran   = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
+        paras     = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
+        doduo     = pokemonSpriteSheet.getSubimage(2168, 180, 70, 45);
+        venonat   = pokemonSpriteSheet.getSubimage(1531, 84, 52, 65);
+        cubone    = pokemonSpriteSheet.getSubimage(1539, 260, 35, 42);
+        nidorina  = pokemonSpriteSheet.getSubimage(100, 105, 50, 40);
+        ryhorn    = pokemonSpriteSheet.getSubimage(2094, 240, 60, 65);
         exeggcute = pokemonSpriteSheet.getSubimage(1370, 244, 65, 53);
-        parasect = pokemonSpriteSheet.getSubimage(1441, 79, 93, 65);
-        chansey = pokemonSpriteSheet.getSubimage(5, 336, 58, 46);
+        parasect  = pokemonSpriteSheet.getSubimage(1441, 79, 93, 65);
+        chansey   = pokemonSpriteSheet.getSubimage(5, 336, 58, 46);
 
         // display a pokemon
         repaint();
@@ -133,15 +133,15 @@ public class PokemonAndItemPanel extends JPanel {
         int pokemonDisplayed = 0;
         int xPoint = 20;
         int yPoint = 100;
-        int widgetSize = 180;
+        int widgetSize = 200;
         int pokeImageSize = 100;
 
         // Draw background
         g2.setColor(new Color(51,51,51));
-        g2.fillRect(0, 0, 1000, 800);
+        g2.fillRect(0, 0, 1100, 800);
 
         // Label for this window
-        g2.drawImage(caughtPokemonLabel, 200, 10, 500, 100, null);
+        g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
 
 
         for(Pokemon p : this.game.getTrainersPokemon()) {
@@ -149,13 +149,64 @@ public class PokemonAndItemPanel extends JPanel {
 
             
             // TODO make draw right pokemon - right now just getting count
-            g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            //if (p.toString().equals("Nidoran")
+            if (p.toString().equals("Nidoran")) {
+
+                g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Paras")) {
+
+                g2.drawImage(paras, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Doduo")) {
+
+                g2.drawImage(doduo, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Venonat")) {
+
+                g2.drawImage(venonat, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Cubone")) {
+
+                g2.drawImage(cubone, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Nidorina")) {
+
+                g2.drawImage(nidorina, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Ryhorn")) {
+
+                g2.drawImage(ryhorn, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Exeggcute")) {
+
+                g2.drawImage(exeggcute, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Parasect")) {
+
+                g2.drawImage(parasect, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            else if (p.toString().equals("Chansey")) {
+
+                g2.drawImage(chansey, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
+            }
+
+            //g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
             g2.setColor(Color.WHITE);
             g2.drawString("HP:", xPoint + 110, yPoint + 20);
             g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
-            g2.drawString("Nidoran", xPoint + 20, yPoint + 120);
+            g2.drawString(p.toString(), xPoint + 70, yPoint + 120);
 
-            g2.drawString("Use\nPotion:", xPoint + 110, yPoint + 72);
+            g2.drawString("Use Potion:", xPoint + 110, yPoint + 72);
             JButton potionButton = new JButton();
             //potionButton.setLocation(xPoint + 110, yPoint + 80);
             //potionButton.setLocation(xPoint, yPoint);
@@ -164,7 +215,7 @@ public class PokemonAndItemPanel extends JPanel {
             //potionButton.setPreferredSize(new Dimension(50,50));
             potionButton.setText("+");
             potionButton.setToolTipText("Click to apply potion to this Pokemon");
-            potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            //potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
             potionButton.addActionListener(new PotionButtonListener(p));
             this.add(potionButton);
             //potionButton.setEnabled(false);
@@ -183,7 +234,7 @@ public class PokemonAndItemPanel extends JPanel {
             // if we have displayed 5 pokemon, start a new row
             if (pokemonDisplayed % 5 == 0) {
                 System.out.println("increment y");
-                yPoint += widgetSize;
+                yPoint += widgetSize - 20;
                 xPoint = 20;
             }
         }
