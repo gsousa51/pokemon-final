@@ -9,9 +9,11 @@ import org.junit.Test;
 import interfaceEnumMocks.Direction;
 import interfaceEnumMocks.GameOverOptions;
 import interfaceEnumMocks.MapObject;
+import model.AvailablePokemonList;
 import model.Game;
 import model.Map;
 import model.Pokemon;
+import model.SafariBall;
 import model.Trainer;
 
 public class ModelTests
@@ -75,7 +77,6 @@ public class ModelTests
         
         
         assertEquals(game.getMapNumber(), 1);
-//        assertEquals(game.getGameOverCondition(), GameOverOptions.NO_STEPS);
         game.addPokemon(new Pokemon("Test", 0, 0, 0));
         assertEquals(game.getPokemonCount(), 7);
 
@@ -93,6 +94,40 @@ public class ModelTests
                 
                
         
+    }
+    
+    @Test
+    public void TestItemsAndGame()
+    {
+        Game g = new Game(2, GameOverOptions.NO_STEPS);
+        
+        //Call enough to get 90% coverage
+        for(int i = 0; i < 20; i++)
+            AvailablePokemonList.getInstance().getPokemon();
+        
+        MapObject[][] map = g.getMap();
+        
+        int num = g.getTrainersItems().getInstance().size();
+        g.foundItem(new SafariBall());
+        assertEquals(g.getTrainersItems().getInstance().size(), num+1);
+
+        Point p = g.getTrainerPosition();
+
+        map[p.y][p.x].removeItem();
+        assertEquals(map[p.y][p.x].getItem(), null);
+    }
+    
+    @Test
+    public void TestMapObject()
+    {
+        Game g = new Game(2, GameOverOptions.NO_BALL);
+        MapObject[][] map = g.getMap();
+        
+        map[2][2].removeItem();
+        assertTrue(map[2][2].isWalkable());
+        assertFalse(map[0][0].isWalkable());
+        
+        assertEquals(map[0][0].getItem(), null);
     }
    
 
