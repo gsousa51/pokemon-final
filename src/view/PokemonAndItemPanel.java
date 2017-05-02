@@ -1,10 +1,11 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -53,7 +54,7 @@ public class PokemonAndItemPanel extends JPanel {
         // TODO temp delete
         //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
@@ -161,8 +162,10 @@ public class PokemonAndItemPanel extends JPanel {
             potionButton.setBounds(xPoint + 110, yPoint + 80, 60, 20);
             //potionButton.setLocation(xPoint, yPoint);
             //potionButton.setPreferredSize(new Dimension(50,50));
-            potionButton.setText("X");
+            potionButton.setText("+");
+            potionButton.setToolTipText("Click to apply potion to this Pokemon");
             potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            potionButton.addActionListener(new PotionButtonListener(p));
             this.add(potionButton);
             //potionButton.setEnabled(false);
             //potionButton.setLocation(xPoint + 110, yPoint + 80);
@@ -186,6 +189,22 @@ public class PokemonAndItemPanel extends JPanel {
         }
     }
 
+    private class PotionButtonListener implements ActionListener {
+        
+        private Pokemon pokemon;
+
+        public PotionButtonListener(Pokemon pokemon) {
+
+            this.pokemon = pokemon;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            System.out.println("update HP for " + this.pokemon.toString());
+        }
+
+
+    }
 
     private class ClosedPanelAdapter extends WindowAdapter {
 
