@@ -23,13 +23,16 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import interfaceEnumMocks.GameOverOptions;
+
 import model.Game;
 import model.Grass;
 import model.Item;
 import model.Pokemon;
+
 import view.BattleScenePanel;
 import view.InfoPanel;
 import view.MapPanel;
+import view.PokemonAndItemPanel;
 
 //import InterfacesAndEnums.GameInterface;
 
@@ -49,10 +52,9 @@ public class GameFrame extends JFrame {
     private GameOverOptions gameOver;
     private int mapNumber;
     private JButton pokemonViewButton;
-    private JButton itemViewButton;;
+    private JButton itemViewButton;
     private Clip gameMusicClip;
     private Clip battleMusicClip;
-
 
     // Main method - RUNNER
     public static void main(String[] args) {
@@ -91,23 +93,13 @@ public class GameFrame extends JFrame {
         // items
         this.pokemonViewButton = new JButton();
         pokemonViewButton.setPreferredSize(new Dimension(75, 50));
-        //pokemonViewButton.setSize(new Dimension(75, 50));
+        // pokemonViewButton.setSize(new Dimension(75, 50));
         pokemonViewButton.setSize(500, 50);
         pokemonViewButton.setLocation(100, 515);
         pokemonViewButton.setText("View Pokemon and Items");
-        // TODO Steve note hoist this out if you want - this is just a temporary stub
-        // note the needed setFocusable stuff... if that is not there, clicking
-        // the button renders the mapPanel unresponsive
-        pokemonViewButton.addActionListener(e -> {
-                    System.out.println("view pokemon and items");
-                    mapPanel.repaint();
-                    mapPanel.setFocusable(true);
-                    mapPanel.requestFocusInWindow();
-                    mapPanel.setEnabled(true);
-                    this.setFocusable(false);
-        });
-        this.add(pokemonViewButton);
+        pokemonViewButton.addActionListener(new ItemAndPokemonListener());
 
+        this.add(pokemonViewButton);
 
         // Window adornments
         this.setTitle("Pokemon Safari Zone");
@@ -143,19 +135,19 @@ public class GameFrame extends JFrame {
 
             int mapChoice = JOptionPane.showOptionDialog(null, "Choose Map To Play On!", "Pokemon Safari Zone",
                     JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options2, null);
-            // TODO: Change one to the choice of the user for which map to use
+
             // 1 = map 1, anything else = map 2
             if (mapChoice == JOptionPane.YES_OPTION) {
                 mapNumber = 1;
             }
-            //User chose map 2
+            // User chose map 2
             else {
                 mapNumber = 2;
             }
-            System.out.println("Created game with map number " + mapNumber +" and " + gameOver );
+            
 
             this.game = new Game(mapNumber, gameOver);
-            mapPanel  = new MapPanel(game, this, mapNumber);
+            mapPanel = new MapPanel(game, this, mapNumber);
             // this.add(mapPanel);
 
         }
@@ -191,8 +183,9 @@ public class GameFrame extends JFrame {
                 // this.step = (StepCountPanel) input.readObject();
                 this.game = (Game) input.readObject();
                 System.out.println("Read in previous game state.");
-                //Create a mapPanel, using the map option they chose when they last played the game.
-                this.mapPanel = new MapPanel(game,this,game.getMapNumber());
+                // Create a mapPanel, using the map option they chose when they
+                // last played the game.
+                this.mapPanel = new MapPanel(game, this, game.getMapNumber());
                 // this.mapPanel = new MapPanel(game,this);
                 // this.battlePanel = new BattleScenePanel(game,this);
                 // mapPanel.setLocation(0, 0);
@@ -212,22 +205,18 @@ public class GameFrame extends JFrame {
         }
     }
 
-
     // Start game battle music in a separate thread
-    public void startBattleMusic() {
+    private void startBattleMusic() {
 
         Thread musicThread = new Thread(new Runnable() {
 
             public void run() {
 
-                try
-                {
+                try {
                     battleMusicClip = AudioSystem.getClip();
-                    battleMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/battle.wav")));
+                    battleMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/battle_final.wav")));
                     battleMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-                }
-                catch (Exception exc)
-                {
+                } catch (Exception exc) {
                     exc.printStackTrace(System.out);
                 }
             }
@@ -235,24 +224,20 @@ public class GameFrame extends JFrame {
 
         musicThread.start();
     }
-
 
     // Start game background music in a separate thread
-    public void startGameMusic() {
+    private void startGameMusic() {
 
         Thread musicThread = new Thread(new Runnable() {
 
             public void run() {
 
-                try
-                {
+                try {
 
-                        gameMusicClip = AudioSystem.getClip();
-                        gameMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/pokemon_safari.wav")));
-                        gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-                }
-                catch (Exception exc)
-                {
+                    gameMusicClip = AudioSystem.getClip();
+                    gameMusicClip.open(AudioSystem.getAudioInputStream(new File("resources/sound/pokemon_safari.wav")));
+                    gameMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                } catch (Exception exc) {
                     exc.printStackTrace(System.out);
                 }
             }
@@ -261,26 +246,21 @@ public class GameFrame extends JFrame {
         musicThread.start();
     }
 
-
     // Stop the background game music
-    public void stopGameMusic() {
+    private void stopGameMusic() {
 
         gameMusicClip.stop();
     }
 
-
     // Stop the background game music
-    public void stopBattleMusic() {
+    private void stopBattleMusic() {
 
         battleMusicClip.stop();
     }
 
-
-
-
     public void switchPanels() {
         if (currentPanel.equals(mapPanel)) {
-            
+
             stopGameMusic();
 
             startBattleMusic();
@@ -314,17 +294,22 @@ public class GameFrame extends JFrame {
         repaint();
     }
 
-    // TODO refactor this so as to catch all end-of-game conditions for
-    // Iteration 2
     public void walkEnded() {
         Point trainerPos = game.getTrainerPosition();
+        // reset our info panel
         step.reset();
+        // repaint the frame
         repaint();
+        // If the game is over (only would happen if the user is out of steps,
+        // here)
         if (game.gameOver()) {
 
+            // Pop our gameOver panel.
             gameOver();
-
-        } else {
+        }
+        // Else, check if we're on grass, if we are, check if we found a
+        // pokemon.
+        else {
             if (game.getMap()[trainerPos.y][trainerPos.x] instanceof Grass) {
                 System.out.println("We're in grass");
                 Pokemon pokemonAtPosition = game.checkPokemon();
@@ -335,17 +320,17 @@ public class GameFrame extends JFrame {
                     repaint();
                 }
             }
-            //Else we're on ground, might be an item.
-            else{
-            	Item currItem = game.getMap()[trainerPos.y][trainerPos.x].getItem();
-            	if(currItem != null){
-            		System.out.println("Found a " + currItem.toString());
-            		//game.foundItem();
-            	       JOptionPane.showMessageDialog(null, "Found a " + currItem.toString()+" !", "Pokemon Safari Zone",
-            	                JOptionPane.INFORMATION_MESSAGE);
-            	       game.getMap()[trainerPos.y][trainerPos.x].removeItem();
-            	}//end if
-            }//end else
+            // Else we're on ground, might be an item found
+            else {
+                Item currItem = game.getMap()[trainerPos.y][trainerPos.x].getItem();
+                if (currItem != null) {
+                    System.out.println("Found a " + currItem.toString());
+                    game.foundItem(currItem);
+                    JOptionPane.showMessageDialog(null, "Found a " + currItem.toString() + " !", "Pokemon Safari Zone",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    game.getMap()[trainerPos.y][trainerPos.x].removeItem();
+                } // end if
+            } // end else
         }
 
     }
@@ -356,11 +341,13 @@ public class GameFrame extends JFrame {
 
     public void gameOver() {
         this.setTitle("Pokemon Safari Zone - Game Over");
-        JOptionPane.showMessageDialog(null, "This game has ended. We still need to show you items and pokemon", "Game Over",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "This game has ended. We still need to show you items and pokemon",
+                "Game Over", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    public InfoPanel getInfoPanel() {
+        return this.step;
+    }
 
     // When user closes window, inquire if they wish to save the game to play
     // in the future
@@ -368,7 +355,7 @@ public class GameFrame extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent event) {
-            if (!inBattle&&!game.gameOver()) {
+            if (!inBattle && !game.gameOver()) {
                 int userInput = JOptionPane.showConfirmDialog(null, "Would you like to save this game?",
                         "Pokemon Safari Zone", JOptionPane.YES_NO_OPTION);
                 if (userInput == JOptionPane.YES_OPTION) {
@@ -380,7 +367,6 @@ public class GameFrame extends JFrame {
                     }
 
                     catch (FileNotFoundException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
 
@@ -389,26 +375,15 @@ public class GameFrame extends JFrame {
                     }
 
                     catch (IOException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
 
                     try {
-                        // let the playlist know that we closed the window but
-                        // saved
-                        // the music.
-                        // juke.getSongQueue().userClosedWindow();
-                        // output.writeObject(juke);
-                        // output.writeObject(queue);
-                        // output.writeObject(accounts);
-                        // output.writeObject(GameFrame.this.mapPanel);
-                        // output.writeObject(GameFrame.this.step);
+
                         output.writeObject(GameFrame.this.game);
 
-                        // TODO debug delete
-                        System.out.println("Game state saved");
                     } catch (IOException e1) {
-                        // TODO Auto-generated catch block
+
                         e1.printStackTrace();
                     }
                 }
@@ -423,5 +398,37 @@ public class GameFrame extends JFrame {
 
         }
 
+    }
+
+
+    // Listener for the JButton that shows the user's items and pokemon
+    private class ItemAndPokemonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            PokemonAndItemPanel pokemonAndItems = new PokemonAndItemPanel(GameFrame.this.game, GameFrame.this);
+            //pokemonAndItems.setVisible(true);
+            // note the needed setFocusable stuff... if that is not there, clicking
+            // the button renders the mapPanel unresponsive
+
+            System.out.println("");
+            System.out.println("[POKEMON AND ITEMS]");
+            // print out all pokemon and items
+            for (Pokemon p : GameFrame.this.game.getTrainersPokemon()) {
+                System.out.println("Name: " + p.toString());
+                System.out.println("Current HP: " + p.getHealth()[0]);
+                System.out.println("Total HP  :" +p.getHealth()[1]);
+            }
+
+            System.out.println("Helix Fossils: " + GameFrame.this.game.getTrainersItems().getItemCount("Helix Fossil"));
+            System.out.println("Potions: " + GameFrame.this.game.getTrainersItems().getItemCount("Potion"));
+            System.out.println("Safari Balls: " + GameFrame.this.game.getTrainersItems().getItemCount("Safari Ball"));
+
+            mapPanel.repaint();
+            mapPanel.setFocusable(true);
+            mapPanel.requestFocusInWindow();
+            mapPanel.setEnabled(true);
+            GameFrame.this.setFocusable(false);
+        }
     }
 }

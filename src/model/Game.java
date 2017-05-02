@@ -8,15 +8,13 @@ import interfaceEnumMocks.GameInterface;
 import interfaceEnumMocks.GameOverOptions;
 import interfaceEnumMocks.MapObject;
 
-// import InterfacesAndEnums.Direction;
-// import InterfacesAndEnums.GameInterface;
-// import InterfacesAndEnums.MapObject;
 
 public class Game implements GameInterface, Serializable
 {
     private Map gameMap;
     private Trainer trainer;
     private MyPokemonList pokedex;
+    private MyItemList items;
     private GameOverOptions endGame;
     private int mapNumber;
     
@@ -26,15 +24,14 @@ public class Game implements GameInterface, Serializable
         gameMap = new Map(mapNumber);
         trainer = new Trainer(mapNumber);
         pokedex = MyPokemonList.getInstance();
+        this.items = MyItemList.getInstance();
         endGame = end;
     }
     
     public int getMapNumber(){
     	return this.mapNumber;
     }
-    public GameOverOptions getGameOverCondition(){
-    	return endGame;
-    }
+
     public int ballsLeft()
     {
         return trainer.getRemainingBalls();
@@ -42,7 +39,6 @@ public class Game implements GameInterface, Serializable
     
     public void foundItem(Item item)
     {
-        MyItemList items = MyItemList.getInstance();
         items.addItem(item);
     }
 
@@ -55,6 +51,16 @@ public class Game implements GameInterface, Serializable
     public int getMapWidth()
     {
         return gameMap.getMapWidth();
+    }
+
+    public MyPokemonList getTrainersPokemon()
+    {
+        return this.pokedex;
+    }
+
+    public MyItemList getTrainersItems()
+    {
+        return this.items;
     }
 
     public int getMapHeight()

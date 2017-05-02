@@ -19,6 +19,14 @@ public class AvailablePokemonListTest {
 		System.out.println(list.getPokemon());
 		System.out.println(list.getPokemon());
 		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
+		System.out.println(list.getPokemon());
 	}
 
 }
