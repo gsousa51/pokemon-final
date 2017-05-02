@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io/api/ava,eclipse,osx,windows,intellij,linux
 
+#ignore the files with the saved game
+PREVIOUSLY_SAVED_GAME.bin
+
 ### Eclipse ###
 
 bin/
