@@ -21,6 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import interfaceEnumMocks.GameOverOptions;
 
@@ -62,6 +64,8 @@ public class GameFrame extends JFrame {
     }
 
     public GameFrame() {
+
+        // attemptToSetNimbusLookAndFeel();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.setLayout(new CardLayout());
@@ -347,6 +351,28 @@ public class GameFrame extends JFrame {
 
     public InfoPanel getInfoPanel() {
         return this.step;
+    }
+
+    // If the system has the [Nimbus] Look and Feel, turn it on
+    private static void attemptToSetNimbusLookAndFeel() {
+
+        try {
+
+            for (LookAndFeelInfo lookAndFeel : UIManager.getInstalledLookAndFeels()) {
+
+                if ("Nimbus".equals(lookAndFeel.getName())) {
+
+                    UIManager.setLookAndFeel(lookAndFeel.getClassName());
+                    break;
+                }
+            }
+        }
+
+        // nimbus wasn't found
+        catch (Exception e) {
+
+            // system default L&F will be used
+        }
     }
 
     // When user closes window, inquire if they wish to save the game to play

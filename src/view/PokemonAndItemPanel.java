@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -103,7 +105,7 @@ public class PokemonAndItemPanel extends JPanel {
 
             exception.printStackTrace();
         }
-
+ 
         nidoran = pokemonSpriteSheet.getSubimage(265, 98, 40, 38);
         paras = pokemonSpriteSheet.getSubimage(1374, 99, 50, 33);
         doduo = pokemonSpriteSheet.getSubimage(2168, 180, 70, 45);
@@ -125,6 +127,7 @@ public class PokemonAndItemPanel extends JPanel {
     public void paintComponent(Graphics g) {
 
         Graphics2D g2 = (Graphics2D) g;
+        this.setLayout(null);
 
         int pokemonDisplayed = 0;
         int xPoint = 20;
@@ -137,7 +140,7 @@ public class PokemonAndItemPanel extends JPanel {
         g2.fillRect(0, 0, 1000, 800);
 
         // Label for this window
-        g2.drawImage(caughtPokemonLabel, 130, 10, 500, 100, null);
+        g2.drawImage(caughtPokemonLabel, 200, 10, 500, 100, null);
 
 
         for(Pokemon p : this.game.getTrainersPokemon()) {
@@ -149,7 +152,26 @@ public class PokemonAndItemPanel extends JPanel {
             g2.setColor(Color.WHITE);
             g2.drawString("HP:", xPoint + 110, yPoint + 20);
             g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
-            g2.drawString("Nidoran", xPoint + 10, yPoint + 120);
+            g2.drawString("Nidoran", xPoint + 20, yPoint + 120);
+
+            g2.drawString("Use\nPotion:", xPoint + 110, yPoint + 72);
+            JButton potionButton = new JButton();
+            //potionButton.setLocation(xPoint + 110, yPoint + 80);
+            //potionButton.setLocation(xPoint, yPoint);
+            potionButton.setBounds(xPoint + 110, yPoint + 80, 60, 20);
+            //potionButton.setLocation(xPoint, yPoint);
+            //potionButton.setPreferredSize(new Dimension(50,50));
+            potionButton.setText("X");
+            potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            this.add(potionButton);
+            //potionButton.setEnabled(false);
+            //potionButton.setLocation(xPoint + 110, yPoint + 80);
+
+
+
+
+
+
             xPoint+= widgetSize;
             //yPoint+=50;
             System.out.println("displayed poke ");
