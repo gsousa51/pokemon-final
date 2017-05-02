@@ -81,13 +81,13 @@ public class PokemonAndItemPanel extends JPanel {
         // Frame to hold the display
         frame = new JFrame();
         frame.setTitle("Pokemon and Items");
-        frame.setSize(800, 800);
+        frame.setSize(1000, 800);
         frame.setLayout(null);
         frame.setVisible(true);
         // Unlock the main UI when window closed
         frame.addWindowListener(new ClosedPanelAdapter());
 
-        this.setSize(800, 800);
+        this.setSize(1000, 800);
         frame.add(this);
         repaint();
     }
@@ -134,7 +134,7 @@ public class PokemonAndItemPanel extends JPanel {
 
         // Draw background
         g2.setColor(new Color(51,51,51));
-        g2.fillRect(0, 0, 800, 800);
+        g2.fillRect(0, 0, 1000, 800);
 
         // Label for this window
         g2.drawImage(caughtPokemonLabel, 130, 10, 500, 100, null);
