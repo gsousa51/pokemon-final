@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import controller.GameFrame;
 
 import model.Game;
+import model.Pokemon;
 
 public class PokemonAndItemPanel extends JPanel {
 
@@ -43,6 +44,29 @@ public class PokemonAndItemPanel extends JPanel {
         this.game = game;
         this.container = container;
         initializePanel();
+
+
+        // TODO temp delete
+        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+
+
+
+
         displayPokemon();
     }
 
@@ -99,14 +123,38 @@ public class PokemonAndItemPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.fillRect(0, 0, 500, 300);
+            int pokemonDisplayed = 0;
+        int xPoint = 0;
+        int yPoint = 0;
+
+        g2.fillRect(0, 0, 800, 800);
         //Draw the background
-              g2.drawImage(nidoran, 0, 0, 500, 300, null);
-                      // Set color to black and write out the
+        //      g2.drawImage(nidoran, 0, 0, 500, 300, null);
+                      //// Set color to black and write out the
                       //pokemon's name and how many
                               // balls are left.
                                       g2.setColor(Color.black);
-        g2.drawImage(nidoran, 10, 10, 50, 50, null);
+        //g2.drawImage(nidoran, 10, 10, 50, 50, null);
+        
+
+        for(Pokemon p : this.game.getTrainersPokemon()) {
+        // for(int i=0; i <16; i++) {
+
+            
+            // TODO make draw right pokemon - right now just getting count
+            g2.drawImage(nidoran, xPoint, yPoint, 50, 50, null);
+            xPoint+=50;
+            //yPoint+=50;
+            System.out.println("displayed poke ");
+            pokemonDisplayed++;
+            
+            // if we have displayed 5 pokemon, start a new row
+            if (pokemonDisplayed % 5 == 0) {
+                System.out.println("increment y");
+                yPoint += 50;
+                xPoint = 0;
+            }
+        }
     }
 
 
