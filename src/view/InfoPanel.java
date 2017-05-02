@@ -21,6 +21,7 @@ public class InfoPanel extends JPanel {
 	Game game;
 	JLabel stepLabel;
 	JLabel pokemonCount;
+	JLabel safariBallCount;
 
 	public InfoPanel(Game game) {
 
@@ -30,9 +31,11 @@ public class InfoPanel extends JPanel {
 		//Set the text for our labels.
 		stepLabel = new JLabel("Steps Left : " + game.getRemainingSteps());
 		pokemonCount = new JLabel("Caught : " + game.getPokemonCount());
+		safariBallCount = new JLabel("Safari Balls : " + game.getTrainersItems().getItemCount("Safari Ball"));
 		//Add them to the game.
 		this.add(stepLabel);
 		this.add(pokemonCount);
+        this.add(safariBallCount);
 
 	}
 
@@ -43,6 +46,7 @@ public class InfoPanel extends JPanel {
 		//Reset the values for the labels in case something has changed.
 		stepLabel.setText("Steps Left : " + game.getRemainingSteps());
 		pokemonCount.setText("Caught : " + String.valueOf(game.getPokemonCount()));
+		safariBallCount.setText("Safari Balls : " + game.getTrainersItems().getItemCount("Safari Ball"));
 		repaint();
 	}
 }
