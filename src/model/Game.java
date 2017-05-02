@@ -53,6 +53,16 @@ public class Game implements GameInterface, Serializable
         return gameMap.getMapWidth();
     }
 
+    public MyPokemonList getTrainersPokemon()
+    {
+        return this.pokedex;
+    }
+
+    public MyItemList getTrainersItems()
+    {
+        return this.items;
+    }
+
     public int getMapHeight()
     {
         return gameMap.getMapHeight();
