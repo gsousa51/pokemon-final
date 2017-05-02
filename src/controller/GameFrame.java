@@ -23,13 +23,16 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import interfaceEnumMocks.GameOverOptions;
+
 import model.Game;
 import model.Grass;
 import model.Item;
 import model.Pokemon;
+
 import view.BattleScenePanel;
 import view.InfoPanel;
 import view.MapPanel;
+import view.PokemonAndItemPanel;
 
 //import InterfacesAndEnums.GameInterface;
 
@@ -403,11 +406,13 @@ public class GameFrame extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            PokemonAndItemPanel pokemonAndItems = new PokemonAndItemPanel(GameFrame.this.game, GameFrame.this);
+            //pokemonAndItems.setVisible(true);
             // note the needed setFocusable stuff... if that is not there, clicking
             // the button renders the mapPanel unresponsive
 
             System.out.println("");
-            System.out.println("view pokemon and items");
+            System.out.println("[POKEMON AND ITEMS]");
             // print out all pokemon and items
             for (Pokemon p : GameFrame.this.game.getTrainersPokemon()) {
                 System.out.println("Name: " + p.toString());
