@@ -261,6 +261,7 @@ public class PokemonAndItemPanel extends JPanel {
         } // for loop to draw all pokemon
 
         // Helix Fossil count
+        g2.setColor(Color.WHITE);
         g2.drawString("Helix Fossil", 20, 660);
         g2.drawImage(helixFossil, 20, 680, pokeImageSize - 30, pokeImageSize - 30, null);
         g2.drawString("X " + this.game.getTrainersItems().getItemCount("Helix Fossil"), 100, 730);
