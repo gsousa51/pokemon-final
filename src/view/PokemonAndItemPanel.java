@@ -43,6 +43,8 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage caughtPokemonLabel;
     private BufferedImage gameOverLabel;
     private BufferedImage helixFossil;
+    private BufferedImage pokeBall;
+    private BufferedImage potion;
     private ArrayList<JButton> PotionButtons;
 
 
@@ -107,6 +109,8 @@ public class PokemonAndItemPanel extends JPanel {
             caughtPokemonLabel = ImageIO.read(new File("src/view/Caught-Pokemon-label.png"));
             gameOverLabel = ImageIO.read(new File("src/view/Game-Over-label.png"));
             helixFossil = ImageIO.read(new File("src/view/Helix-Fossil.png"));
+            pokeBall = ImageIO.read(new File("src/view/pokeball-icon.png"));
+            potion = ImageIO.read(new File("src/view/potion.png"));
             
         } catch (IOException exception) {
 
@@ -265,6 +269,18 @@ public class PokemonAndItemPanel extends JPanel {
         g2.drawString("Helix Fossil", 20, 660);
         g2.drawImage(helixFossil, 20, 680, pokeImageSize - 30, pokeImageSize - 30, null);
         g2.drawString("X " + this.game.getTrainersItems().getItemCount("Helix Fossil"), 100, 730);
+
+        // Pokeball count
+        g2.setColor(Color.WHITE);
+        g2.drawString("Safari Ball", 320, 660);
+        g2.drawImage(pokeBall, 320, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Safari Ball"), 400, 730);
+
+        // Potion count
+        g2.setColor(Color.WHITE);
+        g2.drawString("Potion", 620, 660);
+        g2.drawImage(potion, 620, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Potion"), 700, 730);
 
         // if we dont' have any potions, disable all the potion buttons
         if (this.game.getTrainersItems().getItemCount("Potion") == 0) {
