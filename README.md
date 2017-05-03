@@ -1,13 +1,13 @@
-# pokemon-bulbasquirtmander
+# 335 Final Project - Pokemon Safari Zone
 
-Team:   
+# Team: pokemon-bulbasquirtmander
+
+Team Members:   
 Morgan Henry    
 Brendon Hudnell  
 Gary Sousa  
 Stephen Nolan  
 
-
-## Iteration 1 
 
 ### To run the program:   
 Run src/controller/GameFrame.java   

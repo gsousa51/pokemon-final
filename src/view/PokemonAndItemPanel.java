@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -41,6 +41,11 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage chansey;
     private BufferedImage pokemonSpriteSheet;
     private BufferedImage caughtPokemonLabel;
+    private BufferedImage gameOverLabel;
+    private BufferedImage helixFossil;
+    private BufferedImage pokeBall;
+    private BufferedImage potion;
+    private ArrayList<JButton> PotionButtons;
 
 
     // Constructor
@@ -48,26 +53,27 @@ public class PokemonAndItemPanel extends JPanel {
 
         this.game = game;
         this.container = container;
+        this.PotionButtons = new ArrayList<JButton>();
         initializePanel();
 
 
         // TODO temp delete
-        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Parasect", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Ryhorn", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidorina", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, -5));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Parasect", 50 ,50, 45));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Ryhorn", 50 ,50, 30));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidorina", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
 
 
 
@@ -101,6 +107,10 @@ public class PokemonAndItemPanel extends JPanel {
 
             pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
             caughtPokemonLabel = ImageIO.read(new File("src/view/Caught-Pokemon-label.png"));
+            gameOverLabel = ImageIO.read(new File("src/view/Game-Over-label.png"));
+            helixFossil = ImageIO.read(new File("src/view/Helix-Fossil.png"));
+            pokeBall = ImageIO.read(new File("src/view/pokeball-icon.png"));
+            potion = ImageIO.read(new File("src/view/potion.png"));
             
         } catch (IOException exception) {
 
@@ -141,15 +151,28 @@ public class PokemonAndItemPanel extends JPanel {
         g2.fillRect(0, 0, 1100, 800);
 
         // Label for this window
-        g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
+        if (this.game.gameOver()) {
 
+            System.out.println("Game over ");
+            g2.drawImage(gameOverLabel, 250, 10, 500, 100, null);
+        }
+
+        else {
+
+            g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
+        }
+
+        // if we have any potions, ensure all the potion buttons are enabled
+        if (this.game.getTrainersItems().getItemCount("Potion") != 0) {
+
+            for (JButton potionButton : this.PotionButtons) {
+                
+                potionButton.setEnabled(true);
+            }
+        }
 
         for(Pokemon p : this.game.getTrainersPokemon()) {
-        // for(int i=0; i <16; i++) {
-
             
-            // TODO make draw right pokemon - right now just getting count
-            //if (p.toString().equals("Nidoran")
             if (p.toString().equals("Nidoran")) {
 
                 g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
@@ -203,7 +226,8 @@ public class PokemonAndItemPanel extends JPanel {
             //g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
             g2.setColor(Color.WHITE);
             g2.drawString("HP:", xPoint + 110, yPoint + 20);
-            g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
+            //g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
+            g2.drawString("[" + p.getHealth()[0] + "/" + p.getHealth()[1] + "]", xPoint + 110, yPoint + 40);
             g2.drawString(p.toString(), xPoint + 70, yPoint + 120);
 
             g2.drawString("Use Potion:", xPoint + 110, yPoint + 72);
@@ -217,6 +241,7 @@ public class PokemonAndItemPanel extends JPanel {
             potionButton.setToolTipText("Click to apply potion to this Pokemon");
             //potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
             potionButton.addActionListener(new PotionButtonListener(p));
+            this.PotionButtons.add(potionButton);
             this.add(potionButton);
             //potionButton.setEnabled(false);
             //potionButton.setLocation(xPoint + 110, yPoint + 80);
@@ -228,7 +253,7 @@ public class PokemonAndItemPanel extends JPanel {
 
             xPoint+= widgetSize;
             //yPoint+=50;
-            System.out.println("displayed poke ");
+            //System.out.println("displayed poke ");
             pokemonDisplayed++;
             
             // if we have displayed 5 pokemon, start a new row
@@ -237,12 +262,43 @@ public class PokemonAndItemPanel extends JPanel {
                 yPoint += widgetSize - 20;
                 xPoint = 20;
             }
-        }
-    }
+        } // for loop to draw all pokemon
 
+        // Helix Fossil count
+        g2.setColor(Color.WHITE);
+        g2.drawString("Helix Fossil", 20, 660);
+        g2.drawImage(helixFossil, 20, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Helix Fossil"), 100, 730);
+
+        // Pokeball count
+        g2.setColor(Color.WHITE);
+        g2.drawString("Safari Ball", 320, 660);
+        g2.drawImage(pokeBall, 320, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Safari Ball"), 400, 730);
+
+        // Potion count
+        g2.setColor(Color.WHITE);
+        g2.drawString("Potion", 620, 660);
+        g2.drawImage(potion, 620, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Potion"), 700, 730);
+
+        // if we dont' have any potions, disable all the potion buttons
+        if (this.game.getTrainersItems().getItemCount("Potion") == 0) {
+            for (JButton potionButton : this.PotionButtons) {
+                
+                potionButton.setEnabled(false);
+            }
+        }
+    } // paintComponent
+
+
+    // This is an Actionlistener for applying potions to pokemon
+    // Assumes that calling code has already checked if the trainer 
+    // HAS available potions
     private class PotionButtonListener implements ActionListener {
         
         private Pokemon pokemon;
+        private final static int POTION_HP = 20;
 
         public PotionButtonListener(Pokemon pokemon) {
 
@@ -251,10 +307,20 @@ public class PokemonAndItemPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println("update HP for " + this.pokemon.toString());
+            System.out.println("- Applying potion to " + this.pokemon.toString());
+
+            // apply the potion to the pokemon - STEVE NOTE
+            // this code is not the most robust... would be better to retrieve
+            // the item from the list and query it, but the model did not allow
+            // that, going to just do it by hand
+            PokemonAndItemPanel.this.game.getTrainersItems().removeItem("Potion");
+
+            // Note this only works because all potions are 20HP
+            PokemonAndItemPanel.this.game.getTrainersItems().removeItem("Potion");
+            pokemon.heal(POTION_HP);
+
+            PokemonAndItemPanel.this.repaint();
         }
-
-
     }
 
     private class ClosedPanelAdapter extends WindowAdapter {
