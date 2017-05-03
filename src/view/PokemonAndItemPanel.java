@@ -41,6 +41,7 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage chansey;
     private BufferedImage pokemonSpriteSheet;
     private BufferedImage caughtPokemonLabel;
+    private BufferedImage gameOverLabel;
     private ArrayList<JButton> PotionButtons;
 
 
@@ -103,6 +104,7 @@ public class PokemonAndItemPanel extends JPanel {
 
             pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
             caughtPokemonLabel = ImageIO.read(new File("src/view/Caught-Pokemon-label.png"));
+            gameOverLabel = ImageIO.read(new File("src/view/Game-Over-label.png"));
             
         } catch (IOException exception) {
 
@@ -129,11 +131,6 @@ public class PokemonAndItemPanel extends JPanel {
     // draw the panel
     public void paintComponent(Graphics g) {
 
-        if (this.game.gameOver()) {
-
-            System.out.println("Game over ");
-        }
-
         Graphics2D g2 = (Graphics2D) g;
         this.setLayout(null);
 
@@ -148,7 +145,16 @@ public class PokemonAndItemPanel extends JPanel {
         g2.fillRect(0, 0, 1100, 800);
 
         // Label for this window
-        g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
+        if (this.game.gameOver()) {
+
+            System.out.println("Game over ");
+            g2.drawImage(gameOverLabel, 250, 10, 500, 100, null);
+        }
+
+        else {
+
+            g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
+        }
 
         // if we have any potions, ensure all the potion buttons are enabled
         if (this.game.getTrainersItems().getItemCount("Potion") != 0) {
