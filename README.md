@@ -2,7 +2,7 @@
 
 # Team: pokemon-bulbasquirtmander
 
-Team:   
+Team Members:   
 Morgan Henry    
 Brendon Hudnell  
 Gary Sousa  
