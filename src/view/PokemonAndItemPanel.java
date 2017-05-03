@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -41,6 +41,7 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage chansey;
     private BufferedImage pokemonSpriteSheet;
     private BufferedImage caughtPokemonLabel;
+    private ArrayList<JButton> PotionButtons;
 
 
     // Constructor
@@ -48,26 +49,27 @@ public class PokemonAndItemPanel extends JPanel {
 
         this.game = game;
         this.container = container;
+        this.PotionButtons = new ArrayList<JButton>();
         initializePanel();
 
 
         // TODO temp delete
         //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Parasect", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Ryhorn", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidorina", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, -5));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Parasect", 50 ,50, 45));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Ryhorn", 50 ,50, 30));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidorina", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
 
 
 
@@ -143,9 +145,17 @@ public class PokemonAndItemPanel extends JPanel {
         // Label for this window
         g2.drawImage(caughtPokemonLabel, 250, 10, 500, 100, null);
 
+        // if we have any potions, ensure all the potion buttons are enabled
+        if (this.game.getTrainersItems().getItemCount("Potion") != 0) {
+            for (JButton potionButton : this.PotionButtons) {
+                
+                potionButton.setEnabled(true);
+            }
+        }
+
 
         for(Pokemon p : this.game.getTrainersPokemon()) {
-        // for(int i=0; i <16; i++) {
+        // for(int i=0; i <16; i++) 
 
             
             // TODO make draw right pokemon - right now just getting count
@@ -203,7 +213,8 @@ public class PokemonAndItemPanel extends JPanel {
             //g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
             g2.setColor(Color.WHITE);
             g2.drawString("HP:", xPoint + 110, yPoint + 20);
-            g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
+            //g2.drawString("[45/80]", xPoint + 110, yPoint + 40);
+            g2.drawString("[" + p.getHealth()[0] + "/" + p.getHealth()[1] + "]", xPoint + 110, yPoint + 40);
             g2.drawString(p.toString(), xPoint + 70, yPoint + 120);
 
             g2.drawString("Use Potion:", xPoint + 110, yPoint + 72);
@@ -217,6 +228,7 @@ public class PokemonAndItemPanel extends JPanel {
             potionButton.setToolTipText("Click to apply potion to this Pokemon");
             //potionButton.setFont(new Font("Arial", Font.PLAIN, 12));
             potionButton.addActionListener(new PotionButtonListener(p));
+            this.PotionButtons.add(potionButton);
             this.add(potionButton);
             //potionButton.setEnabled(false);
             //potionButton.setLocation(xPoint + 110, yPoint + 80);
@@ -237,8 +249,16 @@ public class PokemonAndItemPanel extends JPanel {
                 yPoint += widgetSize - 20;
                 xPoint = 20;
             }
+        } // for loop to draw all pokemon
+
+        // if we dont' have any potions, disable all the potion buttons
+        if (this.game.getTrainersItems().getItemCount("Potion") == 0) {
+            for (JButton potionButton : this.PotionButtons) {
+                
+                potionButton.setEnabled(false);
+            }
         }
-    }
+    } // paintComponent
 
     private class PotionButtonListener implements ActionListener {
         
