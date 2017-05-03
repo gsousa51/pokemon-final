@@ -7,8 +7,6 @@ Gary Sousa
 Stephen Nolan  
 
 
-## Iteration 1 
-
 ### To run the program:   
 Run src/controller/GameFrame.java   
 ### grader's note:  
