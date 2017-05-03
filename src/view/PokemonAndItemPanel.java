@@ -56,9 +56,9 @@ public class PokemonAndItemPanel extends JPanel {
         // TODO temp delete
         //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
-        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
-        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
+        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
+        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
+        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, -5));
@@ -128,6 +128,11 @@ public class PokemonAndItemPanel extends JPanel {
 
     // draw the panel
     public void paintComponent(Graphics g) {
+
+        if (this.game.gameOver()) {
+
+            System.out.println("Game over ");
+        }
 
         Graphics2D g2 = (Graphics2D) g;
         this.setLayout(null);

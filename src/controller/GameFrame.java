@@ -47,6 +47,7 @@ public class GameFrame extends JFrame {
     private InfoPanel step;
     private Game game;
     private MapPanel mapPanel;
+    private PokemonAndItemPanel pokemonPanel;
     private BattleScenePanel battlePanel;
     private JPanel currentPanel;
     private boolean inBattle;
@@ -437,7 +438,9 @@ public class GameFrame extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             PokemonAndItemPanel pokemonAndItems = new PokemonAndItemPanel(GameFrame.this.game, GameFrame.this);
+            //pokemonAndItems = new PokemonAndItemPanel(GameFrame.this.game, GameFrame.this);
             //pokemonAndItems.setVisible(true);
             // note the needed setFocusable stuff... if that is not there, clicking
             // the button renders the mapPanel unresponsive
@@ -445,11 +448,11 @@ public class GameFrame extends JFrame {
             System.out.println("");
             System.out.println("[POKEMON AND ITEMS]");
             // print out all pokemon and items
-            for (Pokemon p : GameFrame.this.game.getTrainersPokemon()) {
-                System.out.println("Name: " + p.toString());
-                System.out.println("Current HP: " + p.getHealth()[0]);
-                System.out.println("Total HP  :" +p.getHealth()[1]);
-            }
+            // for (Pokemon p : GameFrame.this.game.getTrainersPokemon()) {
+            //     System.out.println("Name: " + p.toString());
+            //     System.out.println("Current HP: " + p.getHealth()[0]);
+            //     System.out.println("Total HP  :" +p.getHealth()[1]);
+            // }
 
             System.out.println("Helix Fossils: " + GameFrame.this.game.getTrainersItems().getItemCount("Helix Fossil"));
             System.out.println("Potions: " + GameFrame.this.game.getTrainersItems().getItemCount("Potion"));
