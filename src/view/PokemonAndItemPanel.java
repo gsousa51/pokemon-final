@@ -147,19 +147,15 @@ public class PokemonAndItemPanel extends JPanel {
 
         // if we have any potions, ensure all the potion buttons are enabled
         if (this.game.getTrainersItems().getItemCount("Potion") != 0) {
+
             for (JButton potionButton : this.PotionButtons) {
                 
                 potionButton.setEnabled(true);
             }
         }
 
-
         for(Pokemon p : this.game.getTrainersPokemon()) {
-        // for(int i=0; i <16; i++) 
-
             
-            // TODO make draw right pokemon - right now just getting count
-            //if (p.toString().equals("Nidoran")
             if (p.toString().equals("Nidoran")) {
 
                 g2.drawImage(nidoran, xPoint, yPoint, pokeImageSize, pokeImageSize, null);
@@ -260,9 +256,14 @@ public class PokemonAndItemPanel extends JPanel {
         }
     } // paintComponent
 
+
+    // This is an Actionlistener for applying potions to pokemon
+    // Assumes that calling code has already checked if the trainer 
+    // HAS available potions
     private class PotionButtonListener implements ActionListener {
         
         private Pokemon pokemon;
+        private final static int POTION_HP = 20;
 
         public PotionButtonListener(Pokemon pokemon) {
 
@@ -271,10 +272,20 @@ public class PokemonAndItemPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println("update HP for " + this.pokemon.toString());
+            System.out.println("- Applying potion to " + this.pokemon.toString());
+
+            // apply the potion to the pokemon - STEVE NOTE
+            // this code is not the most robust... would be better to retrieve
+            // the item from the list and query it, but the model did not allow
+            // that, going to just do it by hand
+            PokemonAndItemPanel.this.game.getTrainersItems().removeItem("Potion");
+
+            // Note this only works because all potions are 20HP
+            PokemonAndItemPanel.this.game.getTrainersItems().removeItem("Potion");
+            pokemon.heal(POTION_HP);
+
+            PokemonAndItemPanel.this.repaint();
         }
-
-
     }
 
     private class ClosedPanelAdapter extends WindowAdapter {
