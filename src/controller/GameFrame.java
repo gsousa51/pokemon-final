@@ -345,7 +345,12 @@ public class GameFrame extends JFrame {
 
     public void gameOver() {
         this.setTitle("Pokemon Safari Zone - Game Over");
-        JOptionPane.showMessageDialog(null, "This game has ended. We still need to show you items and pokemon",
+
+        // pop the pokemon and item panel
+        new ItemAndPokemonListener().actionPerformed(null);
+
+        // meaningful game over message
+        JOptionPane.showMessageDialog(null, "Game Over - Thanks for playing",
                 "Game Over", JOptionPane.INFORMATION_MESSAGE);
     }
 
