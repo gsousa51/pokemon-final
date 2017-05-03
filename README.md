@@ -1,4 +1,6 @@
-# pokemon-bulbasquirtmander
+# 335 Final Project - Pokemon Safari Zone
+
+# Team: pokemon-bulbasquirtmander
 
 Team:   
 Morgan Henry    
