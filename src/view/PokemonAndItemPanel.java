@@ -42,6 +42,7 @@ public class PokemonAndItemPanel extends JPanel {
     private BufferedImage pokemonSpriteSheet;
     private BufferedImage caughtPokemonLabel;
     private BufferedImage gameOverLabel;
+    private BufferedImage helixFossil;
     private ArrayList<JButton> PotionButtons;
 
 
@@ -55,11 +56,11 @@ public class PokemonAndItemPanel extends JPanel {
 
 
         // TODO temp delete
-        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
-        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
-        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
-        //this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Nidoran", 50 ,50, 50));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Chansey", 50 ,50, 60));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Paras", 50 ,50, 100));
+        // this.game.getTrainersPokemon().addPokemon(new Pokemon("Doduo", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Venonat", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Cubone", 50 ,50, 50));
         // this.game.getTrainersPokemon().addPokemon(new Pokemon("Exeggcute", 50 ,50, -5));
@@ -105,6 +106,7 @@ public class PokemonAndItemPanel extends JPanel {
             pokemonSpriteSheet = ImageIO.read(new File("src/view/PokemonSprites.png"));
             caughtPokemonLabel = ImageIO.read(new File("src/view/Caught-Pokemon-label.png"));
             gameOverLabel = ImageIO.read(new File("src/view/Game-Over-label.png"));
+            helixFossil = ImageIO.read(new File("src/view/Helix-Fossil.png"));
             
         } catch (IOException exception) {
 
@@ -247,7 +249,7 @@ public class PokemonAndItemPanel extends JPanel {
 
             xPoint+= widgetSize;
             //yPoint+=50;
-            System.out.println("displayed poke ");
+            //System.out.println("displayed poke ");
             pokemonDisplayed++;
             
             // if we have displayed 5 pokemon, start a new row
@@ -257,6 +259,11 @@ public class PokemonAndItemPanel extends JPanel {
                 xPoint = 20;
             }
         } // for loop to draw all pokemon
+
+        // Helix Fossil count
+        g2.drawString("Helix Fossil", 20, 660);
+        g2.drawImage(helixFossil, 20, 680, pokeImageSize - 30, pokeImageSize - 30, null);
+        g2.drawString("X " + this.game.getTrainersItems().getItemCount("Helix Fossil"), 100, 730);
 
         // if we dont' have any potions, disable all the potion buttons
         if (this.game.getTrainersItems().getItemCount("Potion") == 0) {

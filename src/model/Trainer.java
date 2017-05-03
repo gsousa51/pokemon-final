@@ -24,6 +24,7 @@ public class Trainer implements Serializable
      */
     public Trainer(int map)
     {
+
         //stepsRemaining = 50;
         stepsRemaining = 500;
         if (map == 1)
