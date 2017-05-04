@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AvailablePokemonList implements Serializable{
+/**
+ * Contains all the possible pokemon, and their relative rarity, that can be
+ * caught in the Safari Zone.
+ * 
+ * @author Brendon Hudnell
+ *
+ */
+public class AvailablePokemonList implements Serializable {
 
 	private ArrayList<String> list;
 	private static AvailablePokemonList self;
@@ -32,7 +39,7 @@ public class AvailablePokemonList implements Serializable{
 		// add rare pokemon
 		list.add("Chansey");
 	}
-	
+
 	public static synchronized AvailablePokemonList getInstance() {
 		if (self == null)
 			self = new AvailablePokemonList();
@@ -64,7 +71,7 @@ public class AvailablePokemonList implements Serializable{
 			return new Pokemon("Ryhorn", 25, 120, 80);
 		case "Exeggcute":
 			return new Pokemon("Exeggcute", 40, 90, 60);
-		case "Parasect": 
+		case "Parasect":
 			return new Pokemon("Parasect", 30, 75, 60);
 		case "Chansey":
 			return new Pokemon("Chansey", 50, 30, 250);

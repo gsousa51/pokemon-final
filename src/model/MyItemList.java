@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Contains all the items the trainer has collected during the game. Is
+ * initialized with 30 Safari Balls
+ * 
+ * @author Brendon
+ *
+ */
 public class MyItemList implements Iterable<Item>, Serializable {
 
 	private static MyItemList self;

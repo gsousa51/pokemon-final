@@ -2,6 +2,13 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Contains the Pokemon class, which has their chance to be caught and their
+ * chance of running
+ * 
+ * @author Brendon
+ *
+ */
 public class Pokemon implements Serializable {
 
 	private int runRate, currentCatchRate, initialCatchRate;

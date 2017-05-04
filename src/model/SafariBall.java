@@ -2,11 +2,17 @@ package model;
 
 import java.io.Serializable;
 
-public class SafariBall extends Item implements Serializable{
+/**
+ * Contains the Safari Ball class, which is used to catch Pokemon in the game
+ * 
+ * @author Brendon
+ *
+ */
+public class SafariBall extends Item implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public SafariBall() {
+	public SafariBall() {
 		super("Safari Ball");
 	}
 

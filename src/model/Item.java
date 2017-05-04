@@ -2,6 +2,12 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * The Item abstract class
+ * 
+ * @author Brendon
+ *
+ */
 public abstract class Item implements Serializable{
 	
 	private String name;
