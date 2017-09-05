@@ -2,10 +2,16 @@ package model;
 
 import java.io.Serializable;
 
-public class Potion extends Item implements Serializable{
-	
-    private static final long serialVersionUID = 1L;
-    private int healAmount;
+/**
+ * Contains the Potion class, which can be used to heal Pokemon in the game
+ * 
+ * @author Brendon
+ *
+ */
+public class Potion extends Item implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private int healAmount;
 
 	public Potion() {
 		super("Potion");
@@ -16,7 +22,7 @@ public class Potion extends Item implements Serializable{
 	public String examineMessage() {
 		return "Restores the HP of a Pokémon by 50 points.";
 	}
-	
+
 	/**
 	 * Returns the amount this item heals
 	 * 

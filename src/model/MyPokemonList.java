@@ -4,9 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Contains all the pokemon the trainer has caught during the game.
+ * 
+ * @author Brendon
+ *
+ */
 public class MyPokemonList implements Iterable<Pokemon>, Serializable {
 
-	private static  MyPokemonList self;
+	private static MyPokemonList self;
 	private ArrayList<Pokemon> pokedex;
 
 	private MyPokemonList() {
@@ -22,7 +28,7 @@ public class MyPokemonList implements Iterable<Pokemon>, Serializable {
 	public void addPokemon(Pokemon pokemon) {
 		pokedex.add(pokemon);
 	}
-	
+
 	public int size() {
 		return pokedex.size();
 	}
