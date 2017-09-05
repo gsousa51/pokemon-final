@@ -1,6 +1,7 @@
 /**
  * Class: InfoPanel.java
- * Purpose: Used for displaying steps left and count of pokemon caught.
+
+ * Purpose: Used for displaying steps left, pokemon count, and balls left.
  * 
  */
 
